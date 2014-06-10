@@ -2,7 +2,7 @@
 config_gt3.js:金税三期
 config_default.js:sword默认
 
-一、目录结构说明
+一、               目录结构说明 
 
 1.widgets
 说明：组件库
