@@ -1,0 +1,11 @@
+.maskDivEl{
+   background:white;
+}
+.loading9{
+	text-align: center;
+	font-weight: bold;
+	background-repeat: no-repeat;
+	background-image: url(images/loadingbar.gif);
+    width: 207px;
+    height: 43px;
+}

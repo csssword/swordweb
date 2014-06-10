@@ -1,0 +1,100 @@
+@CHARSET "utf-8";
+
+body,html {
+	margin: 0px;
+	font-size: 12px;
+	text-align: center;
+	padding: 0px;
+}
+
+.container {
+	width: 579px;
+	height: auto;
+	padding: 0px;
+	font-size: 12px;
+	text-align: left;
+}
+
+.content {
+	font-size: 12px;
+	float: left;
+	background: #fff;
+	width: 579px;
+	padding: 0px;
+	margin: 0px;
+	height: 124px;
+}
+
+.c_l {
+	font-size: 12px;
+	float: left;
+	background: url(images/c_l.gif) no-repeat;
+	width: 70px;
+	height: 74px;
+	margin: 30px 30px;
+	_margin: 30px 15px;
+}
+
+.c_r {
+	margin-top: 45px;
+	font-size: 12px;
+	table-layout: fixed;
+	width: 430px;
+}
+
+.c_r td {
+	padding: 5px 0px 5px 20px;
+	word-wrap: break-word;
+	text-align: left;
+}
+
+.c_info {
+	float: left;
+	width: 579px;
+	background: url(images/c_info.gif) repeat-y left;
+	clear: left;
+	height: 43px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.c_info table th {
+	padding: 3px 0px 0px 0px;
+	font-weight: normal;
+}
+
+.c_info table th a {
+	font-size: 12px;
+	color: #000;
+	text-decoration: underline;
+}
+
+.c_info table td.picdown {
+	background: url(images/arrow_down.gif) no-repeat 21px 8px;
+	width: 40px;
+	height: 35px;
+}
+
+.c_info table td.picup {
+	background: url(images/arrow_up.gif) no-repeat 21px 8px;
+	width: 40px;
+	height: 35px;
+}
+
+.content_inner {
+	width: 555px;
+	padding: 0px 0px 0px 10px;
+	margin: 0px;
+	height: 300px;
+	overflow-y: auto;
+	float: left;
+	letter-spacing: 1px;
+}
+
+.c_m {
+	float: left;
+	width: 565px;
+	padding-left: 15px;
+	word-wrap: break-word;
+	background: #fff;
+}

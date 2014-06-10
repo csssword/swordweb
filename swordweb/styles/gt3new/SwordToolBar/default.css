@@ -1,0 +1,214 @@
+@CHARSET "UTF-8";
+/*为了保证政法委项目不出现上下滚动条，将margin-top设置为0px*/
+.tb_box {height:69px;margin-top:0px; background:url(images/tb_box.png) repeat-x 0 -69px;overflow:auto; }
+.tb_box .l {float:left; width:10px; height:69px; background:url(images/tb_box.png) left top}
+.tb_box .c {overflow:hidden;}
+.tb_box .r {float:right; width:15px; height:69px; background:url(images/tb_box.png) right bottom}
+
+.tb {margin-top:1px; float:left;cursor:pointer; height:60px; width:60px;  background:url(images/bottonbg1.png) no-repeat center;}
+.tb_hover{background:url(images/bottonbg2.png) no-repeat center;}
+.tb_click{background:url(images/bottonbg3.png);}
+.tb_blank {margin:5px 0px 0 0; float:left;}
+/* 设置业务按钮的样式 */
+	/* 可用状态 */
+.tb .new_enabled {background:url(images/allbgs.png) no-repeat -123px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .open_enabled {background:url(images/allbgs.png) no-repeat -24px 0px;padding-top:26px;margin:10px 18px 0;}
+.tb .find_enabled {background:url(images/allbgs.png) no-repeat -798px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .delete_enabled {background:url(images/allbgs.png) no-repeat -573px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .refresh_enabled {background:url(images/allbgs.png) no-repeat -273px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .edit_enabled {background:url(images/allbgs.png) no-repeat -873px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .firstPage_enabled{background:url(images/allbgs.png) no-repeat -823px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .endPage_enabled{background:url(images/allbgs.png) no-repeat -973px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .nextPage_enabled{background:url(images/allbgs.png) no-repeat -223px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .previousPage_enabled{background:url(images/allbgs.png) no-repeat -98px 0px;padding-top:27px;margin:10px 18px 0;}
+
+.tb .save_enabled{background:url(images/allbgs.png) no-repeat -323px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .back_enabled{background:url(images/allbgs.png) no-repeat -523px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .export_enabled{background:url(images/allbgs.png) no-repeat -773px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .addtime_enabled{background:url(images/allbgs.png) no-repeat -623px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .reducetime_enabled{background:url(images/allbgs.png) no-repeat -473px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .addright_enabled{background:url(images/allbgs.png) no-repeat  -723px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .reduceright_enabled{background:url(images/allbgs.png) no-repeat -48px 0px;padding-top:27px;margin:10px 18px 0;}
+
+.tb .close_enabled{background:url(images/allbgs.png) no-repeat -548px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .print_enabled{background:url(images/allbgs.png) no-repeat -373px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .revoke_enabled{background:url(images/allbgs.png) no-repeat -298px 0px;padding-top:27px;margin:10px 18px 0;}
+
+.tb .consult_enabled{background:url(images/increaseEnabled.png) no-repeat -225px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .debit_enabled{background:url(images/increaseEnabled.png) no-repeat -200px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .import_enabled{background:url(images/increaseEnabled.png) no-repeat -275px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .inspect_enabled{background:url(images/increaseEnabled.png) no-repeat -350px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .investigation_enabled{background:url(images/increaseEnabled.png) no-repeat -325px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .lssue_enabled{background:url(images/increaseEnabled.png) no-repeat -300px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .preview_enabled{background:url(images/increaseEnabled.png) no-repeat -175px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .receive_enabled{background:url(images/increaseEnabled.png) no-repeat -50px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .sign_enabled{background:url(images/increaseEnabled.png) no-repeat 0px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .ticket_enabled{background:url(images/increaseEnabled.png) no-repeat -75px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .viewResult_enabled{background:url(images/increaseEnabled.png) no-repeat -150px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .violation_enabled{background:url(images/increaseEnabled.png) no-repeat -125px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .push_enabled{background:url(images/increaseEnabled.png) no-repeat -100px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .accept_enabled{background:url(images/increaseEnabled.png) no-repeat -250px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .registration_enabled{background:url(images/increaseEnabled.png) no-repeat -25px 0px;padding-top:27px;margin:10px 18px 0;}
+
+	/* 不可用状态 */
+.tb .new_disabled {background:url(images/allbgs.png) no-repeat -148px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .open_disabled {background:url(images/allbgs.png) no-repeat 0px 0px;padding-top:26px;margin:10px 18px 0;}
+.tb .find_disabled {background:url(images/allbgs.png) no-repeat -748px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .delete_disabled {background:url(images/allbgs.png) no-repeat -598px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .refresh_disabled {background:url(images/allbgs.png) no-repeat -448px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .edit_disabled {background:url(images/allbgs.png) no-repeat -898px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .firstPage_disabled{background:url(images/allbgs.png) no-repeat -848px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .endPage_disabled{background:url(images/allbgs.png) no-repeat -923px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .nextPage_disabled{background:url(images/allbgs.png) no-repeat -173px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .previousPage_disabled{background:url(images/allbgs.png) no-repeat -73px 0px;padding-top:27px;margin:10px 18px 0;}
+
+.tb .save_disabled{background:url(images/allbgs.png) no-repeat -348px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .back_disabled{background:url(images/allbgs.png) no-repeat -698px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .export_disabled{background:url(images/allbgs.png) no-repeat -948px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .addtime_disabled{background:url(images/allbgs.png) no-repeat -648px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .reducetime_disabled{background:url(images/allbgs.png) no-repeat -423px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .addright_disabled{background:url(images/allbgs.png) no-repeat -673px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .reduceright_disabled{background:url(images/allbgs.png) no-repeat -198px 0px;padding-top:27px;margin:10px 18px 0;}
+
+.tb .close_disabled{background:url(images/allbgs.png) no-repeat -498px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .print_disabled{background:url(images/allbgs.png) no-repeat -398px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .revoke_disabled{background:url(images/allbgs.png) no-repeat -248px 0px;padding-top:27px;margin:10px 18px 0;}
+
+.tb .consult_disabled{background:url(images/increaseDisabled.png) no-repeat -225px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .debit_disabled{background:url(images/increaseDisabled.png) no-repeat -200px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .import_disabled{background:url(images/increaseDisabled.png) no-repeat -275px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .inspect_disabled{background:url(images/increaseDisabled.png) no-repeat -350px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .investigation_disabled{background:url(images/increaseDisabled.png) no-repeat -325px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .lssue_disabled{background:url(images/increaseDisabled.png) no-repeat -300px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .preview_disabled{background:url(images/increaseDisabled.png) no-repeat -175px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .receive_disabled{background:url(images/increaseDisabled.png) no-repeat -50px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .sign_disabled{background:url(images/increaseDisabled.png) no-repeat 0px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .ticket_disabled{background:url(images/increaseDisabled.png) no-repeat -75px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .viewResult_disabled{background:url(images/increaseDisabled.png) no-repeat -150px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .violation_disabled{background:url(images/increaseDisabled.png) no-repeat -125px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .push_disabled{background:url(images/increaseDisabled.png) no-repeat -100px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .accept_disabled{background:url(images/increaseDisabled.png) no-repeat -250px 0px;padding-top:27px;margin:10px 18px 0;}
+.tb .registration_disabled{background:url(images/increaseDisabled.png) no-repeat -25px 0px;padding-top:27px;margin:10px 18px 0;}
+
+.tb .text_enabled {font-size:12px; color:#014b73; text-align:center;}
+.tb .text_disabled {font-size:12px; color:#aaa; text-align:center; }
+.tb_a_enabled {background:url(images/tb_a.png);}
+
+
+/*mini*/
+.tb_mini_hover{background:url(images/toolbarbg_mov.jpg) left 0; }
+.tb_mini_texthover{background:url(images/toolbarbg_mov.jpg) repeat-x right; padding:3px 6px 5px 5px; height:13px;}
+.tb_mini_click{background:url(images/toolbarbg_click.jpg) left 0; }
+.tb_mini_textclick{background:url(images/toolbarbg_click.jpg) repeat-x right; padding:3px 6px 5px 5px; height:13px;}
+.tb_mini_box {border:1px solid #7DB5DE; border-bottom:0; background:#ECF4FA; height:24px;}
+.tb_mini_box .l {float:left; width:10px; height:24px; display:block;}
+.tb_mini_box .c {overflow:hidden;}
+.tb_mini_box .r {float:right; width:0px; height:24px; display:block;}
+.tb_mini_a_enabled {text-decoration:none;}
+.mini_tb {float:left; cursor:pointer; margin-top:2px;height:21px;}
+	
+.mini_tb .text_enabled { float:left; font-size:12px;  color:#010101;  text-align:center; letter-spacing:0.1em;padding:3px 6px 5px 5px;}
+.mini_tb .text_disabled {float:left;margin-top:2px;font-size:12px; color:#aaa; text-align:center; letter-spacing:0.1em; padding:1px 6px 5px 5px;}
+
+.mini_tb .new_enabled,.mini_tb .open_enabled,.mini_tb .find_enabled,.mini_tb .delete_enabled,.mini_tb .refresh_enabled,.mini_tb .edit_enabled,
+.mini_tb .firstPage_enabled,.mini_tb .endPage_enabled,.mini_tb .nextPage_enabled,.mini_tb .previousPage_enabled,.mini_tb .save_enabled,
+.mini_tb .back_enabled,.mini_tb .export_enabled,.mini_tb .addtime_enabled,.mini_tb .reducetime_enabled,.mini_tb .addright_enabled,
+.mini_tb .reduceright_enabled,.mini_tb .close_enabled,.mini_tb .print_enabled,.mini_tb .revoke_enabled,.mini_tb .consult_enabled,
+.mini_tb .debit_enabled,.mini_tb .import_enabled,.mini_tb .inspect_enabled,.mini_tb .investigation_enabled,.mini_tb .lssue_enabled,
+.mini_tb .preview_enabled,.mini_tb .receive_enabled,.mini_tb .sign_enabled,.mini_tb .ticket_enabled,.mini_tb .viewResult_enabled,
+.mini_tb .push_enabled,.mini_tb .accept_enabled,.mini_tb .registration_enabled,.mini_tb .violation_enabled
+	{width:18px;height:18px; margin-top:1px;margin-left:2px;float:left;background:url(images/miniEnableBar.png) no-repeat;}
+.mini_tb .new_enabled {background-position:-108px 0px;}
+.mini_tb .open_enabled {background-position:-396px 0px;}
+.mini_tb .find_enabled {background-position:-540px 0px;}
+.mini_tb .delete_enabled {background-position:-612px 0px;}
+.mini_tb .refresh_enabled {background-position:-234px 0px;}
+.mini_tb .edit_enabled {background-position:-594px 0px;}
+.mini_tb .firstPage_enabled{background-position:-522px 0px;}
+.mini_tb .endPage_enabled{background-position:-504px 0px;}
+.mini_tb .nextPage_enabled{background-position:-18px 0px;}
+.mini_tb .previousPage_enabled{background-position:-36px 0px;}
+.mini_tb .save_enabled{background-position:-270px 0px;}
+.mini_tb .back_enabled{background-position:-360px 0px;}
+.mini_tb .export_enabled{background-position:-486px 0px;}
+.mini_tb .addtime_enabled{background-position:-414px 0px;}
+.mini_tb .reducetime_enabled{background-position:-450px 0px;}
+.mini_tb .addright_enabled{background-position:-378px 0px;}
+.mini_tb .reduceright_enabled{background-position:0px 0px;}
+.mini_tb .close_enabled{background-position:-468px 0px;}
+.mini_tb .print_enabled{background-position:-144px 0px;}
+.mini_tb .revoke_enabled{background-position:-432px 0px;}
+
+.mini_tb .consult_enabled{background-position:-576px 0px;}
+.mini_tb .debit_enabled{background-position:-558px 0px;}
+.mini_tb .import_enabled{background-position:-306px 0px;}
+.mini_tb .inspect_enabled{background-position:-90px 0px;}
+.mini_tb .investigation_enabled{background-position:-72px 0px;}
+.mini_tb .lssue_enabled{background-position:-126px 0px;}
+.mini_tb .preview_enabled{background-position:-54px 0px;}
+.mini_tb .receive_enabled{background-position:-252px 0px;}
+.mini_tb .sign_enabled{background-position:-180px 0px;}
+.mini_tb .ticket_enabled{background-position:-162px 0px;}
+.mini_tb .viewResult_enabled{background-position:-216px 0px;}
+.mini_tb .violation_enabled{background-position:-198px 0px;}
+.mini_tb .push_enabled{background-position:-342px 0px;}
+.mini_tb .accept_enabled{background-position:-324px 0px;}
+.mini_tb .registration_enabled{background-position:-288px 0px;}
+
+/*disabled*/
+.mini_tb .new_disabled,.mini_tb .open_disabled,.mini_tb .find_disabled,.mini_tb .delete_disabled,.mini_tb .refresh_disabled,.mini_tb .edit_disabled,
+.mini_tb .firstPage_disabled,.mini_tb .endPage_disabled,.mini_tb .nextPage_disabled,.mini_tb .previousPage_disabled,.mini_tb .save_disabled,
+.mini_tb .back_disabled,.mini_tb .export_disabled,.mini_tb .addtime_disabled,.mini_tb .reducetime_disabled,.mini_tb .addright_disabled,
+.mini_tb .reduceright_disabled,.mini_tb .close_disabled,.mini_tb .print_disabled,.mini_tb .revoke_disabled,.mini_tb .consult_disabled,
+.mini_tb .debit_disabled,.mini_tb .import_disabled,.mini_tb .inspect_disabled,.mini_tb .investigation_disabled,.mini_tb .lssue_disabled,
+.mini_tb .preview_disabled,.mini_tb .receive_disabled,.mini_tb .sign_disabled,.mini_tb .ticket_disabled,.mini_tb .viewResult_disabled,
+.mini_tb .violation_disabled,.mini_tb .push_disabled,.mini_tb .accept_disabled,.mini_tb .registration_disabled
+{width:18px;height:18px; margin-top:1px;float:left;background:url(images/miniDisableBar.png) no-repeat;}
+.mini_tb .new_disabled {background-position:-108px 0px;}
+.mini_tb .open_disabled {background-position:-450px 0px;}
+.mini_tb .find_disabled {background-position:-540px 0px;}
+.mini_tb .delete_disabled {background-position:-612px 0px;}
+.mini_tb .refresh_disabled {background-position:-234px 0px;}
+.mini_tb .edit_disabled {background-position:-594px 0px;}
+.mini_tb .firstPage_disabled{background-position:-522px 0px;}
+.mini_tb .endPage_disabled{background-position:-504px 0px;}
+.mini_tb .nextPage_disabled{background-position:-18px 0px;}
+.mini_tb .previousPage_disabled{background-position:-36px 0px;}
+.mini_tb .save_disabled{background-position: -270px 0px;}
+.mini_tb .back_disabled{background-position:-360px 0px;}
+.mini_tb .export_disabled{background-position:-486px 0px;}
+.mini_tb .addtime_disabled{background-position:-414px 0px;}
+.mini_tb .reducetime_disabled{background-position:-396px 0px;}
+.mini_tb .addright_disabled{background-position:-378px 0px;}
+.mini_tb .reduceright_disabled{background-position:0px 0px;}
+.mini_tb .close_disabled{background-position:-468px 0px;}
+.mini_tb .print_disabled{background-position:-144px 0px;}
+.mini_tb .revoke_disabled{background-position:-432px 0px;}
+
+.mini_tb .consult_disabled{background-position:-576px 0px;}
+.mini_tb .debit_disabled{background-position:-558px 0px;}
+.mini_tb .import_disabled{background-position:-306px 0px;}
+.mini_tb .inspect_disabled{background-position:-90px 0px;}
+.mini_tb .investigation_disabled{background-position:-72px 0px;}
+.mini_tb .lssue_disabled{background-position:-126px 0px;}
+.mini_tb .preview_disabled{background-position:-54px 0px;}
+.mini_tb .receive_disabled{background-position:-252px 0px;}
+.mini_tb .sign_disabled{background-position:-180px 0px;}
+.mini_tb .ticket_disabled{background-position:-162px 0px;}
+.mini_tb .viewResult_disabled{background-position:-216px 0px;}
+.mini_tb .violation_disabled{background-position:-198px 0px;}
+.mini_tb .push_disabled{background-position:-342px 0px;}
+.mini_tb .accept_disabled{background-position:-324px 0px;}
+.mini_tb .registration_disabled{background-position:-288px 0px;}
+
+.sGrid_div div .tb_mini_box{border:solid #7F9DB9 ; border-width: 0 0 1px;}
+
+.toolbar_fixed{
+    position:fixed;
+    top:0px;
+    z-index:999;/*为了让DIV永远在最前面，不被其他元素遮住*/
+    width:100%;
+    _position:absolute;/*这里开始的2句代码是为ie6不兼容position:fixed;而写的*/
+    _top:expression(eval(document.documentElement.scrollTop));/*这里需要获取滚动高度+元素原本的高度*/
+}
+

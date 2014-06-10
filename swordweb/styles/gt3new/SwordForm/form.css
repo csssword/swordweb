@@ -1,0 +1,656 @@
+body {
+/*background: #e4edf9;*/
+}
+
+/* pNode的定义 */
+.swordfrom_div {
+    border: 0px;
+    margin: 0px auto;
+}
+.swordform_item_oprate{
+
+}
+.swordform_item_input_disable{
+	background: #f1f1f1;
+}
+/* form组件最外层div的定义 */
+.swordfrom_wrap_div {
+    margin: 0px auto;
+    border:none;;
+    border-bottom:0;
+}
+.swordform_item_caption_td{
+   background:#E8F5FF;
+   border-right:1px solid #87B2CE;
+   vertical-align:middle;
+
+   height:25px;
+}
+/* form组件中数据区域的最外层div */
+.swordform_items_div {
+    margin: 0px auto;
+    padding: 0px;
+    display: inline-block;
+    height: auto;
+    width: 100%;
+}
+
+/* form组件每一行的div的定义 */
+.swordform_row_div {
+    clear: both;
+    margin: 0px auto;
+    height:100%;
+    overflow:hidden;    
+    width: auto;
+    border-bottom:1px solid #87B2CE;
+}
+
+/* form里每一个元素外的div */
+.swordform_item_div {
+    float: left; 
+    display: inline-block;
+    width:auto;
+}
+
+/* form里每一个元素外的table */
+.swordform_item_table {
+    border-collapse: collapse;
+
+}
+
+.swordform_item_input {
+    /*background: url("images/text-bg.gif") repeat-x scroll 0 0 #FFFFFF;*/
+    border: 0px solid #B5B8C8;
+    /*height:19px !important;*/
+    cursor:text;
+	margin:0;
+	_padding:0 0 0 1px;
+	height:17px; line-height:17px;
+	width:100%;
+	_width:99%;
+	display:inline-block;
+	
+}
+.swordform_item_input_placeholder {
+	cursor:text;
+	color: #8FAF8F;
+	font-size: 14px;
+}
+.swordform_item_textarea {
+    /*background: url("images/text-bg.gif") repeat-x scroll 0 0 #FFFFFF;*/
+    border: 0px solid #B5B8C8;
+   /* padding: 1px 3px;*/
+   padding:0;
+   margin:0;
+    font-size:12px;
+	overflow:auto;
+	height:120px;
+	width:100%;
+	_width:99%;
+}
+
+/* form里每一个元素外的tr */
+.swordform_item_tr {
+}
+
+/* form里每一个元素外的标题栏的td */
+.swordform_item_title_td {
+    border: 0px solid #E6E8E8;
+    background-color: brown
+}
+
+/* form里每一个元素外的操作框的td */
+.swordform_item_name_td {
+    background:none repeat scroll 0 0 #FFFFFF;
+    border-right: 1px solid #87B2CE;
+}
+
+/* form里每一个元素外的描述信息的td */
+.swordform_item_des_td {
+    border: 0px solid #E6E8E8;
+}
+
+/* form组件包括行的的fieldset定义 */
+.swordform_fieldset {
+    border: 0px solid #a3bae9 !important;
+    border-top: 0px;
+    padding: 0px;
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+    display: block;
+}
+
+/* form组件里fieldset内部的legend定义 */
+.swordform_legend {
+    font: bold 12px tahoma, arial, helvetica, sans-serif;
+    color: #15428b;
+}
+
+/* form组件里fieldset内部的input样式的定义 */
+
+/* form组件里fieldset内部的label样式的定义 */
+.swordform_item_label {
+    text-align: left;
+    height:21px;
+}
+
+/* form组件里fieldset内部的textarea样式的定义 */
+.swordform_item_textarea {
+}
+
+/* form组件里标题样式定义*/
+.swordform_item_text_caption {
+    font: 12px tahoma, arial, helvetica, sans-serif;
+    font-family: "Myriad Pro", "Myriad Web", "Tahoma", "Helvetica", "Arial", sans-serif;
+    color: #030303;
+    text-align: left;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+/* form组件里des样式定义*/
+.swordform_item_text_des {
+    font: 11px tahoma, arial, helvetica, sans-serif;
+    color: crimson;
+    text-align: left; /*width: 118px;*/
+}
+
+/*topPanel*/
+.swordform_panel_top {
+    display:none;
+
+}
+
+.swordform_panel_top .l {
+    float: left;
+    height: 10px;
+    width: 10px;
+    background: url(images/bbbbox_top_bg.gif) left top;
+}
+
+.swordform_panel_top .r {
+    float: right;
+    height: 10px;
+    width: 10px;
+    background: url(images/bbbbox_top_bg.gif) right -72px;
+}
+
+/*btmPanel*/
+.swordform_panel_btm {
+
+    display:none;
+}
+
+.swordform_panel_btm .l {
+    float: left;
+    height: 10px;
+    width: 10px;
+    background: url(images/bbbbox_bottom_bg.gif) left top;
+}
+
+.swordform_panel_btm .r {
+    float: right;
+    height: 10px;
+    width: 10px;
+    background: url(images/bbbbox_bottom_bg.gif) right bottom;
+}
+
+/* 以下是form组件里最上面panel层的定义 */
+.swordform-panel-box {
+
+    background:url("images/headbg.jpg") repeat-x 0 -1px;
+    font-weight:bold;
+    border: 1px solid  #A6C9E2;
+	border-bottom:0;
+	border-top:0;
+    height:25px;
+	overflow:hidden
+}
+
+
+.swordform-panel-box .swordform-panel-tl {
+    float: left;
+    height: 28px;
+    display:inline-block;
+    background:url("images/formico.gif") no-repeat scroll 0 0 transparent;
+    
+}
+
+.swordform-panel-box .swordform-panel-tr {
+    float: right;
+    height: 33px;
+    width: 10px;
+    background: url(images/title_box_bg.gif) right bottom;
+    display:none;
+}
+
+.swordform-panel-box .swordform-panel-title {
+    line-height: 27px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: "Myriad Pro", "Myriad Web", "Tahoma", "Helvetica", "Arial", sans-serif;
+    text-align: left;
+	color: #003073;
+    text-indent:1em;
+    background:url(images/icon_left.gif) no-repeat 6px 4px;
+    padding-left:18px;
+    _padding-left:28px;
+    border-top:1px solid #7f9db9;
+}
+
+.swordform-panel-header {
+    overflow: hidden;
+    zoom: 1;
+}
+
+.swordform-panel-tl .swordform-panel-header {
+    color: #15428b;
+    font: bold 12px tahoma, arial, verdana, sans-serif;
+    padding: 5px 0 4px 0;
+    border: 0 none;
+    background: transparent;
+}
+
+.swordform-panel-header {
+    overflow: hidden;
+    zoom: 1;
+    color: #15428b;
+    font: bold 12px tahoma, arial, verdana, sans-serif;
+    padding: 5px 3px 4px 5px;
+    border: 1px solid #99bbe8;
+    line-height: 15px;
+    background: transparent url(images/white-top-bottom.gif) repeat-x 0 -1px;
+}
+
+/*以下是对form里的block元素的定义 */
+.swordform_block {
+
+}
+
+.swordform_block .swordform_block_top {
+    height: 10px;
+    font-size: 0;
+    background: url(images/cont_box_bg.gif) 0 -50px;
+    display:none;
+}
+
+.swordform_block .swordform_block_bottom {
+    height: 10px;
+    font-size: 0;
+    background: url(images/cont_box_bg.gif) 0 -90px;
+    display:none;
+}
+
+.swordform_block .swordform_block_center {
+    /*background: #E6E8E8*/
+	border:1px solid #A6CAC6; border-bottom:0;
+}
+
+.swordform_block .swordform_block_center .ll {
+}
+
+.swordform_block .swordform_block_center .rr {
+    padding: 0px;
+}
+
+.swordform_block .l {
+    float: left;
+    width: 3px;
+    height: 10px;
+    background: url(images/cont_box_bg.gif) left -100px;
+}
+
+.swordform_block .r {
+    float: right;
+    width: 3px;
+    height: 10px;
+    background: url(images/cont_box_bg.gif) right -100px;
+}
+
+/* 以下是对按钮的定义 */
+.swordform_btn {
+    font: normal 11px tahoma, verdana, helvetica;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.swordform_btn button {
+    border: 0 none;
+    background: transparent;
+    font: 宋 体 11px tahoma, verdana, helvetica;
+    padding-left: 3px;
+    padding-right: 3px;
+    cursor: pointer;
+    margin: 0;
+    overflow: visible;
+    width: auto;
+    -moz-outline: 0 none;
+    outline: 0 none;
+}
+
+.swordform_btn em {
+    font-style: normal;
+    font-weight: normal;
+}
+
+.swordform_btn_left, .swordform_btn_right {
+    font-size: 1px;
+    line-height: 1px;
+}
+
+.swordform_btn_left {
+    width: 3px;
+    height: 21px;
+    background: url(images/btn-sprite.gif) no-repeat 0 0;
+}
+
+.swordform_btn_right {
+    width: 3px;
+    height: 21px;
+    background: url(images/btn-sprite.gif) no-repeat 0 -21px;
+}
+
+.swordform_btn_center {
+    background: url(images/btn-sprite.gif) repeat-x 0 -42px;
+    vertical-align: middle;
+    text-align: center;
+    padding: 0 5px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.swordform_btn_over .swordform_btn_left {
+    background-position: 0 -63px;
+}
+
+.swordform_btn_over .swordform_btn_right {
+    background-position: 0 -84px;
+}
+
+.swordform_btn_over .swordform_btn_center {
+    background-position: 0 -105px;
+}
+
+.swordform_btns_ct {
+    padding: 2px;
+}
+
+.swordform_btns_ct .swordform_btn {
+    float: right;
+    clear: none;
+}
+
+.swordform_btns_ct .swordform_panel_btns td {
+    border: 0;
+    padding: 0;
+}
+
+.swordform_btns_ct .swordform_panel_btns_right table {
+    float: right;
+    clear: none;
+}
+
+.swordform_btns_ct .swordform_panel_btns_left table {
+    float: left;
+    clear: none;
+}
+
+.swordform_btns_ct .swordform_panel_btns_center {
+    text-align: center;
+}
+
+.swordform_btns_ct .swordform_panel_btns_center table {
+    margin: 0 auto;
+}
+
+.swordform_btns_ct table td.swordform_panel_btn_td {
+    padding: 3px;
+}
+
+.swordform_btns_ct .swordform_btn_focus .swordform_btn_left {
+    background-position: 0 -147px;
+}
+
+.swordform_btns_ct .swordform_btn_focus .swordform_btn_right {
+    background-position: 0 -168px;
+}
+
+.swordform_btns_ct .swordform_btn_focus .swordform_btn_center {
+    background-position: 0 -189px;
+}
+
+.swordform_btns_ct .swordform_btn_over .swordform_btn_left {
+    background-position: 0 -63px;
+}
+
+.swordform_btns_ct .swordform_btn_over .swordform_btn_right {
+    background-position: 0 -84px;
+}
+
+.swordform_btns_ct .swordform_btn_over .swordform_btn_center {
+    background-position: 0 -105px;
+}
+
+.swordform_btns_ct .swordform_btn_click .swordform_btn_center {
+    background-position: 0 -126px;
+}
+
+.swordform_btns_ct .swordform_btn_click .swordform_btn_right {
+    background-position: 0 -84px;
+}
+
+.swordform_btns_ct .swordform_btn_click .swordform_btn_left {
+    background-position: 0 -63px;
+}
+
+.swordform_field_valiwrap {
+    white-space: nowrap;
+    float: left;
+    height: 17px;
+    margin-top: 0px;
+    /*margin-top: 2px !important;*/
+    margin-left:2px;
+    background: #E5F5FF none repeat scroll 0% 0%;
+    color: #404040;
+    border-width: 1px;
+    border-color: #40B3FF;
+    border-style: solid; /*padding:2px*/
+}
+
+/* 控制form的每个Filed */
+.swordform_field_wrap {
+    width: 100%;
+    float: left;
+    zoom: 1;
+    font: normal 12px tahoma, arial, helvetica, sans-serif;
+    color: #15428b;
+}
+
+/*正常情况的样式*/
+.swordform_field_valiwrap .swordform_fieldimg_nomal {
+    width: 17px;
+    height: 20px;
+    border: 0;
+    border-bottom: 0px solid #B5B8C8;
+}
+
+/*等待的图片*/
+.swordform_fieldimg_loading {
+    background: transparent url(images/loading.gif) no-repeat 0 0;
+}
+
+/*校验成功样式*/
+.swordform_fieldimg_success {
+    background: transparent url(images/success.png) no-repeat 0 0;
+}
+
+/*校验失败样式*/
+.swordform_fieldimg_failed {
+    background: transparent url(images/failed.png) no-repeat 0 0;
+}
+
+/*************** panel的箭头 ******************/
+.swordform_tool {
+    overflow: hidden;
+    width: 15px;
+    height: 15px;
+    float: left;
+    cursor: pointer;
+    background: transparent url(images/tool-sprites.gif) no-repeat;
+    margin-left: 2px;
+}
+
+.swordform_tool_toggle {
+    background-position: 0 -60px;
+}
+
+.swordform_tool_toggle_over {
+    background-position: -15px -60px;
+}
+
+.swordform_panel_collapsed .swordform_tool_toggle {
+    background-position: 0 -75px;
+}
+
+.swordform_panel_collapsed .swordform_tool_toggle_over {
+    background-position: -15px -75px;
+}
+
+.swordform_div_collapsed {
+    display: none
+}
+
+/************************************ 文件上传 ******************************************************/
+.uploadwrap {
+    font-family: helvetica, tahoma, verdana, sans-serif;
+    font-size: 13px; /*background-color: #fff !important;*/
+}
+
+.fi-button-msg {
+    border: 2px solid #ccc;
+    padding: 5px 10px;
+    background: #eee;
+    margin: 5px;
+    float: left;
+}
+
+.x-form-text {
+    height: 22px;
+    line-height: 18px;
+    vertical-align: middle;
+}
+
+.x-form-file-wrap {
+    position: relative;
+    height: 22px;
+}
+
+.x-form-file-wrap .x-form-file {
+    position: absolute;
+    right: 0;
+    -moz-opacity: 0;
+    filter: alpha(opacity:0);
+    opacity: 0;
+    z-index: 2;
+    height: 22px;
+}
+
+.x-form-file-wrap .x-form-file-text {
+    position: absolute;
+    left: 0;
+    z-index: 3;
+    color: #777;
+}
+
+.x-form-upload-loading {
+    width: 100px;
+    height: 10px;
+    float: left;
+    background: url(images/loading3.gif) no-repeat
+}
+
+/* mutiselect的样式 */
+.formselect-list {
+    border: 0px solid #B5B8C8;
+    /*background: #E6E8E8;*/
+    overflow: hidden;
+}
+
+.formselect-list-inner {
+    overflow: auto; /*position: relative;*/
+    overflow-x: hidden;
+}
+
+.formselect-list-item {
+    float: left;
+    margin: 0 5px;
+    font: normal 12px tahoma, arial, helvetica, sans-serif;
+    border: 0px solid #fff;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    text-align: left;
+    /*background: #E7E7E7;*/
+	vertical-align:middle;
+}
+.formselect-list-item input{ vertical-align:middle;}
+.formselect-list .formselect-selected {
+/*border: 1px dotted #a3bae9 !important;*/
+/*background: #C4C7C7;*/
+    cursor: pointer;
+}
+
+
+.swordform_item_oprate .up-list {
+	padding: 0;
+	list-style: none;
+	margin: 0;
+    text-align: left;
+}
+
+.swordform_item_oprate .file-invalid {
+	cursor: pointer;
+	color: #514721;
+	line-height: 2em;
+	padding-left: 22px;
+	background: url(images/error.png) no-repeat 1px 50%;
+	margin-bottom: 1px;
+}
+.swordform_item_oprate  .file-invalid span {
+	background-color: #fff6bf;
+	padding: 1px;
+}
+
+.swordform_item_oprate  .file {
+	line-height: 2em;
+	padding-left: 22px;
+	background: url(images/attach.png) no-repeat 1px 50%;
+}
+
+.swordform_item_oprate .file span{	_display:block;
+	_float:left;
+}
+
+.swordform_item_oprate   .file .file-size {
+	color: #666;
+}
+
+.swordform_item_oprate   .file .file-delete {
+    padding-left: 22px;
+	background: url(images/delete.gif) no-repeat  5px 50%;
+	background: url(images/delete.gif) no-repeat  5px 50%;
+	_background: url(images/delete.gif) no-repeat  5px 10px;
+	_font-size:12px;
+	_vertical-align:middle;
+}
+
+ .swordform_item_oprate  .file .file-error {
+	color: #8a1f11;
+}
+
+.swordform_item_oprate  .file .file-progress {
+	width: 125px;
+	height: 12px;
+	vertical-align: middle;
+	background-image: url(images/progress.gif);
+}

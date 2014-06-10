@@ -1,0 +1,570 @@
+/*合计部分样式！！*/
+.sGrid_hj_row_div{position: relative;border-bottom: 1px solid #C1DAD7;border-top: 1px solid #C1DAD7;height:25px;background: #ffffff}
+.sGrid_hj_row_item_div{
+    display: block;
+    float: left;
+    height: 25px; /*因此高度与js有关，请尽量不要修改此值！！*/
+    line-height: 25px; /* 因此高度与js有关，请尽量不要修改此值！！*/
+    border-right: 1px solid #C1DAD7;
+    margin-left: -1px;
+    overflow: hidden;
+    white-space: nowrap; /*防止文字太长时候自动折行*/
+    text-overflow: ellipsis; /*ie下 可以自定出省略号，ff不支持*/
+}
+
+
+
+
+.sGrid_data_row_div_shuang {
+    background-color:#f1fafd;
+}
+.sGrid_data_row_div_dan {
+    background:#fff;
+}
+.sGrid_div {
+ border: 1px solid #C1DAD7;
+ font-size:12px;
+}
+.sGrid_header_border_div{
+    width:5px;
+    height:24px;
+    float:right;
+    cursor:w-resize;
+}
+.sGrid_border_div {
+    border: 1px solid black;
+    position: absolute;
+    width: 1px;
+    background:black;
+    cursor:w-resize;
+}
+.gridTipDiv {
+    display: none;
+    position: absolute;
+    background-color: lavender;
+    color: #15428b;
+    font:  12px tahoma,arial,helvetica,sans-serif;
+    text-align:left;
+    z-index:99999999;
+}
+.gridTipItemDiv {
+    border: 1px solid blue;
+    width: 150px;
+    margin: auto;
+    height: 25px;
+    line-height: 25px;
+}
+.gridTipItemDiv:hover {
+    COLOR: #ff7f24;
+    text-decoration: underline;
+    cursor: pointer;
+    background: #FB911C;
+    color: #15428b;
+}
+.sGrid_header_div {
+	width:100%;
+    border-bottom:1px solid #7f9db9;
+    /*border-right:1px solid #7f9db9;*/
+	clear:both;
+	width:100%;
+    background:url("images/table2.png") repeat-x 0 0;
+  	overflow:hidden;
+    position:relative;
+}
+.sGrid_header_div_topborder{
+   border-top:1px solid #7DB5DE;
+}
+.sGrid_header_item_div_hover{
+    cursor: pointer;
+    
+}
+.sGrid_header_item_div {
+    float: left;
+    text-align: center;
+    color: #285974;
+    border-right: 1px solid #C1DAD7;
+    margin-left:-1px;
+    line-height: 24px;
+    overflow: hidden;
+ }
+.sGrid_header_text_div_asc{
+    display:inline;
+    background:url("images/grid_asc.gif") no-repeat right;
+    padding-right:18px;
+}
+.sGrid_header_text_div_desc{
+    display:inline;
+    background:url("images/grid_desc.gif") no-repeat right;
+    padding-right:18px;
+}
+.sGrid_header_text_div {
+    display:inline;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+     color: #285974;
+    text-indent: 5px;
+    font-weight: bold;
+}
+.sGrid_header_checkbox {
+    display: inline;
+    height: 24px;
+    line-height: 24px;
+    margin:0px auto;
+}
+.sGrid_header_item_table{
+}
+.sGrid_header_item_tr{
+}
+.sGrid_header_item_td{
+}
+.sGrid_header_drag_start_div{
+}
+.sGrid_header_drag_enter_div{
+  background-color:#FB911C;
+}
+.sGrid_data_div {
+    background-color:white;
+	width:100%;
+    clear: both;
+    text-align: left;
+    text-indent:5px;
+    /*overflow-y: auto;*/
+    overflow-x: hidden;
+    font: 12px "宋体", Arial, Helvetica, sans-serif;
+  	width: 100%;
+    
+    
+}
+.sGrid_data_row_div{
+  
+   /* clear:both;
+	overflow:hidden; 
+	height:100%;*/
+	height:25px;
+    border-bottom:1px solid #C1DAD7;
+    width:100%;
+}
+.ieRemoveTreeBorder{
+   border-bottom:0px;
+}
+.sGrid_data_row_div_hover{
+    background:#FFF3C6;
+	
+}
+.sGrid_data_row_insert_div{
+}
+.sGrid_data_row_click_div{
+    background:#FFF3C6;
+}
+.sGrid_data_row_click_div:hover{
+    background:#FFF3C6;
+}
+div .sGrid_data_row_item_div{
+    display:none;
+}
+.sGrid_data_div .sGrid_data_row_div .sGrid_data_row_item_div {
+    display:block;
+    float: left;
+    height: 25px;      /*因此高度与js有关，请尽量不要修改此值！！*/
+    line-height: 25px;  /* 因此高度与js有关，请尽量不要修改此值！！*/
+    border-right: 1px solid #C1DAD7;
+    margin-left:-1px;
+    /*border-bottom:1px solid #b4b4b4;*/
+    overflow:hidden;
+    white-space:nowrap;  /*防止文字太长时候自动折行*/
+    text-overflow:ellipsis;  /*ie下 可以自定出省略号，ff不支持*/
+}
+.sGrid_data_row_item_div input{margin-top:2px\9;border:0;}
+/*.sGrid_data_row_item_div{
+    border-right:1px solid #a3bae9;
+    border-bottom:1px solid #a3bae9;
+    float:left;
+    height: 25px;
+    line-height: 25px;
+    overflow:hidden;
+}*/
+/*数据区域包含一个cell的可编辑text的div*/
+.sGrid_data_row_item_text{
+   /*border:1px solid lightseagreen ;*/
+   /*height:30px;*/   /*  js里面定义了此属性的默认值，此属性在此无效了*/
+   /*background-color:antiquewhite;*/
+}
+
+/*数据区域包含一个cell的可编辑text的input , 点击后创建此input*/
+.sGrid_data_row_item_text_input{
+   border:1px solid lightseagreen ;
+   height:20px;
+    /*background:wheat;*/
+}
+/*数据区域包含一个cell的多选框*/
+.sGrid_data_row_item_checkbox{
+   /*border:1px solid lightseagreen ;*/
+   height:21px;
+   line-height:21px;
+    margin:0px auto;
+    display:block;
+}
+/*数据区域包含一个cell的单选框*/
+.sGrid_data_row_item_radio{
+
+}
+/*数据区域包含一个cell的按钮*/
+.sGrid_data_row_item_button{
+
+}
+/*数据区域直接使用item div作为button的样式*/
+.sGrid_data_row_itemdiv_button {
+
+    font-family : Tahoma;
+    font-size : 12px;
+    height:25px;
+    /*color: #004b96;*/
+
+   text-decoration:underline;
+     cursor: pointer;
+   /*font-style:italic;*/
+}
+/*数据区域直接使用item div作为button的样式 但鼠标移入的时候*/
+.sGrid_data_row_itemdiv_button_hover {
+    color:  #3A6EA5;
+}
+
+.sGrid_data_row_itemdiv_button_disabled {
+    color: gray;
+}
+.sGrid_data_row_itemdiv_button_disabled:hover {
+    background-image: url(images/1.gif); /*没有这张图，为了冲掉原来的背景样式*/
+    font-style:normal;
+    color: gray;
+    cursor:default;
+}
+
+/*数据区域包含一个cell的超链接*/
+.sGrid_data_row_item_a{
+    text-decoration: underline ;
+    cursor:pointer;
+    color:blue;
+}
+
+
+/*拖拽行 开始的时候 被拖拽元素的样式 */
+.sGrid_data_row_drag_start_div{
+  background-color:chartreuse;
+}
+/*拖拽行 进入可以放置的区域，区域的效果*/
+.sGrid_data_row_drag_enter_div{
+  background-color:#FB911C;
+}
+
+/*被删除行的现实效果*/
+.sGrid_data_row_delete_div{
+  display:none;
+  background-color:#ffd3b3;
+}
+
+/*更新状态cell的显示效果*/
+.sGrid_data_cell_update_div{
+  /*background-color:#d6ffc4;*/
+}
+/*新增行 校验未通过cell 的显示效果*/
+.sGrid_data_cell_insert_error_div{
+  /*background-color:bisque;*/
+}
+
+
+/*数据区域 end*/
+
+
+/*控制台区域 start*/
+/*控制台区域最外层的div*/
+.sGrid_console_div {
+    border-top:1px solid #C1DAD7;
+     /*border-right:1px solid #7f9db9;*/
+     /*border-bottom:1px solid #7f9db9;*/
+    background: white;
+
+    clear: both;
+    text-align: center;
+    width: 100%;
+}
+
+/*控制台区域按钮的样式*/
+    .sGrid_console_item_button {
+    height: 16px;
+    border: 0;
+    background: #fff;
+    font-size: 12px;
+    margin-top: 5px;
+    cursor:pointer;
+
+}
+
+.sGrid_console_item_button_hover {
+    color:#4293CB;
+}
+.sGrid_console_item_button_disabled{
+   cursor: default;
+    }
+
+
+/*控制台区域翻页的确定按钮*/
+.sGrid_console_target_ok {
+    background: #fff;
+    font-size: 12px;
+    color:#000;
+    margin: 3px 5px;
+    padding:0px 10px;
+    cursor:pointer;
+    border:1px solid #2d73b9;
+    background:url(images/btn.png) repeat-x;
+    /*background:url(images/allbgs.png) repeat-x -203px 0px;
+    width:1px;*/
+    height:19px;
+    line-height:19px;
+    
+    
+}
+
+.sGrid_console_target_ok_hover{
+    background: #fff;
+    font-size: 12px;
+    margin: 3px 5px;
+    padding:0px 10px;
+    cursor:pointer;
+    border: 1px solid #a2904d;
+    color: #663300;
+    background:url(images/btn2.png) repeat-x;
+    height:19px;
+    line-height:19px;
+    }
+
+
+
+
+
+.sGrid_console_target_input{ width:32px; height:13px; border:1px solid #A3A3A3; font-size:12px;margin-left:10px;}
+
+/*控制台区域总文字显示的lable*/
+.sGrid_console_text_lable{
+    display:inline-block;
+}
+
+
+/*控制台区域 end*/
+
+
+/*控制面板样式 开始*/
+
+ /*控制面板区域*/
+.grid_ctrl_div {
+    background-color: lavender;
+    color: #15428b;
+    font:  12px tahoma,arial,helvetica,sans-serif;
+    text-align:left;
+}
+
+/*控制面板区域 元素*/
+.grid_ctrl_item_div {
+    border: 1px solid blue;
+    width: 150px;
+    margin: auto;
+    height: 25px;
+    line-height: 25px;
+}
+
+/*控制面板区域 元素 hover*/
+.grid_ctrl_item_div:hover {
+    COLOR: #ff7f24;
+    text-decoration: underline;
+    cursor: pointer;
+    background: #FB911C;
+    color: #15428b;
+}
+
+/*控制面板样式 结束*/
+
+
+/*panel的样式*/
+.swordgird_panel_header {
+    height: 27px;
+    background:url("images/headbg.jpg") repeat-x 0 -1px;
+    width:100%;
+}
+.swordgird_panel_header_1 {display:none;}
+.swordgird_panel_header_2 {display:none;}
+.swordgird_panel_header_caption {
+	text-indent:5px;
+	line-height:27px; 
+	font-weight:bold;
+	text-align:left;font-family:'宋体';font-size:12px;
+    color: #003073;
+    text-indent:1em;
+    background:url(images/icon_left.gif) no-repeat 6px 4px;
+    padding-left:18px;
+    _padding-left:28px;
+}
+
+
+
+/* tree */
+/*加号*/
+.grid_sign_plus{
+    background-image:url(images/plus.gif);
+    background-repeat: no-repeat;
+    /*border:1px solid black;*/
+    width:20px;
+    height:20px;
+    float:left;
+
+}
+/*减号*/
+.grid_sign_minus{
+     background-image:url(images/minus.gif);
+     background-repeat: no-repeat;
+    width:20px;
+    height:20px;
+    float:left;
+}
+
+/*最末节点*/
+.grid_sign_leaf{
+     /*background-image:url(img/minus.gif);*/
+    width:20px;
+    height:20px;
+    float:left;
+}
+
+/*有符号项目的样式*/
+.grid_sign_cell{
+     text-align:left;
+}
+/*站位的空白*/
+.grid_sign_white{
+    width:20px;
+    height:20px;
+    float:left;
+}
+
+
+/*image 开始*/
+
+.sGrid_console_item_button_first{
+    background:url("images/page-first.gif") #EFEFEF no-repeat center;
+    border:0px;
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
+}
+
+.sGrid_console_item_button_first:hover{
+    border:1px solid silver;
+}
+
+.sGrid_console_item_button_prev{
+    background:url("images/page-prev.gif") #EFEFEF no-repeat center;
+    border:0px;
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
+}
+.sGrid_console_item_button_prev:hover{
+    border:1px solid silver;
+}
+.sGrid_console_item_button_next{
+    background:url("images/page-next.gif") #EFEFEF no-repeat center;
+   border:0px;
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
+}
+.sGrid_console_item_button_next:hover{
+    border:1px solid silver;
+}
+.sGrid_console_item_button_last{
+    background:url("images/page-last.gif") #EFEFEF no-repeat center;
+    border:0px;
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
+}
+.sGrid_console_item_button_last:hover{
+    border:1px solid silver;
+}
+
+
+/*第*/
+.sGrid_console_text_lable_di{
+    border-left:1px solid silver;
+    margin-left:5px;
+    padding-left:5px;
+
+}
+
+/*页*/
+.sGrid_console_text_lable_ye{
+    border-right: 1px solid silver;
+    margin-right: 5px;
+    padding-right:5px;
+}
+
+/*每*/
+.sGrid_console_text_lable_mei{
+    border-left:1px solid silver;
+    margin-left:5px;
+    padding-left:5px;
+}
+/*条*/
+.sGrid_console_text_lable_tiao{
+    border-right: 1px solid silver;
+    margin-right: 5px;
+    padding-right: 5px;
+}
+
+/*录*/
+.sGrid_console_text_lable_lu{
+   border-right: 1px solid silver;
+    margin-right: 5px;
+    padding-right: 5px;
+}
+
+
+/*image 结束*/
+.sGrid_data_row_item_rowNum{
+    color:#000;
+    text-align:center;
+    text-indent:0;
+    font-weight:bold;
+}
+
+
+.wordBreak .sGrid_data_div .sGrid_data_row_div {display: table;overflow:hidden;border-collapse:collapse;table-layout:fixed;}
+.wordBreak .sGrid_data_div .sGrid_data_row_div .sGrid_data_row_item_div{word-wrap:break-word; white-space:normal;height:25px;line-height:20px;display: table-cell; vertical-align: middle;float:none;}
+
+
+.wordBreak .sGrid_header_div {
+    display: table;
+    overflow: hidden;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.wordBreak .sGrid_header_div .sGrid_header_item_div {
+    height:34px;
+    line-height:20px;
+    word-wrap:break-word; white-space:normal;
+    display: table-cell;
+    vertical-align: middle;
+    float: none;
+}
+
+.wordBreak_ie67 .sGrid_header_div {overflow:hidden;}
+.wordBreak_ie67 .sGrid_header_div .sGrid_header_item_div{height:auto;line-height:20px;margin-bottom:-10000px;padding-bottom:10000px;word-wrap:break-word; white-space:normal;}
+
+.wordBreak_ie67 .sGrid_data_div .sGrid_data_row_div {overflow:hidden;}
+.wordBreak_ie67 .sGrid_data_div .sGrid_data_row_div .sGrid_data_row_item_div{height:auto;line-height:20px;margin-bottom:-10000px;padding-bottom:10000px;word-wrap:break-word; white-space:normal;}
+
+.sGrid_console_item_a {font-size:12px;color:#146896; text-decoration:none;}
+.sGrid_console_item_a_hover{color:#EC0000;font-size:12px;}
+.sGrid_console_item_a_disable { color:#CCCCCC;font-size:12px;}
+.sGrid_console_item_a_disable_hover{ color:#CCCCCC;font-size:12px;}

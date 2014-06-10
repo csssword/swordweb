@@ -1,0 +1,70 @@
+/* panel最外层的div  */
+.x-panel { border:1px solid #A6CAC6;}
+/* panel的header  */
+.x-panel-header {
+    overflow: hidden;
+    zoom: 1;
+    color: #15428b;
+    line-height:27px;
+    font: bold 12px tahoma, arial, verdana, sans-serif;
+    background: url(images/headbg.jpg) repeat-x 0 -1px;
+    boder:none;  
+}
+.x-unselectable, .x-unselectable * {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+}
+.x-panel-header-text{
+	/*header上面的字体*/
+   font: 12px ;
+   line-height:26px;
+   padding-left:23px;
+   background: url(images/icon_left.gif) no-repeat 5px 4px ;
+}
+/* panel的header上面的button,x-tools这个按钮在swordcss全局中已经定义了*/
+/*关闭按钮*/
+.x-tool-close {
+    background-position: 0 -0;
+}
+/*pin按钮(不允许拖拽的按钮)*/
+.x-tool-pin {
+    background-position: 0 -135px;
+}
+.x-tool-pin-over {
+    background-position: -15px -135px;
+}
+/*缩进的按钮*/
+.x-tool-toggle {/*向下*/
+    background-position: 0 -60px;
+}
+.x-panel-collapsed .x-tool-toggle {/*向上*/
+    background-position: 0 -75px;
+}
+
+/*panel的body*/
+.x-panel-bwrap {
+    overflow: hidden;
+    zoom: 1;
+    left: 0;
+    top: 0;
+}
+.x-panel-body {
+  
+    border-top: 0 none;
+    overflow: auto;
+   
+    position: relative;
+    zoom: 1;
+}
+/*panel的resize的功能*/
+.x-panel-bottom-resize {
+    bottom: 1px;
+    right: 1px;
+    cursor: nw-resize;
+    position: absolute;
+    background-image: url('images/resizebutton.gif');
+    background-position: -42px -10px;
+    width: 10px;
+    height: 10px;
+    font-size: 0;
+}

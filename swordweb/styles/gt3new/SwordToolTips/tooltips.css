@@ -1,0 +1,49 @@
+#DHTMLgoodies_formTooltipDiv {
+	color: #FFF;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 0.8em;
+	line-height: 120%;
+}
+
+.DHTMLgoodies_formTooltip_closeMessage {
+	color: #FFF;
+	font-weight: normal;
+	font-size: 0.7em;
+}
+
+.DHTMLgoodies_green_formTooltip_bottomImg {
+	background: url(images/green/green-arrow.gif) no-repeat 20px 0;
+	height: 13px;
+	overflow: hidden;
+}
+
+.DHTMLgoodies_green_formTooltip_rightImg {
+	background: url(images/green/green-arrow-right.gif) no-repeat 0 5px;
+	position: absolute;
+	display: block;
+}
+
+.DHTMLgoodies_green_formTooltip_upImg {
+	background: url(images/green/green-arrow-up.gif) no-repeat 20px 0;
+	height: 13px;
+	overflow: hidden;
+}
+
+.DHTMLgoodies_blue_formTooltip_bottomImg {
+	background: url(images/blue/blue-arrow.gif) no-repeat 20px 0;
+	height: 13px;
+	overflow: hidden;
+}
+
+.DHTMLgoodies_blue_formTooltip_rightImg {
+	background: url(images/blue/blue-arrow-right.gif) no-repeat 0 5px;
+	position: absolute;
+	display: block;
+}
+
+.DHTMLgoodies_blue_formTooltip_upImg {
+	background: url(images/blue/blue-arrow-up.gif) no-repeat 20px 0;
+	height: 13px;
+	overflow: hidden;
+}

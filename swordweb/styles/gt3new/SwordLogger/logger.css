@@ -1,0 +1,162 @@
+.logger {
+	width: 1000px;
+	height: 300px;
+	z-index: 20000;
+	border: thin groove;
+	position: absolute;
+	top: 210px;
+	left: 80px;
+	font-size: 12px;
+	background-color: aquamarine; 
+}
+
+.logger .caption{
+	background-color: white;
+	height:16px;
+    cursor:move;
+}
+
+.logger .caption .captionNameDiv{
+	float:left;
+}
+
+.logger .caption .captionTools div{
+	cursor:pointer;
+	width:16px;
+	height:16px;
+	float:right;
+}
+
+.logger .caption .captionTools .tools_closeBtn{
+	background:url(images/ico.gif) no-repeat -48px 0;
+}
+.logger .caption .captionTools .tools_maxBtn{
+	background:url(images/ico.gif) no-repeat -16px 0;
+}
+.logger .caption .captionTools .tools_minBtn{
+	background:url(images/ico.gif) no-repeat 0 0;
+}
+.logger .caption .captionTools .tools_normalBtn{
+	background:url(images/ico.gif) no-repeat -32px 0;
+}
+
+.logger .title{
+	background-color: #efe8e0;
+	height:20px;
+}
+
+.logger .area{
+	filter: alpha(opacity=80);
+	overflow: auto;
+	height: 250px;
+	opacity: 0.8;
+	text-align: center;
+}
+
+.logger .area .contentDiv{
+	clear:both;
+}
+
+.logger .area .contentDiv div{
+	float: left;
+	border-collapse:collapse;
+	border-left: 1px solid;
+    border-top: 1px solid;
+    
+	word-break:break-all;
+	vertical-align: bottom;
+}
+
+.logger .area .contentDiv .areaLevel{
+	width: 10%;
+}
+
+.logger .area .contentDiv .areaTime{
+	width: 20%;
+}
+
+.logger .area .contentDiv .areaModule{
+	width: 15%;
+}
+
+.logger .area .contentDiv .areaFunc{
+	width: 15%;
+}
+
+.logger .area .contentDiv .areaMsg{
+	width: 38%;
+}
+
+.logger .tail{
+	background: #efe8e0;
+	height:16px;
+}
+
+.logger .tail .load{
+	float:left;
+}
+
+.logger .tail .load .chk{
+	
+}
+
+.logger .tail .position{
+	float:left;
+}
+
+.logger .tail .position .positionchk{
+	
+}
+
+.logger .tail .clear{
+	float:left;
+}
+
+.logger .tail .clear .btn{
+	
+}
+
+.logger .tail .version{
+	float:right;
+	text-align: right;
+}
+
+.logger .tail .resize{
+    bottom: 1px;
+    right: 1px;
+    cursor: nw-resize;
+    position: absolute;
+    background-image: url('images/resizebutton.gif');
+    background-position: -42px -10px;
+    width: 10px;
+    height: 10px;
+    font-size: 0;
+}
+
+.logger_debug{
+	color: blue;
+}
+
+.logger_info{
+	color: green;
+}
+
+.logger_warn{
+	color: yellow;
+}
+
+.logger_error{
+	color: red;
+}
+
+.logger_fatal{
+	color: silver;
+}
+
+.logger_profile{
+	color: gray;
+}
+
+
+
+

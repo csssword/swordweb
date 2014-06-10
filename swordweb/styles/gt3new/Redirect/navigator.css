@@ -1,0 +1,35 @@
+.navbar {
+    border-top: solid #000 1px;
+    border-bottom: solid #000 1px;
+    background-color: #336699;
+    font-size:12;
+}
+.navbar ul {
+    margin: 0px;
+    padding: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #FFF;
+    line-height: 20px;
+    white-space: nowrap;
+}
+.navbar li {
+    list-style-type: none;
+    display: inline;
+}
+.navbar li a {
+    text-decoration: none;
+    padding-right: 5px;
+    padding-left: 5px;
+    color: #FFF;
+}
+.navbar li a:link {
+    color: #FFF;
+}
+.navbar li a:visited {
+    color: #CCC;
+}
+.navbar li a:hover {
+    font-weight: bold;
+    color: #FFF;
+    background-color: #ff6600;
+}

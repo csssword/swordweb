@@ -1,0 +1,20 @@
+/*鼠标移入的效果*/
+.edit_in {
+    background-color: white;
+    cursor:move;
+    border:2px dotted;
+}
+
+/*拖拽开始，原始el的效果*/
+.edit_drag_start {
+    /*background-color: wheat;*/
+    background-color: white;
+    cursor:move;
+    border:2px dotted;
+}
+/*拖拽到节点上，被替换节点的效果*/
+.edit_drag_enter {
+    background-color: wheat;
+    border:2px dotted;
+}
+
