@@ -50,7 +50,11 @@ Sword.utils = {
             obj.imgtd = $(document.createElement("td"));
             obj.imgtd.name = 'imgtd';
             obj.imgtd.width = '17px';
-            obj.imgtd.set('html','<div style="width:17px;visibility:hidden;"></div>');    //为了在页面变小的时候，有个元素，会撑住td，否则，td会被盖住
+            if(Browser.Engine.version <= 5){
+            	obj.imgtd.set('html','<div style="width:17px;display:none;"></div>');
+            }else{
+            	 obj.imgtd.set('html','<div style="width:17px;visibility:hidden;"></div>');    //为了在页面变小的时候，有个元素，会撑住td，否则，td会被盖住
+            }
             tr.appendChild(obj.imgtd);
         }
         tb.appendChild(tr);
