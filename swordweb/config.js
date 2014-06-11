@@ -77,7 +77,7 @@ var swordCfg={
     
     ,SwordClientTiming:false
 
-    ,onBefore:["pullTreeBefore()","selectBefore()","_OverWritePostReq()","addKzSubmitDiv()"]
+    ,onBefore:["pullTreeBefore()","selectBefore()","_OverWritePostReq()"]
 
     ,onAfter:["pageAfter()"]
 
