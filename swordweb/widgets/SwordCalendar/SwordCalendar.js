@@ -1954,7 +1954,7 @@ var SwordCalendar = new Class({
         }
     }, addEventToEl:function (elType) {//根据元素类型添加事件
         if (elType == "input") {
-            this.dateInput.addEvent('focus', function (e) {
+            this.dateInput.addEvent('click', function (e) {
                 var input = $(new Event(e).target);
                 if (input.get('isShow') == "false") {
                     return;
