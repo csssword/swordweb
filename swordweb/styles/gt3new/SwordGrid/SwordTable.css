@@ -168,7 +168,8 @@ div .sGrid_data_row_item_div{
     float: left;
     height: 25px;      /*因此高度与js有关，请尽量不要修改此值！！*/
     line-height: 25px;  /* 因此高度与js有关，请尽量不要修改此值！！*/
-    border-right: 1px solid #C1DAD7;
+    /*border-right: 1px solid #C1DAD7;  */
+    border-right: 1px solid #DCE8DF;
     margin-left:-1px;
     /*border-bottom:1px solid #b4b4b4;*/
     overflow:hidden;
