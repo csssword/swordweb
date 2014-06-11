@@ -11,13 +11,13 @@
  * @param isShift  
  *            是否按下Shift键  
  */  
-var SwordHotKeyObject = function(keyCode, isCtrl, isAlt, isShift,isUserDefined) {  
-    this.keyCode = keyCode;  
-    this.isCtrl = isCtrl ? true : false;  
-    this.isAlt = isAlt ? true : false;  
-    this.isShift = isShift ? true : false;  
-    this.isUserDefined = isUserDefined ? true : false; 
-};
+//var SwordHotKeyObject = function(keyCode, isCtrl, isAlt, isShift,isUserDefined) {  
+//    this.keyCode = keyCode;  
+//    this.isCtrl = isCtrl ? true : false;  
+//    this.isAlt = isAlt ? true : false;  
+//    this.isShift = isShift ? true : false;  
+//    this.isUserDefined = isUserDefined ? true : false; 
+//};
 
 var PageContainer = new Class({
     Implements:[Events,Options]
@@ -45,7 +45,7 @@ var PageContainer = new Class({
         if($defined(node)) {
             swordWidgets = $(node).getElements("div[sword][sword!='PageInit']");
         } else {
-            swordWidgets = $$("div[sword][sword!='PageInit']");
+            swordWidgets = $$("div[sword][sword!='PageInit'][type!='pulltree']");
         }
         var newSwordWidgets = [];
         swordWidgets.each(function(item, index) {
