@@ -1,0 +1,39 @@
+drop table tb_performancelog;
+
+create table tb_performancelog(
+	v0		varchar(100),
+	v1		varchar(20),
+	v2		varchar(20),
+	v3		varchar(100),
+	v4		varchar(20),
+	v5		varchar(20),
+	v6		varchar(20),
+	v7		varchar(20),
+	v8		varchar(20),
+	v9		varchar(20)
+)
+;
+
+drop table tb_performancelog_web;
+
+create table tb_performancelog_web(
+	v0		varchar(200),
+	v1		varchar(20),
+)
+;
+select * from tb_performancelog;
+select * from tb_performancelog_web;
+
+delete from tb_performancelog;
+delete from tb_performancelog_web;
+
+
+日志记录内容：
+
+v0 -- 记录标号，随机数
+v1 -- 在DomainFacadeBean中拦截的总处理时间
+v2 -- SLSBDomainController 中 dealActions处理时间
+v3 -- transactionID
+v4 -- web端delegate中取远程DomainFacade对象花费的时间
+v5 -- web端delegate中调用远程invoke对象花费的时间
+
