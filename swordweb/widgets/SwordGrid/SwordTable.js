@@ -4983,14 +4983,19 @@ var SwordGrid = new Class({
     ,addNextFocusEvent:function(srcEl, obj) {
         srcEl.addEvent('keyup', function(event) {
             var e = Event(event);
+            
             if(e.key == 'enter') {
                 this.nextCell(srcEl, event,obj);
-                if(obj)obj.hide();
+                //if(obj)obj.hide();
+            }else if (e.key== 'left' || e.key== 'up' || e.key== 'right' || e.key== 'down' ) {  //左
+            	this.nextCell(srcEl, event,obj,e.key);
             }
+            if(obj)obj.hide();
         }.bind(this));
     }
     //加一个参数，为了解决GIRD中连续日期列，不触发hide时间，不执行校验及事件的BUG
-    ,nextCell:function(srcEl, e,obj) {
+    ,nextCell:function(srcEl, e,obj,nextOrder) {
+    	
         this.autoScroll = true;
         var startEl;
         var cell;
@@ -5012,22 +5017,27 @@ var SwordGrid = new Class({
             if(flag == false)return;
         }
         var nextEl;
-        if(this.options.nextOrder == 'row') {//以行的方向焦点转移，默认的方向
+        
+        if( nextOrder=="right"  || (!$chk(nextOrder) && this.options.nextOrder == 'row') ) {//以行的方向焦点转移，默认的方向
+            
             nextEl = this.findNextFocusInOneRow(startEl);
             while(!nextEl) {
                 var nextRow = this.getRow(startEl).getNext();
                 if(nextRow == null) {//没有下一行
-                	try{
-                    	if($chk(this.autoInsertFunc)){
-                    		this.autoInsertFunc();
-                        	var nextFunc = function(src, e, obj){
-                        		this.nextCell(src, e, obj);
-                        	}.bind(this);
-                        	nextFunc.delay(50,this, [startEl, e, obj]);
-                    	}
-                        e.target.blur();
-                	}catch(e){
-                	}
+                	if( !$chk(nextOrder) ){
+	                	try{
+	                    	if($chk(this.autoInsertFunc)){
+	                    		this.autoInsertFunc();
+		                        	var nextFunc = function(src, e, obj){
+		                        		this.nextCell(src, e, obj,nextOrder);
+		                        	}.bind(this);
+	                        		nextFunc.delay(50,this, [startEl, e, obj]);
+	                        		e.target.blur();
+	                    	}
+	                         
+	                	}catch(e){
+	                	}
+	              }
                     return;
                 }
                 startEl = nextRow.getFirst();
@@ -5045,19 +5055,59 @@ var SwordGrid = new Class({
                 }
         	   
             }
-        } else if(this.options.nextOrder == 'column') {//以列的方向焦点转移
+        } else if(  nextOrder == "down" ||  (!$chk(nextOrder) && this.options.nextOrder== 'column')) {//以列的方向焦点转移
+      
             var cells = this.getCells(startEl.get('name'));
             nextEl = this.findNextFocusInOneColumn(startEl, cells);
             while(!nextEl) {
                 startEl = startEl.getNext();//找下一列
                 if(startEl == null) {
-                    e.target.blur();
+                   // e.target.blur();
                     return;
                 }
                 cells = this.getCells(startEl.get('name'));
                 nextEl = this.findNextFocusInOneColumn(null, cells);
             }
+        }else if(  nextOrder == "left" ) {//以列的方向焦点转移
+        
+            nextEl = this.findPreviousFocusInOneRow(startEl);
+            while(!nextEl) {
+                var nextRow = this.getRow(startEl).getPrevious();
+                if(nextRow == null) {//没有下一行
+                    return;
+                }
+                startEl = nextRow.getLast();
+                var type = startEl.get('type');
+                if(['text','date','select','pulltree','password'].contains(type) && startEl.get('disabled') != true && startEl.get('disable') != 'true') {
+                     if(startEl.getStyle('display') != 'none') {//不是隐藏列
+                    	 nextEl = startEl;
+                      }
+                }
+                if(!$chk(nextEl))nextEl = this.findPreviousFocusInOneRow(startEl);
+                if(nextEl){
+                	 if(nextEl.get('type')=='date'||nextEl.get('type')=="pulltree"){
+             	    	this.nextRowScroll = true;
+             	    }
+                }
+        	   
+            }
+        }else if(  nextOrder == "up" ) {//以列的方向焦点转移
+        	
+		var cells = this.getCells(startEl.get('name'));
+	
+		nextEl = this.findPreviousFocusInOneColumn(startEl, cells);
+		
+		while(!nextEl) {
+			startEl = startEl.getPrevious();//找下一列
+			if(startEl == null) {
+				//e.target.blur();
+				return;
+			}
+			cells = this.getCells(startEl.get('name'));
+			nextEl = this.findPreviousFocusInOneColumn(null, cells);
+		}
         }
+        
         if(nextEl) {
             this.dataDiv().getChildren('.sGrid_data_row_click_div').each(function(el) {
                 el.removeClass('sGrid_data_row_click_div');
@@ -5121,6 +5171,23 @@ var SwordGrid = new Class({
         }
         return null;
     }
+    ,findPreviousFocusInOneColumn:function(startEl, cells) {
+        var indexBegin = 0;
+        if(startEl) {
+        	indexBegin = cells.indexOf(startEl) - 1;
+		if(indexBegin==-1) return null;        	
+        }else   if(indexBegin==0) indexBegin = cells.length-1;
+        while(indexBegin>-1) {
+            var temp = cells[indexBegin];
+            var type = temp.get('type');
+            if(['text','date','select','pulltree','password'].contains(type) && temp.get('disabled') != true && temp.get('disable') != 'true' && temp.getStyle('display') != 'none') {
+                return temp;
+            }else{
+            	indexBegin--;		
+            }
+        }
+        return null;
+    }
     /*
      * 从startEl 的开始找。。
      * 返回找到的元素el，没有找到返回null*/
@@ -5136,6 +5203,23 @@ var SwordGrid = new Class({
             nextEl = nextEl.getNext();
         }
     }
+    
+    /*
+     * 从startEl 的开始找。。
+     * 返回找到的元素el，没有找到返回null*/
+    ,findPreviousFocusInOneRow:function(startEl) {
+        var nextEl = startEl.getPrevious();
+        while(nextEl) {
+            var type = nextEl.get('type');
+            if(['text','date','select','pulltree','password'].contains(type) && nextEl.get('disabled') != true && nextEl.get('disable') != 'true') {
+                if(nextEl.getStyle('display') != 'none') {//不是隐藏列
+                    return nextEl;
+                }
+            }
+            nextEl = nextEl.getPrevious();
+        }
+    }
+  
 
     /**
      * 表格上执行一行物理删除的接口;
