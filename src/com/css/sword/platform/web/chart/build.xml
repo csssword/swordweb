@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- basedir是工作的根目录 .代表当前目录 -->
+<project name="chart" default="docs" basedir=".">
+<!-- src的目录-->
+ <property name="src" value="src"/>
+<!--  <import file="common-ant.xml" />  -->
+   <property name="app.copyright" value=" Copyright (c) 2011 The CSS Software Foundation.  All rights reserved."/>
+ <!--app的dist (distribution) 目录中-->
+ <property name="dist.dir" value="dist"/>
+ <property name="dist.docs" value="${dist.dir}/chart-docs"/>
+    
+ <!--  初始化创建目录包结构 -->
+ <target name="init">
+ <!--清除以前的dist目录-->
+  <delete dir="${dist.dir}"/>
+   <mkdir dir="${dist.dir}"/>
+   <mkdir dir="${dist.docs}"/>
+  </target>
+
+<!-- 生成java文档-->
+    <target name="docs" depends="init" description="creates the API documentation">
+    <echo message="进行生成javadoc。。。"/>
+        <!--
+            encoding="UTF-8" 
+            docencoding="GB2312"
+            -->
+        <javadoc packagenames="com.css.sword.platform.web.chart.ofc4j.*"
+                 sourcepath="${src}"
+                 private="yes" 
+                 defaultexcludes="yes"
+                 destdir="${dist.docs}"
+                 author="true"
+                 version="true"
+                 encoding="UTF-8"
+                 docencoding="GB2312"
+                 use="true"
+                 windowtitle="Docs API">
+            <doctitle><![CDATA[<h1>Sword Chart Docs API</h1>]]></doctitle>
+            <bottom><![CDATA[<i>${app.copyright}</i>]]></bottom>
+            <tag name="todo" scope="all" description="To do:"/>
+        </javadoc>
+    </target>
+</project>
