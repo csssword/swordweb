@@ -81,6 +81,7 @@ $extend(SwordCalendarTemplate, {
     	            }
     	        }
     	        el.set("value", elData);
+    	        el.set("oValue", elData);
     }
     /*
      * 模板元素追加事件
