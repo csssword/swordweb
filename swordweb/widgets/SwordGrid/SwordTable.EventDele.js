@@ -104,6 +104,7 @@ SwordGrid.implement({
         	treeDef.setStyle('width', '100%');  //设置宽度  原始cell宽度 只有列定义上的宽度   100可保证输入框撑满cell
         	treeDef.set('select','true');  
         	treeDef.set('Sword','SwordTree');
+        	treeDef.set('text','');
         	treeDef.set('name',treename);
         	pageContainer.initWidgetParam(treeDef);
         	treeObj = $w(treename);
@@ -115,21 +116,24 @@ SwordGrid.implement({
         	treeObj.initData(pc.getInitData(treename));
             this.addNextFocusEvent(treeObj.select.selBox);
             treeObj.select.addEvent('onSelectHide', function(input) {
-                var cell = input.getParent('.sGrid_data_row_item_pulltree');
-                treeObj.select.selBox.store('lastCell', cell);
-                if(!cell)return;
+                treeObj.options.pNode.inject(document.body);
+                treeObj.options.pNode.setStyle('display', 'none');
+                if(!this.targetCell)return;
+                treeObj.select.selBox.store('lastCell', this.targetCell);
                 var realvalue = input.get('realvalue');
                 var caption = input.get('value');
-                cell.set('realvalue', realvalue);
-                cell.set('text', caption);
-                cell.set('title', caption);
-                this.updateCell(cell, realvalue, caption, true);
+                this.targetCell.set('realvalue', realvalue);
+                this.targetCell.set('text', caption);
+                this.targetCell.set('title', caption);
+                this.updateCell(this.targetCell, realvalue, caption, true);
                 input.set('value', '');
                 input.set('realvalue', '');
             }.bind(this));
         }
+        this.targetCell = el;
+        treeObj.options.pNode.inject(el);
+        treeObj.options.pNode.setStyle('display', '');
         var input = treeObj.select.selBox;
-        input.inject(el);
         input.set('value', el.get('title'));
         input.set('realvalue', el.get('realvalue'));
         treeObj.select.showByJs = true;
