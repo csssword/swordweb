@@ -11,13 +11,13 @@
  * @param isShift  
  *            是否按下Shift键  
  */  
-//var SwordHotKeyObject = function(keyCode, isCtrl, isAlt, isShift,isUserDefined) {  
-//    this.keyCode = keyCode;  
-//    this.isCtrl = isCtrl ? true : false;  
-//    this.isAlt = isAlt ? true : false;  
-//    this.isShift = isShift ? true : false;  
-//    this.isUserDefined = isUserDefined ? true : false; 
-//};
+var SwordHotKeyObject = function(keyCode, isCtrl, isAlt, isShift,isUserDefined) {  
+    this.keyCode = keyCode;  
+    this.isCtrl = isCtrl ? true : false;  
+    this.isAlt = isAlt ? true : false;  
+    this.isShift = isShift ? true : false;  
+    this.isUserDefined = isUserDefined ? true : false; 
+};
 
 var PageContainer = new Class({
     Implements:[Events,Options]
@@ -583,7 +583,7 @@ var PageContainer = new Class({
                 }
             }
         }, this);
-        this.initCoutTag();
+//        this.initCoutTag();
 
         if($defined(param['onAfterLoadData'])) {
             param['onAfterLoadData'](dataObj);
@@ -1139,7 +1139,6 @@ function $init_Gt(){
     pc.process();
     MaskDialog.hide();
     _pcSwordClientPageJumpTiming("15");
-    document.body.focus();
 }
 function initSwordPage() {
 	 $init_Gt();
