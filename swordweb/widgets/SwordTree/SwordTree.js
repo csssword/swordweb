@@ -240,7 +240,6 @@ var SwordTree = new Class({
          */
         ,isDragCut:"true"
 
-        ,isShow:"true"
         /**
          * 定义用于验证目标节点是否已经存在的标识  "id,title"
          *  @property {private string} existRules
@@ -1016,7 +1015,7 @@ var SwordTree = new Class({
 		    	        if($chk(nodeData)){
 		    	            var hash = new Hash();
 		    	            var ccm = nodeData.ccm+","+nodeData.code;
-		    	            hash.set(this.options.cascadeSign.id, nodeData.ccm.split(','));
+		    	            hash.set(this.options.cascadeSign.id, ccm.split(','));
 		    	            this.extendNodeByIdPath(hash);
 	    					node = this.container.getElements("div[leaftype!='-1'][code='" + codes[i]+ "']")[0];
 	    				}
@@ -1744,9 +1743,6 @@ SwordTree.Draw = new Class({
 
         this.containerID = container.get("id") || container.get("name");
         var treeWrapper = this.nodeEnum("div");
-        if (this.options.isShow == "false") {
-            treeWrapper.setStyle("display", "none");
-        }
 
         treeWrapper.setProperties({
             depth:this.depth + 1
@@ -1759,12 +1755,12 @@ SwordTree.Draw = new Class({
         this.initParam();
         treeWrapper.addClass(this.options.treeStyle.treeWrapper);
         var ctEle = treeWrapper;
-        if ($defined(this.options.title)) {
-            var titleEle = this.nodeEnum("div");
-            titleEle.innerHTML = this.options.title;
-            titleEle.addClass(this.options.treeStyle.treeTitle);
-            treeWrapper.grab(titleEle);
-        }
+//        if ($defined(this.options.title)) {
+//            var titleEle = this.nodeEnum("div");
+//            titleEle.innerHTML = this.options.title;
+//            titleEle.addClass(this.options.treeStyle.treeTitle);
+//            treeWrapper.grab(titleEle);
+//        }
         if (this.options.startLayer == 0 || !dom.hasChildNodes()) {
             var childrenElement = this.nodeEnum("div");
             childrenElement.setProperty("leaftype", "-1");
@@ -2495,7 +2491,7 @@ SwordTree.Draw = new Class({
      			domNodeHs.set(item.code,item);
         	});
         	this.swordTree.treeArray.each(function(item){
-    			if(item.ccm.indexOf(nCccm)!=-1){
+    			if(item.ccm.contains(nCccm, ',')){
     				if(checkStats){
     					item.ischecked="true";item.state="checked";
         				this.setNodeDataCheckState(item.code,"ischecked",false,treeDataHs,domNodeHs) ;
@@ -2549,7 +2545,7 @@ SwordTree.Draw = new Class({
                 		nCccm=nCccm+","+nodeData.code;
                 	}
                 	this.swordTree.treeArray.each(function(item){
-            			if(item.ccm.indexOf(nCccm)!=-1){
+            			if(item.ccm.contains(nCccm, ',')){
             				if(state == "0"){
             					delete item.ischecked;delete item.state;
             					this.setNodeDataCheckState(item.code,"unchecked",false,treeDataHs,domNodeHs) ;
@@ -2894,7 +2890,7 @@ SwordTree.Draw = new Class({
                 		if($chk(arrDataHs)){
                     		arrDataHs.set(item.code,item);
                     	}
-            			if(item.ccm.indexOf(nCccm)!=-1){
+            			if(item.ccm.contains(nCccm, ',')){
             				if(state == "0"){
             					delete item.ischecked;delete item.state;
             					this.setNodeDataCheckState(item.code,"unchecked",false,treeDataHs,domNodeHs) ;
@@ -4106,6 +4102,7 @@ SwordTree.Draw = new Class({
                     childDiv.setStyle("display", "none");
                 }
             }
+            item.setStyle("color","#000000");//恢复因搜索添加的颜色
 
         }.bind(this));
         this.unSelectNode();
@@ -5226,7 +5223,6 @@ SwordTree.Select = new Class({
         }
         //form的提交识别标识
         ,formSubSign:"swordform_item_oprate swordform_item_input"
-        
 
     }
     ,initialize:function(options, tree, parent) {
@@ -5366,7 +5362,20 @@ SwordTree.Select = new Class({
         	e=new Event(e);
         	if((e.code>=37&&e.code<=40)||e.code=="13"||e.code=="35"||e.code=="36"){
         		this.elKeyUpEvent(e);
+        	}else if(e.code=="8"){/*判断当前的显示值是否与原来的值一样*/
+                var oldValue = this.getCaption()!=null?this.getCaption():"";
+                var newValue =  e.target.value;
+                if(oldValue!=newValue){
+                    this.fireEvent("onSelectChange",[newValue, oldValue]);
+                }
+                this.setRealValue('');
+               // this.selBox.value = '';
+                if(this.selBox.get('value')==""){
+                    var dataO=this.swordTree.oldDataStr||this.swordTree.options.dataStr;
+             		this.swordTree.reloadTree(dataO,true);
+                }
         	}
+        	
         }.bind(this)});
         this.selBox.addEvent("blur", this.selectBlur.bind(this));
         this.selDiv.addEvent("click", function() {
@@ -5574,7 +5583,7 @@ SwordTree.Select = new Class({
     ,clickBefore: function(){
     	if(this.swordTree.options.echoExtend == "true"){
         	if(!this.isClick){
-        		if(this.swordTree.gridAddEvent)this.buildTree();
+        		this.buildTree();
             	var realvalue = this.selBox.get('realvalue');
             	if($chk(realvalue)){
             		realvalue.split(',').each(function(value){
@@ -5655,20 +5664,6 @@ SwordTree.Select = new Class({
 
     ,keyDown:function(event) {
     	switch (event.code) {
-            case 8:
-            	/*判断当前的显示值是否与原来的值一样*/
-                var oldValue = this.getCaption()!=null?this.getCaption():"";
-                var newValue =  event.target.value;
-                if(oldValue!=newValue){
-                    this.fireEvent("onSelectChange",[newValue, oldValue]);
-                }
-                this.setRealValue('');
-               // this.selBox.value = '';
-                if(this.selBox.get('value')==""){
-                    var dataO=this.swordTree.oldDataStr||this.swordTree.options.dataStr;
-             		this.swordTree.reloadTree(dataO,true);
-                }
-    	        break;
             case 13:
                 this.getSelectedNode();
                 break;
@@ -5703,32 +5698,53 @@ SwordTree.Select = new Class({
      * 回选
      */
     ,getSelectedNode:function() {
-        var node = this.swordTree.getSelectedNode();
-        if ($defined(node)) {
-            var executeSel = false;
-            var func = this.swordTree.options.onNodeClickBefore;
-            var inputValue = null;
-            if ($defined(func)) {
-            	var resNodeClickBefore = this.getFunc(func)[0](node,this.selBox);
-            	if(resNodeClickBefore == true){
-            		executeSel = true;
-            	}
-            	else if($type(resNodeClickBefore)=='string'){
-                	inputValue = resNodeClickBefore;
-                	executeSel = true;
-            	}
-            } else if (!$defined(func)&&!executeSel) {
-                if ((this.swordTree.options.selectrule == "leaf" && node.get("leaftype") == 1) || (this.swordTree.options.selectrule == "all"))
-                    executeSel = true;
-            }
-            if (executeSel) {
-            	if(this.swordTree.options.checkbox =="true")return;
-                this.setSelectedNode(node, inputValue);
-            }else{
-                //否则展开该节点
-                this.swordTree.builder.draw.extend(node);
-            }
-        }
+         if(this.swordTree.options.checkbox =="true"){
+        	 if(this.swordTree.options.selectrule == "leaf"){
+                 this.setValue(this.swordTree.getAllChecked(this.swordTree.displayTag,",",true));
+                 //  submitFormat默认值为code，如果用户没有重新定义此值就按照this.options.cascadeSign.id获取回传的数据
+                 if(this.options.submitFormat=="code"){
+                     this.setRealValue(this.swordTree.getAllChecked(this.options.cascadeSign.id,",",true));
+                 }else{
+                     this.setRealValue(this.swordTree.getAllChecked(this.options.submitFormat,",",true));
+                 }
+             } else {
+                 this.setValue( this.swordTree.getAllChecked(this.swordTree.displayTag));
+                 //  submitFormat默认值为code，如果用户没有重新定义此值就按照this.options.cascadeSign.id获取回传的数据
+                 if(this.options.submitFormat=="code"){
+                     this.setRealValue(this.swordTree.getAllChecked(this.options.cascadeSign.id));
+                 }else{
+                     this.setRealValue(this.swordTree.getAllChecked(this.options.submitFormat));
+                 }
+             }
+
+             this.hide();
+         }else{
+             var node = this.swordTree.getSelectedNode();
+             if ($defined(node)) {
+                 var executeSel = false;
+                 var func = this.swordTree.options.onNodeClickBefore;
+                 var inputValue = null;
+                 if ($defined(func)) {
+                 	var resNodeClickBefore = this.getFunc(func)[0](node,this.selBox);
+                 	if(resNodeClickBefore == true){
+                 		executeSel = true;
+                 	}
+                 	else if($type(resNodeClickBefore)=='string'){
+                     	inputValue = resNodeClickBefore;
+                     	executeSel = true;
+                 	}
+                 } else if (!$defined(func)&&!executeSel) {
+                     if ((this.swordTree.options.selectrule == "leaf" && node.get("leaftype") == 1) || (this.swordTree.options.selectrule == "all"))
+                         executeSel = true;
+                 }
+                 if (executeSel) {
+                     this.setSelectedNode(node, inputValue);
+                 }else{
+                     //否则展开该节点
+                     this.swordTree.builder.draw.extend(node);
+                 }
+             }
+         }
     }
 
     ,setSelectedNode:function(node, inputValue) {
@@ -5772,7 +5788,7 @@ SwordTree.Select = new Class({
                     this.setRealValue(newValue);                 
                  }
             }
-            this.setValue((inputValue == null) ? value : inputValue)
+            this.setValue((inputValue == null) ? value : inputValue);
             this.selBox.store('treeData',node.retrieve('data'));
             this.hide();
             this.swordTree.unSelectNode();
@@ -5901,13 +5917,15 @@ SwordTree.Select = new Class({
         	this.hide();
         } else {
         	if(t.options.echoExtend == "true"){
+//        		t.search(sb.get("value"));
+//        		if(!$chk(sb.get("value")))t.collapse();
 	        	this.show();
         	}else{
         		var reValue = sb.get("realValue");
         		if(this.options.readonly!="true"){
     	        	if ($chk(sb.get("value"))) {
-    	        			if(!this.builder||!t.builder.draw){this.show();}
     	        			t.search(sb.get("value"));
+    	        			this.show();
     	            }
     	        	else {t.search();this.show();}
         		} else {
@@ -5977,7 +5995,7 @@ SwordTree.Select = new Class({
         this.selBox.set("display", "true");
         this.validateBox(this.selBox);
         this.fireEvent("onSelectHide", [this.selBox]);
-        this.selBox.blur();//为了tipTitle 隐藏selBox的时候遗失焦点
+//        this.selBox.blur();//为了tipTitle 隐藏selBox的时候遗失焦点
         this.swordTree.removeTreeFilterHiddenClass();
     }
 
