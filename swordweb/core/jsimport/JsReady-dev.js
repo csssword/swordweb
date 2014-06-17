@@ -47,6 +47,7 @@ jsR.addWidget({name:"SwordToolBar",prefixPath:"swordweb/widgets/SwordToolBar",js
 jsR.addWidget({name:"SwordSearch",prefixPath:"swordweb/widgets/SwordSearch",jsPath:['SwordSearch.js'],cssPath:['SwordSearch.css']});
 jsR.addWidget({name:"Editor",prefixPath:"swordweb/core/edit",jsPath:['Editor.js'],cssPath:['edit.css']});
 jsR.addWidget({name:"StudioComm",prefixPath:"swordweb/core/edit",jsPath:['StudioComm.js']});
+jsR.addWidget({name:"SwordHotKeys",prefixPath:"swordweb/widgets/SwordHotKeys",jsPath:['SwordHotKeys.js']});
 /*去掉了,'swordcache-min.js'*/
 jsR.addWidget({name:"SwordClientCache",prefixPath:"swordweb/widgets/SwordClientCache",jsPath:['swfobject.js','query.js','SwordCacheManager.js']});
 
