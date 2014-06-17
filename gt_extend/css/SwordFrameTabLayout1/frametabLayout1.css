@@ -1,0 +1,118 @@
+/*最外层的div  */
+.layout1frametabDiv {
+    border-style: solid;
+    border-color: #99bbe8;
+    border-width: 0;
+}
+/*header的div*/
+.layout1ftable {
+    height: 43px;
+	border : 0;
+
+}
+/*header的左右button*/
+.layout1ftable .left {
+	float:left;
+    width: 24px;
+    height: 22px;
+    background: url(images/tab_ico_l.gif);
+    margin: 4px 4px 0 0;
+	cursor:pointer;
+}
+.layout1ftable .right {
+	float:right;
+    width: 24px;
+    height: 22px;
+    background: url(images/tab_ico_r.gif);
+    margin: 4px 0 0 4px;
+	cursor:pointer;
+}
+.layout1ftable .left_a {
+    background: url(images/tab_ico_l_a.gif);
+}
+.layout1ftable .right_a {
+    background: url(images/tab_ico_r_a.gif);
+}
+.layout1ftable .tab_box{
+	margin:0px;
+	vertical-align:top;
+	height:33px;
+	width:75%;
+	float:left;
+}
+/*header的item项的ul和li*/
+.layout1ftable .tab_box ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+	display:block;
+}
+.layout1ftable .tab_box ul li {
+	list-style-type: none;
+    padding: 0;
+    margin: 0;
+    height: 25px;
+    line-height: 25px;
+    float: left;
+    margin-right: 5px;
+    font-size: 12px;
+    color: #2e4e76;
+	cursor:pointer;
+}
+/*激活的li*/
+.layout1ftable .tab_box .sty_a {
+    background: url(images/tab_bg.gif);
+    border-left: 1px solid #86a5ae;
+    border-right: 1px solid #86a5ae;
+    font-weight:bold;
+    color:black;
+}
+/*没激活的li*/
+.layout1ftable .tab_box .sty_b {
+    background: url(images/tab_bg.gif) 0 -25px;
+    height: 23px;
+    border-left: 1px solid #b1c1d7;
+    border-right: 1px solid #b1c1d7;
+}
+/*浮动的li*/
+.layout1ftable .tab_box .sty_b:hover {
+    background-color:#FFFFFF;
+    background: url(images/tab_bg.gif);
+    border-left: 1px solid #86a5ae;
+    border-right: 1px solid #86a5ae;
+    font-style:italic;
+}
+/*文字*/
+.layout1ftable .tab_box .text {
+	text-align:center;
+}
+.layout1ftable .tab_box .text span{
+    float:left;
+}
+.layout1infoList{
+	float:right; width:160px; margin-top:8px; margin-right:4px;
+}
+/*关闭的按钮*/
+.layout1ftable .tab_box .esc {
+	float:left;
+    width: 11px;
+    height: 11px;
+    font-size: 0;
+    background: url(images/esc_ico.gif) no-repeat;
+    border: none;
+	margin:5px 0px 0 0;
+}
+/*body的div*/
+.x-tab-panel-body {
+    overflow: auto;
+	//border: 1px solid #8db2e3;
+    border-top:none;
+    //background: #e4edf9;
+	width: 100%;
+}
+.x-tab-panel-body-top {
+    border-top: 0 none;
+}
+.x-tab-panel-body-bottom {
+    border-bottom: 0 none;
+}

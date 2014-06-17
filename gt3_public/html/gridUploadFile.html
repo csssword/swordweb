@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">   
+<html>   
+<head>   
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>   
+     <script language="javascript" type="text/javascript" src="../../swordweb/core/jsimport/Sword.js"></script> 
+     <script language="javascript" type="text/javascript">
+     var param;
+     var tjtag;
+     var flzl;
+     function onFileCommitAfter(res) {
+    	 var box = this.parent[this.name];
+         box.closePopUpBox();
+         //if(sytag == "form"){
+         	// if($defined(param.formUploadAfter))param.formUploadAfter(res);
+              //}else{
+             	 if($defined(param.gridUploadAfter))param.gridUploadAfter(res);
+                 //}
+         if($defined(parent.onFileCommitAfter))parent.onFileCommitAfter(res);
+         }
+     function onSuccess(resData){
+    	 var box = this.parent[this.name];
+         param = box.options.param;
+         flzl = resData.getAttr("flzldm");
+         }
+
+     function fileVal(el){
+         var result = {};   
+         var value = el.get("value");
+         if(!$chk(value)){
+        	 result["state"]=false;
+        	 result["msg"]="不能为空";
+        	 tjtag = false;
+             } else if($defined(this.parent.uploadBefore)){
+             var msg = this.parent.uploadBefore(el);
+             if($chk(msg)){
+            	 result["state"]=false;
+            	 result["msg"]= msg;
+            	 tjtag = false;
+                 } else  tjtag = true;
+             }else tjtag = true;
+         return  result; 
+         }
+     function uploadfileBefore(){
+    	 var qdSubmit = $w("qdSubmit");
+         if(!tjtag){
+        	 qdSubmit.stop();
+             }else {
+                 qdSubmit.pushData("flzldm", flzl);
+                 }
+         }
+</script>
+</head>   
+<body>   
+<div sword='PageInit' onFinish="onSuccess();"></div>
+<div class="wrapper">
+			<div sword="SwordForm" name="uploadForm" panel="true"
+				userdefine="true">
+				<table class="tab_form" border="0" cellpadding="0" cellspacing="0">
+					<colgroup>
+						<col style="width: 30%"></col>
+						<col style="width: 70%"></col>
+					</colgroup>
+					<tr>
+						<th>
+							上传
+						</th>
+						<td>
+							<div name="gridupload" type="file" size="40" isMulti="true" rule="customFunction;fileVal()">
+							</div>
+						</td>
+					</tr>
+			</table>
+			</div> 
+			   <table class="tab_botton" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>
+						<div name="qdSubmit" sword="SwordSubmit" btnName="确定" isRedirect=false
+							enabled="true" isShow="true" postType="ajax" ctrl="UploadCtrl_gridUpload" onSubmitBefore="uploadfileBefore();"
+							class="submitbutton" >
+							 <div widgetName="uploadForm" isVal="false">  </div>   
+						</div>
+					</td>
+				</tr>
+			</table> 
+			</div>
+</body>   
+</html>  

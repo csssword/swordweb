@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">   
+<html>   
+<head>   
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>   
+     <script language="javascript" type="text/javascript" src="../../swordweb/core/jsimport/Sword.js"></script> 
+     <script language="javascript" type="text/javascript">
+     var tag;
+     var ywzb;
+     var ywid;
+     var sjgsdq;
+     var param;
+     var sytag;
+     function onFileCommitAfter(res) {
+    	 var box = this.parent[this.name];
+         box.closePopUpBox();
+         if(tag == "form"){
+         	 if($defined(param.formUploadAfter))param.formUploadAfter(res);
+              }else{
+             	 if($defined(param.gridUploadAfter))param.gridUploadAfter(res);
+                 }
+         if($defined(parent.onFileCommitAfter))parent.onFileCommitAfter(res);
+         }
+     function onSuccess(resData){
+    	 var box = this.parent[this.name];
+         param = box.options.param;
+         tag = resData.getAttr("tag");
+         ywzb = resData.getAttr("ywzb");
+         ywid = resData.getAttr("ywid");
+         sjgsdq = resData.getAttr("sjgsdq");
+         sytag = resData.getAttr("sytag");
+         }
+     function uploadfileBefore(){
+         var qdSubmit = $w("qdSubmit");
+         qdSubmit.pushData("ywzb",ywzb);
+         qdSubmit.pushData("ywid",ywid);
+         qdSubmit.pushData("sjgsdq",sjgsdq);
+         qdSubmit.pushData("sytag",sytag);
+         }
+</script>
+</head>   
+<body>   
+<div sword='PageInit' onFinish="onSuccess();"></div>
+<div class="wrapper">
+			<div sword="SwordForm" name="uploadForm" panel="true"
+				userdefine="true">
+				<table class="tab_form" border="0" cellpadding="0" cellspacing="0">
+					<colgroup>
+						<col style="width: 30%"></col>
+						<col style="width: 70%"></col>
+					</colgroup>
+					<tr>
+						<th>
+							上传
+						</th>
+						<td>
+							<div name="uploadField" type="file" size="40" isMulti="false" accept="image/gif, image/jpeg">
+							</div>
+						</td>
+					</tr>
+			</table>
+			</div> 
+			   <table class="tab_botton" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>
+						<div name="qdSubmit" sword="SwordSubmit" btnName="确定" isRedirect=false
+							enabled="true" isShow="true" postType="ajax" ctrl="UploadCtrl_imgFileUpload" onSubmitBefore="uploadfileBefore();"
+							class="submitbutton" >
+							 <div widgetName="uploadForm"> </div>   
+						</div>
+					</td>
+				</tr>
+			</table> 
+			</div>
+</body>   
+</html>  

@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Panel Test</title>
+</head>
+<script language="javascript" type="text/javascript" src="../../swordweb/core/jsimport/Sword.js"></script>
+<script type="text/javascript" >
+	function test(){
+		pc.getWidget('studentsEdit').move({top:300,left:500});
+	}
+</script>
+<body>
+	<div sword="SwordPopUpWindow" name="studentsEdit"  title="xxx" height="300" >
+	     <div sword='SwordForm'  name='studentsForm' caption='人员信息查询' layout="layer0"> 
+	         <div name="ID" caption="学号" type="text" type="text" rule="must" css="text-align:center;"></div>   
+	         <div name="NAME" caption="姓名" type="text" rule="must" ></div>
+	         <div name="CLASS" caption="班级" type="text" rule="must"  ></div>
+     	</div>
+	</div>
+	<div sword='SwordToolBar' name='test' >  
+                      <div name="associate">  
+                         <div name="associateWidget" widgetName="students">  
+                             <div name="muiltCheck" checkName="check"></div>  
+                         </div>  
+                      </div>  
+                      <div name="firstPage" gridName="students"></div> 
+                      <div name="previousPage" gridName="students" ></div>  
+                      <div name="nextPage" gridName="students"></div> 
+                      <div name="endPage" gridName="students"></div>
+                      <div name="edit" gridName="students"></div>
+                      <div name="new" gridName="students" ></div>
+                      <div name="delete" gridName="students"></div>  
+                 </div>  
+            <div sword='SwordGrid' name='students'  caption="学生查询结果" dblshoweditwin=true rows="10" autoHeight="false" rowCheckValidator = true>  
+                  <div name="check"  type="checkbox" ></div>  
+                  <div name="ID" caption="学号"></div>  
+                  <div name="NAME" caption="学生姓名"  rule="must"></div>  
+                  <div name="CLASS" caption="班级"  ></div>  
+             </div>  
+             <div sword='PageInit'  
+                  data='{"data":[{"trs":[{"tds":{"CLASS":{"value":"a"},"NAME":{"value":"afsd"},"ID":{"value":"1"}},"opt":null},{"tds":{"CLASS":{"value":"a"},"NAME":{"value":""},"ID":{"value":"2"}},"opt":null}],"name":"students","sword":"SwordGrid"},{"trs":[{"tds":{"CLASS":{"value":"a"},"NAME":{"value":"afsd"},"ID":{"value":"1"}},"opt":null},{"tds":{"CLASS":{"value":"a"},"NAME":{"value":"sdaf"},"ID":{"value":"2"}},"opt":null}],"name":"students1","sword":"SwordGrid"},{"trs":[{"tds":{"CLASS":{"value":"a"},"NAME":{"value":"afsd"},"ID":{"value":"1"}},"opt":null},{"tds":{"CLASS":{"value":"a"},"NAME":{"value":"sdaf"},"ID":{"value":"2"}},"opt":null}],"name":"students2","sword":"SwordGrid"}]}'></div>
+                 
+  		</div>
+</body>
+</html>

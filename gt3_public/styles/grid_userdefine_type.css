@@ -1,0 +1,46 @@
+@CHARSET "UTF-8";
+.left{
+	float:left;
+	height:25px;
+	line-height:25px;
+	border:1px solid #C1DAD7;
+	text-align: center;
+	border-right: none
+	}
+.clicked{
+	background-color: #e6eef9;
+	}
+.sGrid_div{
+	border-bottom: none
+	}
+.hj_left{
+	border:1px solid #C1DAD7;
+	border-top: none;
+	border-bottom: none;
+	float:left
+	}
+.hj{
+	height:25px;
+	line-height:25px;
+	float:left;
+	text-align: center;
+	position:relative;
+	margin-top:-26px
+	}
+.zhj{	
+	margin-top:-26px
+	}
+.hj_bottom{
+	border-bottom: 1px solid #C1DAD7
+	}
+.left_input{
+	width: 90%;
+	border: 0;
+	height:22px;
+	line-height:22px;
+	text-align: center;
+}
+.m_b25{margin-bottom: 25px;overflow:hidden;}
+.sGrid_data_row_div{width:100%;}
+.sGrid_data_div{*width:100%;_width:auto;}
+.sGrid_data_div input{padding:0;margin:0;}
