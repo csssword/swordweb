@@ -38,7 +38,7 @@ var SwordToolBar = new Class({
             child.each(function(item) {
                 var name = item.get('name');
                 var type = item.get('type');
-
+				var quickKey = item.get("quickKey");
 				var btnDiv;
                 var itemO = this.items[name]||this.items[type];
                 if (itemO != null) {
@@ -556,6 +556,10 @@ SwordToolBar.implement({
                     : "true")
                     : obj.get('enabled')
         });
+        	var quickKey = obj.get("quickKey");
+        	if($chk(quickKey)){
+        		newDiv.set("quickKey",quickKey);
+        	}
         var newPic = new Element('div', {
             'class' : $chk(obj.get('enabled')) ? (obj
                     .get('enabled') == 'true' ? pclass + '_enabled'
