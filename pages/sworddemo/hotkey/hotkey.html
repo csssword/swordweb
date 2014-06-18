@@ -7,15 +7,10 @@
 
 </head>
 <body style="height:500px">
-<p>提交组件注册的快捷键是alt+i</p>
- <div sword="SwordSubmit" name="submit_1" value="提交组件_1" quickKey="alt+i" onSubmitAfter="SwordSubmit_onSubmitAfter_submit_1()" onSubmitBefore="SwordSubmit_onSubmitBefore_submit_1()" onclick="SwordSubmit_onclick_submit_1()"  ></div>
 
-<p>工具栏按钮快捷键参考SwordHotKeys.js 中的hotKeyObj</p>
-<P >新建alt+n 刷新alt+r 返回alt+b
 <div sword="SwordToolBar" name="toolbar_1"   showType="mini" isFixed="false" >
-    <div name="new"  type="new"  caption="新建" onclick="SwordToolBar_onclick_toolbar_1_1()" ></div>
-    <div name="refresh" type="refresh" caption="刷新" onclick="SwordToolBar_onclick_toolbar_1_2()"></div>
-    <div name="back" type='back' caption="返回" onclick="SwordToolBar_onclick_toolbar_1_3()"></div>
+    <div name="new"  type="new"  caption="新建" onclick="SwordToolBar_onclick_toolbar_1_1()" _quickKey="alt+o" ></div>
+
     
 </div>
 <p>由于此版本的问题swordHotKeys组件必须放到所有组件的最后面使用</p>
