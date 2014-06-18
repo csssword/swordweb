@@ -1913,7 +1913,7 @@ var SwordGrid = new Class({
         		if(this.options.scrollX > "100%") {
                     tempTop = tempTop - 17;
                }
-               this.hjRow.setStyle("top", tempTop);	
+                this.hjRow.setStyle("top", tempTop);	
         	}else{
         		this.hjRow.setStyle("top", 0);	
         	}
@@ -1923,9 +1923,9 @@ var SwordGrid = new Class({
         		if(this.options.scrollX > "100%") {
                     tempTop = tempTop - 17;
                }
-               this.hjRow.setStyle("top", tempTop);	
+                this.hjRow.setStyle("top", tempTop);	
         	}else{
-            		this.hjRow.setStyle("top", -25);
+        		this.hjRow.setStyle("top", -25);
         	}
     	}
     }
@@ -5618,11 +5618,6 @@ var SwordGrid = new Class({
 
     //根据row的长度，重建表格宽度和高度
     ,buildXY:function(row) {
-        if(this.totalRows() == 0)
-            this.dataDiv().setStyle('display', 'none');
-        else {
-            this.dataDiv().setStyle('display', '');
-        }
         this.buildX(row);
         this.buildY();
     }
@@ -5842,7 +5837,7 @@ var SwordGrid = new Class({
 
         this.options.sGrid_console_totalRows_lable = new Element('lable', {
             'class': 'sGrid_console_text_lable'
-            ,'html':this.totalRows()
+            ,'html':0
         }).inject(this.console());
 
 
@@ -5956,7 +5951,7 @@ var SwordGrid = new Class({
 
         this.options.sGrid_console_totalRows_lable = new Element('lable', {
             'class': 'sGrid_console_text_lable'
-            ,'html':this.totalRows()
+            ,'html':0
         }).inject(this.console());
 
 
