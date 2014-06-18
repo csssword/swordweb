@@ -1,24 +1,4 @@
 
-/**  
- * 按键对象，封装按键和组合的功能键  
- *   
- * @param keyCode  
- *            按键值  
- * @param isCtrl  
- *            是否按下Ctrl键  
- * @param isAlt  
- *            是否按下Alt键  
- * @param isShift  
- *            是否按下Shift键  
- */  
-var SwordHotKeyObject = function(keyCode, isCtrl, isAlt, isShift,isUserDefined) {  
-    this.keyCode = keyCode;  
-    this.isCtrl = isCtrl ? true : false;  
-    this.isAlt = isAlt ? true : false;  
-    this.isShift = isShift ? true : false;  
-    this.isUserDefined = isUserDefined ? true : false; 
-};
-
 var PageContainer = new Class({
     Implements:[Events,Options]
     ,name:"PageContainer"
@@ -76,6 +56,11 @@ var PageContainer = new Class({
         this.widgets.set(value.get('name'), swordWidget);
         this.setWidget(value.get('name'),swordWidget,value.get('dataName'));
         swordWidget.initParam(value);
+    },initParamOne:function(node){
+    	var swordWidget = this.widgetFactory.create(node);
+    	node.pNode = node;
+        this.setWidget(node.get('name'),swordWidget,node.get('dataName'));
+        swordWidget.initParam(node);
     }
     ,initSwordPageData:function() {
         if($defined($('SwordPageData'))) {
@@ -218,7 +203,7 @@ var PageContainer = new Class({
         //给自定义form子类型注册事件
         this.initEventForForm();
         this.firePIOnAfter();
-        this.regHotKey();
+      
     }
     ,initEventForForm:function(){
     	this.widgets.each(function(value){
@@ -925,139 +910,7 @@ var PageContainer = new Class({
     reloadSel1:function(dataname, seldata){
     	this.deleteDataByDataName(dataname);
     	this.initData.data[this.initData.data.length] = seldata;
-    },
-     SwordHotKeys:new Hash({
-        'ctrlA': '导入',
-        'ctrlS': '保存',
-        'ctrlD': '下一户'
-    }), 
-    SwordHotKeyTitle:new Hash({
-        '导入':'ctrl+A',
-        '保存':'ctrl+S',
-        '下一户':'ctrl+D'
-    }), 
-    SwordhotKeyCaptions:new Hash({
-        '导入': null,
-        '保存': null,
-        '下一户': null
-    }),
-	// 过滤快捷键列表，如果需要过滤其它快捷键，请自行添加  
-    SwordHotKeyFilter : [
-              new SwordHotKeyObject(116), //F5刷新
-              new SwordHotKeyObject(83, true), // Ctrl+S  
-  			  new SwordHotKeyObject(68, true),// Ctrl+D
-              new SwordHotKeyObject(65, true)// Ctrl+A
-	],
-	addHotKey : function(keyCode,hotKey,caption,isCtrl, isAlt, isShift) {
-		 if(!isCtrl&&!isAlt&&!isShift)isCtrl = true;
-		 this.SwordHotKeyFilter.include(new SwordHotKeyObject(keyCode,isCtrl,isAlt,isShift));
-		 this.SwordHotKeys.set(hotKey,caption);
-		 this.SwordhotKeyCaptions.set(caption,null);
-	 },
-	 regUserDefinedHotKey : function(keyCode,hotKey,fun,isCtrl, isAlt, isShift) {
-		 if(!isCtrl&&!isAlt&&!isShift)isCtrl = true;
-		 this.SwordHotKeyFilter.include(new SwordHotKeyObject(keyCode,isCtrl,isAlt,isShift,true));
-		 this.SwordHotKeys.set(hotKey,fun);
-	 },
-    regHotKey : function() {
-    	//屏蔽IE原生快捷键
-    	window.document.addEvent('keydown', function(e) {  
-    	var event = e.event;
-        for (var i = 0, len = this.SwordHotKeyFilter.length; i < len; i++) {  
-            var fk = this.SwordHotKeyFilter[i];  
-            if (event.keyCode == fk.keyCode && event.ctrlKey == fk.isCtrl  
-                    && event.altKey == fk.isAlt && event.shiftKey == fk.isShift) {
-                // IE浏览器  
-                if (navigator.userAgent.indexOf("MSIE") > 0) {  
-                   return false;
-                }  
-                // Firefox等其他浏览  
-                else {  
-                    event.preventDefault();  
-                    event.stopPropagation();  
-                }  
-                break;  
-            }  
-        }  
-    }.bind(this));
-    //注册指定快捷键（当页面不存在toolbar或其父页面页不存在时不注册）	
-    	var bars = this.getWidgetsByType('SwordToolBar');
-    	var bar = bars.getValues()[0];
-    	var isPar = false;
-    	if(!$chk(bar)){//本页没有toolbar时，查看父页面是否存在toolbar，若存在使用父页面注册快捷键
-    		if(!$chk(parent.window.pc))return;
-    		bar = parent.window.pc.getWidgetsByType('SwordToolBar').getValues()[0];
-    		if(!$chk(bar))return;
-    		isPar = true;
-    	}
-    	var child = bar.pNode().getChildren();
-        if (child.length != 0) {
-        	child.each(
-                    function(item) {
-                    	if(this.SwordhotKeyCaptions.has(item.get('caption'))){
-                    		this.SwordhotKeyCaptions.set(item.get('caption'),item)
-                    		var container = item.parentNode.getElements("div[name='container']");
-                    		var parentDivs = container.getElements("div[name='" + item.get('name') + "']")[0];
-                    		if($chk(parentDivs))parentDivs.set('title',this.SwordHotKeyTitle.get(item.get('caption')));
-                    	}
-                    }.bind(this));
-        }
-    	window.document.addEvent('keydown', function(e) {
-    		var event = e.event;
-    	    for (var i = 0, len =this.SwordHotKeyFilter.length; i < len; i++) {  
-    	        var fk = this.SwordHotKeyFilter[i];  
-    	        if (event.keyCode == fk.keyCode && event.ctrlKey == fk.isCtrl  
-    	                && event.altKey == fk.isAlt && event.shiftKey == fk.isShift) {
-    	        	if($defined(pc.maskState)&&pc.maskState)return;
-    	            // IE浏览器  
-    	            if (navigator.userAgent.indexOf("MSIE") > 0) {
-    	            	var key = (e.key+"").toUpperCase();
-    	            	if(fk.isShift)key = 'shift'+key;
-    	            	if(fk.isAlt)key = 'alt'+key;
-    	            	if(fk.isCtrl)key = 'ctrl'+key;
-    	            	if(fk.isUserDefined){
-    	            		var fun = this.SwordHotKeys.get(key);
-    	            		if($chk(fun))this.getFunc(fun)[0]();
-    	            		break;
-    	            	}
-    	            	var caption = this.SwordHotKeys.get(key);
-    	            	if($chk(caption)){
-        	            	var srcItem = this.SwordhotKeyCaptions.get(caption);
-        	            	if($chk(srcItem)){
-        	            		var container = bar.options.pNode.getElements("div[name='container']");
-        	                    var parentDivs = container.getElements("div[name='" + srcItem.get('name') + "']")[0];
-        	                    if(parentDivs.get('enabled')=='true'){
-                	            	if($defined(srcItem.get('_onClick'))){
-                	            		var eve =  srcItem.get('_onClick');
-                	            		if(isPar)eve = "parent."+eve;
-                	            		this.getFunc(eve)[0]();
-                	            	}else if($defined(srcItem.get('onClick'))){
-                	            		var eve =  srcItem.get('onClick');
-                	            		if(isPar)eve = "parent."+eve;
-                	            		this.getFunc(eve)[0]();
-                	            	}
-        	                    }else{
-        	                    	break;
-        	                    }
-            	            	
-        	            	}else{
-        	            		break;
-        	            	}
-    	            	}else{
-    	            		return false;
-    	            	}
-    	            }  
-    	            // Firefox等其他浏览  
-    	            else {  
-    	                event.preventDefault();  
-    	                event.stopPropagation();  
-    	            }  
-    	            break;  
-    	        }  
-    	    }  
-    	}.bind(this));
-    	
-    } ,   	
+    },	
 	
 	 getRandomUUID : function() {
 		 return Sword.utils.uuid(32);
@@ -1264,3 +1117,5 @@ function  _pcSwordClientPageJumpTiming(type){
 		
 }
 }
+
+
