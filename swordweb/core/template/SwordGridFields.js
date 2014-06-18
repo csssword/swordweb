@@ -165,6 +165,9 @@ var SwordGridFields = new Class({
 		var row=[];
 		items.each(function(item){
 			var type = item.get('type');
+			if(item.getAttribute('show') == 'false') {//隐藏列
+				item.setStyle('display', 'none')
+	        }
 			row.push(this._findFieldHandler(type)(item,type));
 		},this);
 		return row.join("");
