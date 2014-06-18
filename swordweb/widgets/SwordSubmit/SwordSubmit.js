@@ -47,10 +47,12 @@ var SwordSubmit = new Class({
         ,onSuccess:$empty//提交成功触发,{reqData,resData}
         ,onError:$empty//提交失败触发,{reqData,resData}
         ,onAfterLoadData:$empty
+        ,onClick:$empty
         ,maskOpacity:1//蒙版的透明度
         ,submitConfirm:'false'//提交前是否询问
         ,submitConfirmMsg:null//提交前询问信息，默认为 是否+btnName
         ,isOneClick:'false'//是否 只允许点击一次，默认为否
+        ,quickKey:''
     }
     ,initialize:function() {
         if (arguments.length > 0) {
@@ -74,6 +76,7 @@ var SwordSubmit = new Class({
         this.htmlOptions(initPara);
         this.options.value = this.options.btnName || initPara.getAttribute('value') || this.options.value;
         this.build();
+        this.options.pNode.erase("onClick");//删除原生的onClick,避免两次调用
         this.pc = pageContainer;
     }
     ,initData:function(data) {
@@ -146,9 +149,13 @@ var SwordSubmit = new Class({
         }
     }
     ,initEvents:function() {
-        if ($defined(this.button)) {
-            this.button.addEvent("click", function() {
-                if(!this.button.disabled)this.submit();
+         if ($defined(this.button)) {
+        	this.container.onclick="";//清除原生click
+            this.container.addEvent("click", function() {
+            	this.clear();//在执行提交动作前,清理上一次的数据
+            	if(this.button.disable) return;
+            	this.fireEvent("onClick",[this,this.button]);
+                this.submit();
             }.bind(this));
         }
     }

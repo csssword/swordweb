@@ -72,7 +72,7 @@ var SwordHotKeys = new Class({
 	}]},
 	hotKeyEls:[],
 	eventContainer:$((self||window).document.body),
-	initParam:function(htmlNode){alert(2);
+	initParam:function(htmlNode){
 		this.htmlOptions(htmlNode);
 		var sKey=this.options.submitHashKey,tKey=this.options.toolbarHashKey,isInit=this.options.isInit;
 		if(isInit!="true")return;
