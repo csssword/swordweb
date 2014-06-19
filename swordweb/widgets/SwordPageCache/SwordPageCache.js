@@ -12,7 +12,7 @@ var SwordPageCache = new Class({
     ,uuid : null
     ,cacheObj: null
     ,jsVariableScope: ["gt3"]
-    ,uuidSign:["tid"]
+    ,uuidSign:["tid","ctrl"]
     
     ,constant:{
     	"cache":"cache"
@@ -229,37 +229,42 @@ var SwordPageCache = new Class({
     }
 
     ,set:function(key,value){
-		var dataStr = this.cacheObj.get(this.uuid);
-		var obj;
-		try{
-			if(dataStr && dataStr!="null"){
-				obj = JSON.decode(dataStr);
+    	if(this.cacheObj){
+			var dataStr = this.cacheObj.get(this.uuid);
+			var obj;
+			try{
+				if(dataStr && dataStr!="null"){
+					obj = JSON.decode(dataStr);
+					
+				}else{
+					obj = {};
+				}
+				obj[key] = value;
+				dataStr = JSON.encode(obj);
+				var size = dataStr.length ;
+				var cacheInfo = JSON.decode(this.cacheObj.get(this.collectInfoKey));
+				if(!cacheInfo){
+					cacheInfo = {};
+				}
+				cacheInfo[this.uuid] = {"size":size};
+				this.cacheObj.set(this.collectInfoKey,JSON.encode(cacheInfo));
 				
-			}else{
-				obj = {};
-			}
-			obj[key] = value;
-			dataStr = JSON.encode(obj);
-			var size = dataStr.length ;
-			var cacheInfo = JSON.decode(this.cacheObj.get(this.collectInfoKey));
-			if(!cacheInfo){
-				cacheInfo = {};
-			}
-			cacheInfo[this.uuid] = {"size":size};
-			this.cacheObj.set(this.collectInfoKey,JSON.encode(cacheInfo));
-			
-			this.cacheObj.set(this.uuid,dataStr);
-			
-		}catch(e){}
+				this.cacheObj.set(this.uuid,dataStr);
+				
+			}catch(e){}
+    	}
     }
     
 
     ,get:function(key){
-		var obj = this.cacheObj.get(this.uuid);
-		var res;
-		if(obj && obj!="null"){
-			res = JSON.decode(obj)[key];
-		}
+    	var res;
+    	if(this.cacheObj){
+			var obj = this.cacheObj.get(this.uuid);
+			
+			if(obj && obj!="null"){
+				res = JSON.decode(obj)[key];
+			}
+    	}
 		return res;
     }
     
@@ -316,7 +321,10 @@ var SwordPageCache = new Class({
 		
     }
 
-    
+    /**
+     * 需要考虑window.open 的场景
+     * @return {}
+     */
     ,getTopWin:function(){
     	var win ;
 	    win = window.top
