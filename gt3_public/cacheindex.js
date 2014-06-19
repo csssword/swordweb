@@ -75,6 +75,7 @@ var $swfcacheobject = (function () {
  				 if (fn){
     					fn.call(scope || o , val !="null" && val !=null, val,tname);
  				 }	 		 
+ 				 return val;
 	 	},
 	 	
 	 	set: function(key, val, fn, scope) {
