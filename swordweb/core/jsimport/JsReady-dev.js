@@ -52,6 +52,7 @@ jsR.addWidget({name:"SwordHotKeys",prefixPath:"swordweb/widgets/SwordHotKeys",js
 jsR.addWidget({name:"SwordClientCache",prefixPath:"swordweb/widgets/SwordClientCache",jsPath:['swfobject.js','query.js','SwordCacheManager.js']});
 jsR.addWidget({name:"SwordAnchorLayout",prefixPath:"swordweb/widgets/SwordLayout",jsPath:['SwordAnchorLayout.js']});
 jsR.addWidget({name:"SwordDockLayout",prefixPath:"swordweb/widgets/SwordLayout",jsPath:['SwordDockLayout.js']});
+jsR.addWidget({name:"SwordPageCache",prefixPath:"swordweb/widgets/SwordPageCache",jsPath:['SwordPageCache.js']});
 
 jsR.initConfig = function(cfg) {
 	jsR.config = cfg;
