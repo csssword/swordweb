@@ -21,7 +21,9 @@ var SwordForm = new Class({
         btmPanel:false,//是否创建底部的panel
         requiredSign:"caption",//必填的标志的位置。是跟随caption还是跟随field
         edit:null,//是否是只读form
-        isShowTogdiv:false
+        isShowTogdiv:false,
+        valfocus:true,//表单焦点移动的时候如果校验不通过是否可以移动到下一元素 true可以移动 false不可以移动
+        noNextEvent:$empty//表单焦点移动没有时调用方法
     },
     el:{
         name:null,//name属性
@@ -1021,6 +1023,15 @@ var SwordForm = new Class({
         return this.fieldElHash.getKeys();//this.options.pNode.getElements(".swordform_item_oprate").get('name');
     },
     nextFocus:function(e) {
+   
+    	if(this.options.valfocus=="false" || !this.options.valfocus){
+		    var vs = this.Vobj.validate(e);
+		    if(!vs){
+		    	e.target.focus();
+		    	return;
+		    }
+	    }
+	    
         e = Event(e);
         if(e.key == 'enter') {
             var tar = null;
@@ -1060,9 +1071,15 @@ var SwordForm = new Class({
             }
             if($defined(tar)) {
                 tar.focus();
-                tar.click();
+               // tar.click();
             } else {
-            	$(e.target.get("id")).blur();
+            
+	            if($chk(this.options.noNextEvent)){
+	            	this.getFunc(this.options.noNextEvent)[0]();
+	            }else{
+	            	$(e.target.get("id")).blur();
+	            }
+            	
             }
         }
     },
@@ -1553,7 +1570,7 @@ var SwordForm = new Class({
     	}
     }
     ,allElEvent:function(el){
-//    	var typeArray=["text","label","password"];
+//    	var typeArray=["text","label","password"];  
     	var tag = el.get("tag");
 		var input=tag=="input"||el.get("tag")=="textarea"?el:el.getElement("input");
 		if(input&&tag!='select'&&tag!='date'&&$chk(el.get("rule")))this.Vobj._add(el);
