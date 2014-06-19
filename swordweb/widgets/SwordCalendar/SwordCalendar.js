@@ -1814,7 +1814,9 @@ var SwordCalendar = new Class({
             	}else if(textLen >3){
             		return false;
             	}
-            }else return (key == 8 || key == 37 || key == 39 || (event.control && key == 86) || (event.shift && key == 36) || key==229);
+            }else if(key==9){
+        		this.hide();
+        	}else return (key == 8 || key == 37 || key == 39 || (event.control && key == 86) || (event.shift && key == 36) || key==229);
         } catch (e) {
         }
     },
