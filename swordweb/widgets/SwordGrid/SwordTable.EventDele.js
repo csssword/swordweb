@@ -95,53 +95,92 @@ SwordGrid.implement({
 	}
 	
     ,pulltreeeClickDele:function(e,defEl){
-    	var el=defEl;
-    	if(el.get('disable') == 'true'||el.get('disabled')==true)return;
-    	var treename = el.get('treename');
+    	var el=defEl, 
+    	type=defEl.get('type'), 
+    	elName=defEl.get('name'), 
+    	itemEl=this.getItemElByName(elName)[0],
+    	rowNum=this.getRowNum(defEl);
+    	
+    	var treename = itemEl.get('treename');
         var treeObj = $w(treename);
-        if(!treeObj){  //没有树对象 根据 当前传入cell创建树对象  
-        	var treeDef=el.clone();  //拷贝cell  避免改变当前cell的属性  
-        	treeDef.setStyle('width', '100%');  //设置宽度  原始cell宽度 只有列定义上的宽度   100可保证输入框撑满cell
-        	treeDef.set('select','true');  
-        	treeDef.set('Sword','SwordTree');
-        	treeDef.set('text','');
-        	treeDef.set('name',treename);
-        	pageContainer.initWidgetParam(treeDef);
-        	treeObj = $w(treename);
-        	if(!window.validator) {
-              	window.validator = pc.widgetFactory.create("SwordValidator");
-              	window.validator.initParam(this.options.vType);
-               }
-        	treeObj.setValidate(window.validator);
-        	treeObj.initData(pc.getInitData(treename));
-            this.addNextFocusEvent(treeObj.select.selBox);
-            treeObj.select.addEvent('onSelectHide', function(input) {
+        
+        
+        
+        if(treeObj.gridAddEvent != true) { //注册事件
+            var eventTarget = treeObj.select ? treeObj.select : treeObj;
+            eventTarget.addEvent('onSelectHide', function(input) {
+                var cell = input.getParent('.sGrid_data_row_item_pulltree');
+                treeObj.select.selBox.store('lastCell', cell);
                 treeObj.options.pNode.inject(document.body);
                 treeObj.options.pNode.setStyle('display', 'none');
-                if(!this.targetCell)return;
-                treeObj.select.selBox.store('lastCell', this.targetCell);
+
+                if(!cell)return;
+                cell.set('html', '');
                 var realvalue = input.get('realvalue');
                 var caption = input.get('value');
-                this.targetCell.set('realvalue', realvalue);
-                this.targetCell.set('text', caption);
-                this.targetCell.set('title', caption);
-                this.updateCell(this.targetCell, realvalue, caption, true);
+                cell.set('realvalue', realvalue);
+
+                this.updateCell(cell, realvalue, caption, true);
+
                 input.set('value', '');
                 input.set('realvalue', '');
-            }.bind(this));
+
+                if(cell.get('rule')) {//执行校验
+                    if(!this.vObj.doValidate(cell).state) {//校验没有通过
+                        this.addError(this.getRow(cell).get('rowNum'), cell.get('name'));
+                    } else {
+                        this.removeError(this.getRow(cell).get('rowNum'), cell.get('name'));
+                    }
+                }
+
+            }.bind(this))
+
+            treeObj.gridAddEvent = true;
         }
-        this.targetCell = el;
+        
+
+               
+        if(el.get('disable') == 'true'||el.get('disabled')==true)return;
+        treeObj.select.hide();
+        el.set('html', '');
+        var input = treeObj.options.pNode.getElement('input');
         treeObj.options.pNode.inject(el);
         treeObj.options.pNode.setStyle('display', '');
-        var input = treeObj.select.selBox;
+        //页面上有其他节点focus()时，会有问题，先去掉
+        //input.focus();
         input.set('value', el.get('title'));
         input.set('realvalue', el.get('realvalue'));
         treeObj.select.showByJs = true;
-        treeObj.select.selInput();//触发创建方法  
+
+        treeObj.select.selBox.set('codePath', el.get('codePath'));
+        treeObj.select.selBox.focus();
         var rule = el.get('rule');
         if($defined(rule) && rule.contains('must'))treeObj.select.selBox.setStyle('background-color','#b5e3df');
-        if(treeObj.options.onClickBefore)this.getFunc(treeObj.options.onClickBefore)[0](dataObj, el);
-        treeObj.select.selBox.focus();
+//        treeObj.select.selBox.focus();
+        this.addNextFocusEvent(treeObj.select.selBox);
+//        //在此触发下拉树的onClickBefore事件
+//        if(treeObj.options.onClickBefore)this.getFunc(treeObj.options.onClickBefore)[0](dataObj, el);
+        //treeObj.select.show();
+        if($chk(el.get('realvalue'))) {
+            if($chk(el.get('codePath'))) {
+                treeObj.select.clickBefore(el.get('codePath'));
+            }
+            else {
+                
+                if(treeObj.options.treeType==1){//checkbox
+                	var rv=el.get('realvalue');
+                	var cl = treeObj.select.getNodeByRealvalue(rv,true);
+		        	treeObj.setNodeChecked(cl);
+		        	
+                }else{
+                	var query = new Hash();
+                	query.set(treeObj.options.cascadeSign.id, treeObj.select.selBox.get('realvalue'));
+                	treeObj.findTreeNode(query);
+                }
+            }
+        }
+        
+        
     }
     
     
@@ -298,14 +337,20 @@ SwordGrid.implement({
     
     ,selectClickDele:function(e,defEl){
     	var el=defEl, 
+    	type=defEl.get('type'), 
     	elName=defEl.get('name'), 
-    	itemEl=this.getItemElByName(elName)[0];
+    	itemEl=this.getItemElByName(elName)[0],
+    	rowNum=this.getRowNum(defEl);
     	
         if(el.get('disable') == 'true' || el.get('disabled')==true)return;
         
         if(!el.retrieve('space')){
         	el.store("space", el.getParent('.sGrid_data_row_div'));
         }
+//        if(el.get('allDb')){
+//        	el.store("allDb",JSON.decode(el.get('allDb')));
+//        	el.erase('allDb');
+//        }
 
         if(itemEl.get('onBeforeClick'))this.getFunc(itemEl.get('onBeforeClick'))[0](this.getOneRowData(el), this.getRow(el), itemEl);
 
@@ -354,14 +399,25 @@ SwordGrid.implement({
 //            el.store('allDb', allDb);
             el.set('createSelect', 'false');
 
+            //                            el.set('text', selectValue);
             this.updateCell(el, realValue, el.get('caption') || '', true);
+
+            if(el.get('rule')) {//执行校验
+                if(!this.vObj.doValidate(el).state) {//校验没有通过
+                	  var elRow = this.getRow(el);
+                  	if(elRow){
+                  		 this.addError(elRow.get('rowNum'), el.get('name'));
+                  	}
+                } else {
+                    this.removeError(rowNum, elName);
+                }
+            }
+
         }.bind(this);
 
         sel.box.set('value', text);
         sel.box.set('code', el.get('code'));   //在box上赋值，好让onfinish能取到
         sel.box.set('realvalue', el.get('realvalue'));
-
-        sel.show.delay(1, sel); //延迟执行是为了。。略过全局的click事件,不被hide掉
 
         el.set('createSelect', 'true');
 

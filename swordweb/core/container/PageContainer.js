@@ -54,7 +54,6 @@ var PageContainer = new Class({
     	var swordWidget = this.widgetFactory.create(value);
         value.pNode = value;
         this.widgets.set(value.get('name'), swordWidget);
-        this.setWidget(value.get('name'),swordWidget,value.get('dataName'));
         swordWidget.initParam(value);
     }
     ,initSwordPageData:function() {
@@ -82,12 +81,6 @@ var PageContainer = new Class({
                 return d["value"];
             }
         }
-    }
-    ,getDataFunc4Name:function(key) {
-    	return this.data.filter(function(item){return item["name"]==key;})[0];
-    }
-    ,getDataFunc4DataName:function(key) {
-    	return this.data.filter(function(item){return item["dataname"]==key||item["dataName"]==key;})[0];
     }
     ,initPageData:function() {
         var pi = this.getPageInit();
@@ -257,22 +250,8 @@ var PageContainer = new Class({
 
         }
     }
-    ,widgets_dataname:new Hash() //按dataname存放组件对象
-    ,setWidget:function(key, widget, dataname) {
+    ,setWidget:function(key, widget) {
         this.widgets.set(key, widget);
-        if(dataname){
-        	if(!this.widgets_dataname.get(dataname)){
-        		var a=[];
-        		a.initData=function(d){
-                    a.each(function(obj){
-                       if(obj) obj.initData(d);
-                    });
-                } ;
-                this.widgets_dataname.set(dataname,a);
-            }
-        	this.widgets_dataname.get(dataname).erase(widget);
-            this.widgets_dataname.get(dataname).push(widget);
-        }
     }
     ,getWidget:function(key) {
     	var widget = this.widgets.get(key);
@@ -285,9 +264,6 @@ var PageContainer = new Class({
         return this.widgets.filter(function(value, key) {
             return $chk(value.$family)?value.$family.name == type : value.name == type;
         }, this);
-    }
-    ,getWidgetsByDataname:function(dataname){
-        return this.widgets_dataname.get(dataname);
     }
     ,getMask:function() {
         if(!$defined(this.mask))this.mask = this.widgetFactory.create("SwordMask");
@@ -432,12 +408,6 @@ var PageContainer = new Class({
         if(!$defined(dataObj.getAttr)) {
             dataObj["getAttr"] = this.getAttrFunc;
         }
-        if(!$defined(dataObj.getData)) {
-            dataObj["getData"] = this.getDataFunc4Name;
-        }
-        if(!$defined(dataObj.getDataByDataName)) {
-            dataObj["getDataByDataName"] = this.getDataFunc4DataName;
-        }
         if(dataObj['exception']) {
             if($defined(onError)) {
                 onError(dataObj);
@@ -523,20 +493,6 @@ var PageContainer = new Class({
                 }
                 return;
             }
-            if(widgetData['sword'] == "SwordTree"){
-            	var dn=widgetData['name'];
-        		if(param.initpage!=true){ //不是页面初始化操作，select自动重载数据
-        			//装载下拉的数据，注意：这里没有区分是否是下拉类型，可能会有问题
-            		this.reloadSel(dn,dataObj);
-        		}
-        		 
-        		if(this.getWidgetsByDataname(dn)){
-        			widgetData.initpage=param.initpage;//通知各个组件是否为第一次初始化数据
-        			this.getWidgetsByDataname(dn).initData(widgetData);
-        		}
-        		return;
-            }
-            
             var widgetName = widgetData['name'];
             if($chk(!widgetName)) {
 //                logger.debug("res->data->widget中没有name属性，略过此段数据。。。", 'PageContainer');
@@ -572,21 +528,20 @@ var PageContainer = new Class({
 
     ,widgets_loaddataOnly:new Hash()     //保存对象，这些对象在loaddata的时候会被调用，在$w的时候获取不到，hash中value是数组。目前：pulltree
     ,setWidget4loaddata:function(key,obj){
-        /*if(!this.widgets_loaddataOnly.get(key)){
+        if(!this.widgets_loaddataOnly.get(key)){
             this.widgets_loaddataOnly.set(key,[]);
-        }*/
-        this.widgets_loaddataOnly.set(key, obj);
+        }
+        this.widgets_loaddataOnly.get(key).push(obj);
     }
     ,getWidget4loaddata:function(name){
          if(this.widgets_loaddataOnly.get(name)){
-            /* var r=[];
+             var r=[];
              r.initData=function(d){
                  r.each(function(obj){
                     if(obj)obj.initData(d);
                  });
              } ;
-             return r.include(this.getWidget(name)).extend(this.widgets_loaddataOnly.get(name));*/
-        	 return this.widgets_loaddataOnly.get(name);
+             return r.include(this.getWidget(name)).extend(this.widgets_loaddataOnly.get(name));
          }else{
              return this.getWidget(name);
          }
@@ -984,7 +939,7 @@ function $init_Gt(){
     pc = pageContainer = new PageContainer(edit);
     pc.getSelect(); //为了初始化全局click事件
     pc.getMask();
-    pc.process();
+    pc.process();debugger;
     pc.initWidgetParam(new Element("div",{'sword':"SwordHotKeys","name":"hotKeyAutoCreate"}));
     MaskDialog.hide();
     _pcSwordClientPageJumpTiming("15");

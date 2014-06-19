@@ -15,7 +15,7 @@
 
 .tree-wrapper {
 /*position: relative;*/
-  /*   width: 100%; */
+    width: 100%;
     margin: 0;
     padding: 0;
     font-family: sans-serif;
@@ -24,7 +24,6 @@
     white-space: nowrap;
     cursor: default;
     overflow: auto;
-    padding-right:18px;
 }
 
 .tree-title{
@@ -70,14 +69,12 @@
 
 .tree-children {
     padding-left: 18px;
-   /*  width: 25px; */
+    width: 25px;
 }
 
 .tree-node {
-   /* width: 18px; */ 
+   width: 18px; 
    background: url('images/line.gif') repeat-y 0px -3px;
-   /* color:black;
-    word-wrap:normal; */
 }
 
 .tree-node-last {
@@ -212,9 +209,11 @@
 }
 
 .tree-ghost-icon {
-    padding-left: 16px; /*background-color:#fff;*/
+    /*padding-left: 16px; 
     background-repeat: no-repeat;
-    background-image: url('images/drop-no.gif');
+    background-image: url('images/drop-no.gif');*/
+    /*background:url(images/allbgs.png) no-repeat -125px 0px;width:16px;padding-left: 16px;*/
+    background:url(images/dropbgs.png) no-repeat 0px 0px;height:16px;padding-left:16px;
 }
 
 .tree-ghost-after {
@@ -230,15 +229,18 @@
 }
 
 .tree-ghost-inside {
-    padding-left: 16px; /*background-color:#fff;*/
+    /*padding-left: 16px; 
     background-repeat: no-repeat;
-    background-image: url('images/drop-add.gif');
+    background-image: url('images/drop-add.gif');*/
+    background:url(images/dropbgs.png) no-repeat 0px -16px;height:16px;padding-left:16px;
 }
 
 .tree-ghost-notAllowed {
-    padding-left: 16px; /*background-color:#fff;*/
+    /*padding-left: 16px; 
     background-repeat: no-repeat;
-    background-image: url('images/drop-no.gif');
+    background-image: url(images/allbgs2.png);
+    background-position: -125px 0px;*/
+    background:url(images/dropbgs.png) no-repeat 0px 0px;height:16px;padding-left:16px;
 }
 
 .tree-drag-current {
@@ -256,61 +258,53 @@
 ================CheckBox=================
 ......................................................................................*/
 .tree-checkbox {
-    padding-left: 18px;
+    padding-left: 14px;
 }
 
 /*** 选中  ***/
 .tree-node-checked, .tree-node-checked .tree-checkbox {
-    background: url('images/checked.gif') center 1px no-repeat;
+   /* background: url('images/checked.gif') center 1px no-repeat;*/
+   background:url(images/treecheck.png) no-repeat -28px 1px;width:14px;margin: auto 5px 0;
 }
 
 /****不选中 ****/
 .tree-node-unchecked, .tree-node-unchecked .tree-checkbox {
-    background: url('images/unchecked.gif') center 1px no-repeat;
+   /* background: url('images/unchecked.gif') center 1px no-repeat;*/
+   background:url(images/treecheck.png) no-repeat 0px 1px;width:14px;margin: auto 5px 0;
 }
 
 /*** 选中状态的禁止选中***/
 .tree-node-nochecked-checked {
-    background: url('images/noChecked_1.gif') center 1px no-repeat;
+    /*background: url('images/noChecked_1.gif') center 1px no-repeat;*/
+    background:url(images/noChecked.png) no-repeat 0px 1px;width:16px;margin: auto 5px 0;
 }
 
 /****未选中状态的禁止选中 ****/
 .tree-node-nochecked-notchecked {
-    background: url('images/noChecked_0.gif') center 1px no-repeat;
+    /*background: url('images/noChecked_0.gif') center 1px no-repeat;*/
+    background:url(images/noChecked.png) no-repeat -16px 1px;width:16px;margin: auto 5px 0;
 }
 
 /****叶节点的半选中状态 ***/
 .tree-node-half-checked {
-    background: url('images/half-checked2.gif') center 1px no-repeat;
+   /* background: url('images/half-checked.gif') center 1px no-repeat;*/
+   background:url(images/treecheck.png) no-repeat -14px 1px;width:14px;margin: auto 5px 0;
 }
 
 /*解决下拉树图片折行，此行代码要与form中样式一致*/
-/*
 .swordtree_wrap .swordform_item_oprate{
-  padding-left:2px;
-}
-table.swordform_field_wrap div{*margin-left:-4px;_margin-left:-2px;}
-.swordform_item_input {
-    background: url("images/text-bg.gif") repeat-x scroll 0 0 #FFFFFF;
-    border: 1px solid #B5B8C8;
-    cursor:text;
-	padding:0;
-	padding-left:2px;
-	margin:0;
-    height:17px;
-    width:145px;
+    /*padding-left:2px;*/
 }
 
 .swordform_field_wrap{
     zoom: 1;
     font: normal 12px tahoma, arial, helvetica, sans-serif;
     color: #15428b;
-    float: left;
+  /* float: left;
     padding-top:2px;
     padding-bottom:2px;
-    padding-left:5px;
+    padding-left:5px;   */ 
 }
-*/
 /*选择框箭头按钮样式,注意在firefox上,height=20,top=0*/
 .swordform_field_wrap  .tree-select-selimg {
     width: 17px;
@@ -325,17 +319,15 @@ table.swordform_field_wrap div{*margin-left:-4px;_margin-left:-2px;}
     cursor: default;	
 }
 /*选择框箭头按钮，鼠标经过时样式*/
-/* 
 .swordform_field_wrap .tree-select-selimg-over {
     background-position: -17px 0;
-} */
+}
 
 /*选择框箭头按钮，鼠标点击时样式*/
-/* 
 .swordform_field_wrap .tree-select-selimg-click {
     background-position: -34px 0;
     
-} */
+}
 
 /*下拉选择框最外层样式*/
 .tree-select-list {

@@ -4,9 +4,9 @@
  * @author Administrator
  */
 
-SwordGrid.Iterator = new Class({
+SwordTree.Iterator = new Class({
 
-    $family: {name: 'SwordGrid.Iterator'}
+    $family: {name: 'SwordTree.Iterator'}
     /**
      * 被迭代节点
      */
@@ -61,30 +61,31 @@ SwordGrid.Iterator = new Class({
     ,getChildNodes:$empty
 
     ,setParentSign:function(code, pcode) {
-        SwordGrid.Iterator.code = code;
-        SwordGrid.Iterator.pcode = pcode;
+        SwordTree.Iterator.code = code;
+        SwordTree.Iterator.pcode = pcode;
 
     }
 
 });
 
 
-SwordGrid.Iterator.newInstance = function(node, type, cascadeSign) {
+SwordTree.Iterator.newInstance = function(node, type, cascadeSign) {
     var instance = null;
-    SwordGrid.Iterator.treeNodeNum = 0;
+    SwordTree.Iterator.treeNodeNum = 0;
     if ($chk(type) && 'json'.test(type.trim(), 'i')) {
-        instance = new SwordGrid.JSONIterator(node || {}, 0);
+        instance = new SwordTree.JSONIterator(node || {}, 0);
     } else if ($chk(type) && 'jsonAptitude'.test(type.trim(), 'i')) {
-//        var data = [];
-//        if ($defined(node) && $defined(node.data)) {
-//            data = node.data;
-//        }
+        var data = [];
+        if ($defined(node) && $defined(node.data)) {
+            data = node.data;
+        }
+        else return null;//没有数据时
 
-        instance = new SwordGrid.JSONAptitudeIterator(node, 0);
-        instance.setDomainData(node);
+        instance = new SwordTree.JSONAptitudeIterator(data, 0);
+        instance.setDomainData(data);
         instance.setParentSign(cascadeSign.id, cascadeSign.pid, node);
     } else {
-        instance = new SwordGrid.XMLIterator(node, 0);
+        instance = new SwordTree.XMLIterator(node, 0);
     }
     return instance;
 };
@@ -93,8 +94,8 @@ SwordGrid.Iterator.newInstance = function(node, type, cascadeSign) {
 /**
  * xml迭代器
  */
-SwordGrid.XMLIterator = new Class({
-    Extends :SwordGrid.Iterator
+SwordTree.XMLIterator = new Class({
+    Extends :SwordTree.Iterator
 
     ,setLastSign:function(sign) {
         this.lastSign = sign;
@@ -113,7 +114,7 @@ SwordGrid.XMLIterator = new Class({
         this.dataDepth++;
         for (var k = 0; k < this.node.childNodes.length; k++) {
             if ((/[^\t\n\r ]/.test(this.node.childNodes[k].data))) {
-                var it = new SwordGrid.XMLIterator(this.node.childNodes[k], this.dataDepth);
+                var it = new SwordTree.XMLIterator(this.node.childNodes[k], this.dataDepth);
                 it.setLastSign(false);
                 nodes.push(it);
             }
@@ -142,8 +143,8 @@ SwordGrid.XMLIterator = new Class({
 /**
  * JSON迭代器
  */
-SwordGrid.JSONIterator = new Class({
-    Extends:SwordGrid.Iterator
+SwordTree.JSONIterator = new Class({
+    Extends:SwordTree.Iterator
 
     /**
      * 用于缓存当前属性，避免每次都查询
@@ -171,12 +172,12 @@ SwordGrid.JSONIterator = new Class({
         this.node.getKeys().each(function (item, index) {
             if ($type(this.node.get(item)) == 'array') {
                 this.node.get(item).each(function(value) {
-                    var it = new SwordGrid.JSONIterator(value, this.dataDepth);
+                    var it = new SwordTree.JSONIterator(value, this.dataDepth);
                     it.setLastSign(false);
                     array.push(it);
                 }.bind(this));
             } else if ($type(this.node.get(item)) == 'object') {
-                var it = new SwordGrid.JSONIterator(this.node.get(item), this.dataDepth);
+                var it = new SwordTree.JSONIterator(this.node.get(item), this.dataDepth);
                 it.setLastSign(false);
                 array.push(it);
             }
@@ -224,17 +225,15 @@ SwordGrid.JSONIterator = new Class({
 /**
  * 智能处理json数据，数据无需满足树的标准格式
  */
-SwordGrid.JSONAptitudeIterator = new Class({
-    Extends:SwordGrid.Iterator
+SwordTree.JSONAptitudeIterator = new Class({
+    Extends:SwordTree.Iterator
 
     /**
      * 当前指向的元素
      * @param node
      */
-    ,current:null 
-		,tdsSign:'tds'
-		,rootNodes:[]
-		,childNodes:[]
+    ,current:null
+
     ,iterator:function(node) {
         this.node = node;
 
@@ -243,63 +242,77 @@ SwordGrid.JSONAptitudeIterator = new Class({
         this.lastSign = sign;
     }
     ,hasChildNodes:function() {
-
-       /* if (this.dataDepth == 0) {
-            return    this.domainData.length > 0;
+    	var sip = SwordTree.Iterator.pcode;
+    	var sic = SwordTree.Iterator.code;
+        if (this.dataDepth == 0) {
+            return this.domainData.length > 0;
         } else {
+        	var nCode = this.node[sic]||this.node[sic.toUpperCase()];
             return this.domainData.some(function(item) {
-                return item[this.tdsSign][this.tdsSign][SwordGrid.Iterator.pcode]['value'] == this.node[this.tdsSign][SwordGrid.Iterator.code]['value'];
+                return (item[sip]||item[sip.toUpperCase()]) == nCode && (item[sic]||item[sic.toUpperCase()]) != nCode;
             }, this);
-        }*/
-        return (this.getChildNodes()!=0);
+        }
     }
     ,setDomainData:function(data) {
         this.domainData = data;
     }
-    
-    ,getRootNodes:function(){
-    		this.dataDepth==0;    		
-    		if ($defined(this.domainData) && this.domainData.length > 0  && this.rootNodes.length==0) {
-    				this.dataDepth++;
-            for (var i = 0; i < this.domainData.length; i++) {
-                var tp=true;
-                for(var j=0;j<this.domainData.length;j++){
-                    if(this.domainData[i][this.tdsSign][SwordGrid.Iterator.pcode]['value']==this.domainData[j][this.tdsSign][SwordGrid.Iterator.code]['value']){
-                        tp=false;
-                        break;
+
+    ,getChildNodes:function(rootPcode) {
+    	var sip = SwordTree.Iterator.pcode;
+    	var sic = SwordTree.Iterator.code;
+        var array = new Array();
+        if (this.dataDepth == 0) {
+            this.dataDepth++;
+            if ($defined(this.domainData) && this.domainData.length > 0) {
+                for (var i = 0; i < this.domainData.length; i++) {
+                    var tp=true;
+                    if (rootPcode != null){
+                    	 var p=this.domainData[i][sip]||this.domainData[i][sip.toUpperCase()];
+                         if(rootPcode == "null"){
+                             tp = p== 'null'||p==null ;
+                         }else{
+                             tp = p == rootPcode ;
+                         }
+                    }else{
+                        for(var j=0;j<this.domainData.length;j++){
+                            if((this.domainData[i][sip]||this.domainData[i][sip.toUpperCase()])==(this.domainData[j][sic]||this.domainData[j][sic.toUpperCase()]) && i !=j ){
+                                 tp=false;
+                                 break;
+                            }
+                        }
+                    }
+                    if (tp) {
+                        var it = new SwordTree.JSONAptitudeIterator(this.domainData[i], this.dataDepth);
+                        it.setLastSign(false);
+                        array.push(it);
+                        it.setDomainData(this.domainData);
                     }
                 }
-                if (tp) {
-                    var it = new SwordGrid.JSONAptitudeIterator(this.domainData[i], this.dataDepth);
-                    it.setLastSign(false);
-                    it.setDomainData(this.domainData);
-                    this.rootNodes.push(it);
+            }
+        } else {
+
+            if ($defined(this.domainData) && this.domainData.length > 0) {
+                for (var i = 0; i < this.domainData.length; i++) {
+                	var ddPcode = (this.domainData[i][sip]||this.domainData[i][sip.toUpperCase()]);
+                	var ddCode = (this.domainData[i][sic]||this.domainData[i][sic.toUpperCase()]);
+                	var nCode = (this.node[sic]||this.node[sic.toUpperCase()]);
+                    if ( ddPcode == nCode &&  ddCode != nCode) {//code相同认为是一个节点
+                        var it = new SwordTree.JSONAptitudeIterator(this.domainData[i], this.dataDepth);
+                        it.setLastSign(false);
+                        array.push(it);
+                        this.domainData.splice(i, 1);
+                        it.setDomainData(this.domainData);
+                        i--;
+                    }
                 }
             }
-        } 
-        return this.rootNodes;
-        
-    }
-    
-    ,getChildNodes:function() {
-      
-        if ($defined(this.domainData) && this.domainData.length > 0 && this.childNodes.length==0){
-        		this.dataDepth++;
-            for (var i = 0; i < this.domainData.length; i++) {
-                if (this.domainData[i][this.tdsSign][SwordGrid.Iterator.pcode]['value'] == this.node[this.tdsSign][SwordGrid.Iterator.code]['value']) {
-                    var it = new SwordGrid.JSONAptitudeIterator(this.domainData[i], this.dataDepth);
-                    it.setLastSign(false);
-                    this.childNodes.push(it);
-                    //this.domainData.splice(i, 1);
-                    it.setDomainData(this.domainData);
-                    //i--;
-                }
-            }
-            if (this.childNodes.length > 0) {
-		            this.childNodes[this.childNodes.length - 1].setLastSign(true);
-		        }
+            this.dataDepth++;
         }
-        return this.childNodes;
+        if (array.length > 0) {
+            array[array.length - 1].setLastSign(true);
+        }
+
+        return array;
     }
 
     ,getAttributes:function() {
@@ -319,7 +332,7 @@ SwordGrid.JSONAptitudeIterator = new Class({
     }
     ,getAttribute:function(key) {
         if ($defined(this.node)) {
-            return this.node[key];
+            return this.node[key]||this.node[key.toUpperCase()];
         } else {
             return null;
         }

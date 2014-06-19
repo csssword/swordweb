@@ -134,11 +134,9 @@ var SwordHotKeys = new Class({
 		
 		
 		this.eventContainer.addEvent("keydown",function(e){
-			
 			e=new Event(e);
 			var keyStr=e.key,hItems=null;
 			if(keyStr!=""&&keyStr!=""){//"" alt的key
-				debugger;
 				hItems=this.hotKeyEls.filter(function(item){
 					var b=item.quickKey.split("+"); 
 					return e[b[0]]&&e.key==b[1];

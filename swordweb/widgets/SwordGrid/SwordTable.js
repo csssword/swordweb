@@ -1,4 +1,141 @@
+var DelayedTask = function(fn, scope, args) {
+    var me = this,
+            id,
+            call = function() {
+                clearInterval(id);
+                id = null;
+                fn.apply(scope, args || []);
+            };
+    me.delay = function(delay, newFn, newScope, newArgs) {
+        me.cancel();
+        fn = newFn || fn;
+        scope = newScope || scope;
+        args = newArgs || args;
+        id = setInterval(call, delay);
+    };
+    me.cancel = function() {
+        if(id) {
+            clearInterval(id);
+            id = null;
+        }
+    };
+};
+var SwordSort = new Class({
+    Implements : [Events,Options],
+    name:"SwordSort",
+    options:{
+        sortName:        "",//排序列name
+        type:          "string",//比较的数据类型
+        sortflag:          "asc",//默认升序
+        widget:         "table",//目前支持table--存储满足表格的数据,array--存储普通数据
+//        dataStr:        null, //数组数据
+        onSortBegin:    null,//排序前执行
+        onSortEnd:      null//排序后执行
+    },
+    initialize:function(options) {
+        this.setOptions(options);
+    },
+    initParam: function(node) {
 
+    },
+    initData: function() {
+
+    } ,
+
+    //排序并显示
+    sort: function(data, options) {
+        this.setOptions(options);
+        this.setData(data);
+
+        //获取数据
+        if($chk(this.options.dataStr)) {
+            this.setData(JSON.decode(this.options.dataStr));
+        }
+        if(!$chk(this.getData()))
+            return [];
+        //排序前执行
+        this.fireEvent('onSortBegin', this.data);
+        //排序
+        this.getData().sort(this.compare.bind(this));
+        //排序后执行
+        this.fireEvent('onSortEnd', this.data);
+        return this.getData();
+    },
+    //比较函数
+    compare: function(obj1, obj2) {
+        var vValue1 = this.getValue(obj1);
+        var vValue2 = this.getValue(obj2);
+        if(vValue1 < vValue2) {
+            return (this.options.sortflag == "asc") ? -1 : 1;
+        } else if(vValue1 > vValue2) {
+            return (this.options.sortflag == "asc") ? 1 : -1;
+        }
+        return 0;
+
+    },
+
+    //获取比较值
+    getValue: function(obj) {
+        var data = "";
+        if(this.options.widget == "table") {
+            if(!$chk(this.options.sortName)) {
+                swordAlert("未指定排序列！！");
+                return false;
+            }
+            data = obj["tds"][this.options.sortName];
+            if(data) {
+                data = data["value"];
+            } else {
+                data = '';
+            }
+
+        }
+        if(this.options.widget == "array")
+            data = obj;
+        //数据转换
+        switch(this.options.type.toLowerCase()) {
+            case "int":
+                return parseInt(data, 10) || 0;
+            case "float":
+                return parseFloat(data, 10) || 0;
+            case "bool":
+                return data === true || String(data).toLowerCase() == "true" ? 1 : 0;
+            case "string":
+            default:
+                return data ? data.toString() : "";
+        }
+    },
+
+    setData: function(data) {
+        this.data = data;
+    },
+    getData: function() {
+        return this.data;
+    }
+});
+
+
+/**
+ * widgets 模块
+ * @module widgets
+ * @requires base ,core
+ */
+/**
+ 表格组件
+ @class swordweb.widgets.SwordGrid.SwordGrid
+ * @implements Events
+ * @implements Options
+ * @extends PageContainer
+ */
+/*
+ /*
+ *
+ * 表格行状态说明：
+ * 新增：insert
+ * 删除：delete
+ * 更新：update
+ *
+ * */
 var SwordGrid = new Class({
 
     Implements:[Events,Options]
@@ -50,7 +187,7 @@ var SwordGrid = new Class({
          * 在表格组件的根标签上可以声明此属性;
          * @property {public int} dataX
          */
-        ,dataX:'100%'
+        ,dataX:-1
         /**
          * 每页显示行数【前台分页的时候才会生效，使用后台分页的时候，请在addTable接口中设置此参数】;
          * 在表格组件的根标签上可以声明此属性；
@@ -179,6 +316,7 @@ var SwordGrid = new Class({
         ,gridData:null//完整的表格数据
         ,fenyeType:'page'   //分页类型 page 和 server
         ,nextOrder:'row' //row:行的次序焦点转移、column:列的次序焦点转移；默认是行
+        ,validateShow:'false'
         ,showHJ : 'false'
         ,rowCheckValidator : false   //设置当用户通过复选框选中某行时是否验证数据满足数据规则。
         ,treeRootNum:'false'
@@ -515,6 +653,10 @@ var SwordGrid = new Class({
 
     ,addError:function(rowIndex, cellName) {
     	return;
+    }
+
+    ,removeError:function(rowIndex, cellName) {
+    	this.celltooltips.hide();
     }
 
   //去掉一行的错误
@@ -1746,23 +1888,37 @@ var SwordGrid = new Class({
          
          this.cachePages.include(1);
          
-         if(!window.validator) {
-           	window.validator = pc.widgetFactory.create("SwordValidator");
-           	window.validator.initParam(this.options.vType);
-            }
-          this.vObj = window.validator;
-         
+        var swordValidator = pc.widgetFactory.create("SwordValidator");
 
-          if(!window.tooltips) {
-         	window.tooltips = pageContainer.create('SwordToolTips');
-          }
-          this.celltooltips = window.tooltips;
+        swordValidator.initParam(this.options.vType);
+        this.vObj = swordValidator;
+        
 
+        if(!window.tooltips) {
+        	window.tooltips = pageContainer.create('SwordToolTips');
+        }
+        	this.celltooltips = window.tooltips;
 
         //隐藏 userdefine 元素
         this.options.pNode.getChildren('div[type=userdefine]').setStyle('display', 'none');
 
-       
+        //没有数据行的话，隐藏下拉树
+        this.options.pNode.getChildren('div[type=pulltree]').each(function(t) {
+            $w(t.get('treename')).addEvent('onFinish', function() {
+            	 if(!t.get('notFirst')){
+                     $w(t.get('treename')).options.pNode.setStyle('display', 'none');
+                     t.set('notFirst','true');
+                 }
+            });
+        });
+
+        //处理elements
+//            this.options.elements=JSON.decode(this.options.elements);
+
+        //初始化items   todo items方法已经修改为从document里面动态取，所以这样性能浪费。。已经去掉
+//             this.options.items = this.options.pNode.getChildren(">div:not([console])") ; //过滤掉控制台属性
+
+
         //初始化 console 的配置信息
         this.options.consoleItems = this.options.pNode.getChildren(">div[console]");
 
@@ -1913,7 +2069,7 @@ var SwordGrid = new Class({
         		if(this.options.scrollX > "100%") {
                     tempTop = tempTop - 17;
                }
-                this.hjRow.setStyle("top", tempTop);	
+               this.hjRow.setStyle("top", tempTop);	
         	}else{
         		this.hjRow.setStyle("top", 0);	
         	}
@@ -1923,9 +2079,9 @@ var SwordGrid = new Class({
         		if(this.options.scrollX > "100%") {
                     tempTop = tempTop - 17;
                }
-                this.hjRow.setStyle("top", tempTop);	
+               this.hjRow.setStyle("top", tempTop);	
         	}else{
-        		this.hjRow.setStyle("top", -25);
+            		this.hjRow.setStyle("top", -25);
         	}
     	}
     }
@@ -3063,6 +3219,14 @@ var SwordGrid = new Class({
         });
 
         var result = {'tds':tds};
+        result.getValue = function(name) {   //注册取值方法
+            var tmp = this.tds[name];
+            if(!$defined(tmp)) {
+                return null;
+            }
+            return tmp['value'];
+        }
+
         return result;
     }
 
@@ -3137,6 +3301,7 @@ var SwordGrid = new Class({
             return;
         }
 
+        this.removeError();
         this.options.lastPageNum = this.options.pageNum;
         this.options.pageNum = targetPage;
         this.delayBuildData();
@@ -3263,6 +3428,7 @@ var SwordGrid = new Class({
         	};funca.delay(500,this);
         	//此处是为解决ie8下,后台addTableMap数据合计行定位错乱bug所写的匿名函数延迟
         }
+        this.removeError();
         //TODO ----------------------------------------------------
         var totalRows = this.totalRows() / 1; //行总数
         if(totalRows == 0){
@@ -3739,6 +3905,7 @@ var SwordGrid = new Class({
  			this.dataDiv().appendChild(rows);
 
         }
+
         if(this.options.highQuality != 'true') {
             this.lastBuildData();
         }
@@ -3788,10 +3955,22 @@ var SwordGrid = new Class({
     ,lastBuildData:function() {
         this.buildXY();
         this.header().setStyle('top', '0px');
-//        this.getDataDivFxScroll().toTop();
+        this.getDataDivFxScroll().toTop();
+        /*if(this.options.type == 'tree' && this.options.dataY == -1) {
+         var height = this.console().getHeight()
+         + this.header().getHeight()
+         + (this.panel() != undefined ? this.panel().getHeight() : 0);
+         var treerows = this.dataDiv().getElements('div[row=true]').length;
+         var dataHeight = this.itemY() * treerows + treerows;
+         this.sGrid_div().setStyle('height', height / 1 + dataHeight / 1 + 1);
+         }*/
+
+
         this.fireEvent('onAfterInitData');
 
         this.doUnmask();    //结束的是 ： delayBuildData 中的 mask方法
+
+
     }
 
     ,delayCreateRow:function(i, dataIndex, datas) {
@@ -3895,6 +4074,75 @@ var SwordGrid = new Class({
         }.bind(this);
     }
 
+    ,addRowEvent:function(sGrid_data_row_div, dataObj, items) {
+        //与行有关的事件 开始
+        sGrid_data_row_div.addEvent('click', function(e) {
+            var obj = $(e.target);
+            var type = obj.get('type');
+            var tag = obj.get('tag');
+            if(this.options.checkMoudle == 'true') {
+                if(!(type == 'checkbox' && tag == 'input')) {
+                    this.dataDiv().getElements('input:not(:disabled)[type=checkbox][checked]').set('checked', false);
+                    sGrid_data_row_div.getElements('input:not(:disabled)[type=checkbox]').set('checked', true);
+                    //新增，监听check被选中事触发 change事件。
+                    if(this.options.rowCheckValidator != false && this.options.rowCheckValidator != "false") {
+                        var __clickRow = sGrid_data_row_div.getElements('input[type=checkbox]:checked:not(:disabled)');
+                        __clickRow.fireEvent("change", [__clickRow]);
+                    }
+                }
+                var radios = sGrid_data_row_div.getElements('input:not([disabled])[type=radio]');
+                radios.set('checked', true);
+                radios.each(function(radio){
+                	this.radioSetChecked(radio.getParent());
+                }.bind(this))
+
+                var noneChecked = this.dataDiv().getElements('input[type=checkbox]:not([checked])').length;
+                if(noneChecked == 0) {
+                    this.getHeaderCheckboxs_noneChecked().set('checked', true);
+                } else {
+                    this.getHeaderCheckboxs_checked().set('checked', false);
+                }
+            } else {
+            	if(type == 'checkbox' && tag == 'input') {
+                	var headerCheckbox = this.getHeaderCheckboxByName(obj.get('name'));
+                	if(headerCheckbox == null)return;
+                	var itemEl = this.getItemElByName(obj.get('name'));//有这种需求。。。
+                    var noneChecked = this.dataDiv().getElements('input[type=checkbox][name=' + obj.get('name') + ']:not([checked])').length;
+                    if(this.allInCache()&&noneChecked == 0) {
+                        headerCheckbox.set('checked', true);
+                        if(this.isCP()) {
+                            itemEl.set('userClicked', 'true');//客户点击过
+                            itemEl.set('checkAllFlag', 'true');//客户点击全选按钮的最后状态
+                        }
+                    } else if(this.isCP() && itemEl.get('userClicked') == 'true'&&itemEl.get('checkAllFlag') == 'true'&&noneChecked == 0) {
+                        headerCheckbox.set('checked', true);
+                    }else {
+                        headerCheckbox.set('checked', false);
+                    }
+                }
+            }
+	
+
+            this.dataDiv().getChildren('.sGrid_data_row_click_div').each(function(el) {
+                el.removeClass('sGrid_data_row_click_div');
+            });
+            sGrid_data_row_div.addClass('sGrid_data_row_click_div');
+
+            this.fireEvent('onRowClick', [dataObj,sGrid_data_row_div,e]);
+        }.bind(this));
+
+        sGrid_data_row_div.addEvent('dblclick', function(e) {
+            this.fireEvent('onRowDbClick', [dataObj,sGrid_data_row_div,e]);
+        }.bind(this));
+
+        sGrid_data_row_div.addEvent('contextmenu', function(e) {
+            this.fireEvent('onRowRightClick', [dataObj,sGrid_data_row_div,e]);
+        }.bind(this));
+
+        //与行有关的事件 结束
+    }
+
+
     ,rowM_dan:new Element('div', {
         'class': 'sGrid_data_row_div sGrid_data_row_div_dan'
         ,'row' :true
@@ -3938,7 +4186,8 @@ var SwordGrid = new Class({
 
     ,createRow:function(rowNum, dataObj, items, status, row) {
     	
-    	 if(!row) row=this._getRender().renderRow(dataObj, items,status);
+//    	 this.fireEvent('onBeforeCreateRow', [dataObj,items]);
+    	 if(!row) row=this._getRender().renderRow(dataObj, items,rowNum,status);
          return row;
 
     }
@@ -4722,19 +4971,14 @@ var SwordGrid = new Class({
     ,addNextFocusEvent:function(srcEl, obj) {
         srcEl.addEvent('keyup', function(event) {
             var e = Event(event);
-            
             if(e.key == 'enter') {
                 this.nextCell(srcEl, event,obj);
-                //if(obj)obj.hide();
-            }else if (e.key== 'left' || e.key== 'up' || e.key== 'right' || e.key== 'down' ) {  //左
-            	this.nextCell(srcEl, event,obj,e.key);
+                if(obj)obj.hide();
             }
-            if(obj)obj.hide();
         }.bind(this));
     }
     //加一个参数，为了解决GIRD中连续日期列，不触发hide时间，不执行校验及事件的BUG
-    ,nextCell:function(srcEl, e,obj,nextOrder) {
-    	
+    ,nextCell:function(srcEl, e,obj) {
         this.autoScroll = true;
         var startEl;
         var cell;
@@ -4756,27 +5000,22 @@ var SwordGrid = new Class({
             if(flag == false)return;
         }
         var nextEl;
-        
-        if( nextOrder=="right"  || (!$chk(nextOrder) && this.options.nextOrder == 'row') ) {//以行的方向焦点转移，默认的方向
-            
+        if(this.options.nextOrder == 'row') {//以行的方向焦点转移，默认的方向
             nextEl = this.findNextFocusInOneRow(startEl);
             while(!nextEl) {
                 var nextRow = this.getRow(startEl).getNext();
                 if(nextRow == null) {//没有下一行
-                	if( !$chk(nextOrder) ){
-	                	try{
-	                    	if($chk(this.autoInsertFunc)){
-	                    		this.autoInsertFunc();
-		                        	var nextFunc = function(src, e, obj){
-		                        		this.nextCell(src, e, obj,nextOrder);
-		                        	}.bind(this);
-	                        		nextFunc.delay(50,this, [startEl, e, obj]);
-	                        		e.target.blur();
-	                    	}
-	                         
-	                	}catch(e){
-	                	}
-	              }
+                	try{
+                    	if($chk(this.autoInsertFunc)){
+                    		this.autoInsertFunc();
+                        	var nextFunc = function(src, e, obj){
+                        		this.nextCell(src, e, obj);
+                        	}.bind(this);
+                        	nextFunc.delay(50,this, [startEl, e, obj]);
+                    	}
+                        e.target.blur();
+                	}catch(e){
+                	}
                     return;
                 }
                 startEl = nextRow.getFirst();
@@ -4794,59 +5033,19 @@ var SwordGrid = new Class({
                 }
         	   
             }
-        } else if(  nextOrder == "down" ||  (!$chk(nextOrder) && this.options.nextOrder== 'column')) {//以列的方向焦点转移
-      
+        } else if(this.options.nextOrder == 'column') {//以列的方向焦点转移
             var cells = this.getCells(startEl.get('name'));
             nextEl = this.findNextFocusInOneColumn(startEl, cells);
             while(!nextEl) {
                 startEl = startEl.getNext();//找下一列
                 if(startEl == null) {
-                   // e.target.blur();
+                    e.target.blur();
                     return;
                 }
                 cells = this.getCells(startEl.get('name'));
                 nextEl = this.findNextFocusInOneColumn(null, cells);
             }
-        }else if(  nextOrder == "left" ) {//以列的方向焦点转移
-        
-            nextEl = this.findPreviousFocusInOneRow(startEl);
-            while(!nextEl) {
-                var nextRow = this.getRow(startEl).getPrevious();
-                if(nextRow == null) {//没有下一行
-                    return;
-                }
-                startEl = nextRow.getLast();
-                var type = startEl.get('type');
-                if(['text','date','select','pulltree','password'].contains(type) && startEl.get('disabled') != true && startEl.get('disable') != 'true') {
-                     if(startEl.getStyle('display') != 'none') {//不是隐藏列
-                    	 nextEl = startEl;
-                      }
-                }
-                if(!$chk(nextEl))nextEl = this.findPreviousFocusInOneRow(startEl);
-                if(nextEl){
-                	 if(nextEl.get('type')=='date'||nextEl.get('type')=="pulltree"){
-             	    	this.nextRowScroll = true;
-             	    }
-                }
-        	   
-            }
-        }else if(  nextOrder == "up" ) {//以列的方向焦点转移
-        	
-		var cells = this.getCells(startEl.get('name'));
-	
-		nextEl = this.findPreviousFocusInOneColumn(startEl, cells);
-		
-		while(!nextEl) {
-			startEl = startEl.getPrevious();//找下一列
-			if(startEl == null) {
-				//e.target.blur();
-				return;
-			}
-			cells = this.getCells(startEl.get('name'));
-			nextEl = this.findPreviousFocusInOneColumn(null, cells);
-		}
         }
-        
         if(nextEl) {
             this.dataDiv().getChildren('.sGrid_data_row_click_div').each(function(el) {
                 el.removeClass('sGrid_data_row_click_div');
@@ -4910,23 +5109,6 @@ var SwordGrid = new Class({
         }
         return null;
     }
-    ,findPreviousFocusInOneColumn:function(startEl, cells) {
-        var indexBegin = 0;
-        if(startEl) {
-        	indexBegin = cells.indexOf(startEl) - 1;
-		if(indexBegin==-1) return null;        	
-        }else   if(indexBegin==0) indexBegin = cells.length-1;
-        while(indexBegin>-1) {
-            var temp = cells[indexBegin];
-            var type = temp.get('type');
-            if(['text','date','select','pulltree','password'].contains(type) && temp.get('disabled') != true && temp.get('disable') != 'true' && temp.getStyle('display') != 'none') {
-                return temp;
-            }else{
-            	indexBegin--;		
-            }
-        }
-        return null;
-    }
     /*
      * 从startEl 的开始找。。
      * 返回找到的元素el，没有找到返回null*/
@@ -4942,23 +5124,6 @@ var SwordGrid = new Class({
             nextEl = nextEl.getNext();
         }
     }
-    
-    /*
-     * 从startEl 的开始找。。
-     * 返回找到的元素el，没有找到返回null*/
-    ,findPreviousFocusInOneRow:function(startEl) {
-        var nextEl = startEl.getPrevious();
-        while(nextEl) {
-            var type = nextEl.get('type');
-            if(['text','date','select','pulltree','password'].contains(type) && nextEl.get('disabled') != true && nextEl.get('disable') != 'true') {
-                if(nextEl.getStyle('display') != 'none') {//不是隐藏列
-                    return nextEl;
-                }
-            }
-            nextEl = nextEl.getPrevious();
-        }
-    }
-  
 
     /**
      * 表格上执行一行物理删除的接口;
@@ -5392,6 +5557,16 @@ var SwordGrid = new Class({
             this.options.gridData = data;      
     	} //完整的表格数据
         this.options.data = this.options.gridData['trs'];   //业务数据  trs
+        this.options.data.each(function(tr) {
+        	if(!$chk(tr))return;
+            tr.getValue = function(name) {   //注册取值方法
+                var tmp = this.tds[name];
+                if(!$defined(tmp)) {
+                    return null;
+                }
+                return tmp['value'];
+            }
+        })
 
     }
 
@@ -5504,7 +5679,7 @@ var SwordGrid = new Class({
     //数据区，是否有纵向滚动条
     ,haveYScroll:function() {
         var dataDiv = this.dataDiv();
-        var allRows = $$(dataDiv.childNodes);
+        var allRows = dataDiv.getChildren();
         if(allRows.length == 0) {//没有元素肯定没有滚动条
             return false;
         }
@@ -5524,6 +5699,14 @@ var SwordGrid = new Class({
     //重建表格宽度
     ,buildX:function(row) {
         var haveYScroll = this.haveYScroll();
+        /* if (!Browser.Engine.trident4 && !Browser.Engine.trident5) {//如果 不是 ie6 且不是ie7
+         if (haveYScroll) {//如果含有滚动条
+         this.header().setStyle('overflow-y', 'scroll');    //为表头加入站位的滚动条
+         } else {
+         this.header().setStyle('overflow-y', 'auto');
+         }
+         }*/
+
         var scrollX = '' + this.options.scrollX;
         if(scrollX.contains('%')) {
             this.dataDiv().setStyle('width', scrollX);
@@ -5618,6 +5801,11 @@ var SwordGrid = new Class({
 
     //根据row的长度，重建表格宽度和高度
     ,buildXY:function(row) {
+        if(this.totalRows() == 0)
+            this.dataDiv().setStyle('display', 'none');
+        else {
+            this.dataDiv().setStyle('display', '');
+        }
         this.buildX(row);
         this.buildY();
     }
@@ -5837,7 +6025,7 @@ var SwordGrid = new Class({
 
         this.options.sGrid_console_totalRows_lable = new Element('lable', {
             'class': 'sGrid_console_text_lable'
-            ,'html':0
+            ,'html':this.totalRows()
         }).inject(this.console());
 
 
@@ -5951,7 +6139,7 @@ var SwordGrid = new Class({
 
         this.options.sGrid_console_totalRows_lable = new Element('lable', {
             'class': 'sGrid_console_text_lable'
-            ,'html':0
+            ,'html':this.totalRows()
         }).inject(this.console());
 
 
@@ -6000,6 +6188,7 @@ var SwordGrid = new Class({
                 el.set('value', realvalue);//李伟杰  2012-3-22添加  避免 自定义校验  el.get(value)为空  校验不通过
                 el.set('realvalue', realvalue);
                 el.set('showvalue', showvalue);
+                this.removeError(rowNum, elName);
                 this.updateCell(el, realvalue);//统一使用realvalue来更新值
                 if(itemEl.get('_onBlur')) {
                     this.getFunc(itemEl.get('_onBlur'))[0](realvalue, showvalue, this.getOneRowData(el), el, this.getRow(el), text || '', this);
@@ -6309,6 +6498,7 @@ var SwordGrid = new Class({
        var input = cell.getElement("input");
        if(input){this.vObj.clearElTip(input.set("rule",rule));input.destroy();cell.set('createInput','false')}
        this.updateCell(cell,cell.get("realvalue"),cell.get("text"));
+       if(rule=='')this.removeError(row.get('rowNum'), name);
        if(rule=='must'){
            var headerItem = this.options.sGrid_header_div.getElement("div[_for='"+name+"']");
            if(!headerItem.getElement("span")){
@@ -6366,118 +6556,23 @@ var SwordGrid = new Class({
    }
 
 });
-var DelayedTask = function(fn, scope, args) {
-    var me = this,
-            id,
-            call = function() {
-                clearInterval(id);
-                id = null;
-                fn.apply(scope, args || []);
-            };
-    me.delay = function(delay, newFn, newScope, newArgs) {
-        me.cancel();
-        fn = newFn || fn;
-        scope = newScope || scope;
-        args = newArgs || args;
-        id = setInterval(call, delay);
-    };
-    me.cancel = function() {
-        if(id) {
-            clearInterval(id);
-            id = null;
-        }
-    };
-};
-var SwordSort = new Class({
-    Implements : [Events,Options],
-    name:"SwordSort",
-    options:{
-        sortName:        "",//排序列name
-        type:          "string",//比较的数据类型
-        sortflag:          "asc",//默认升序
-        widget:         "table",//目前支持table--存储满足表格的数据,array--存储普通数据
-//        dataStr:        null, //数组数据
-        onSortBegin:    null,//排序前执行
-        onSortEnd:      null//排序后执行
-    },
-    initialize:function(options) {
-        this.setOptions(options);
-    },
-    initParam: function(node) {
+/*
 
-    },
-    initData: function() {
 
-    } ,
+ window.addEvent('domready',function(){
 
-    //排序并显示
-    sort: function(data, options) {
-        this.setOptions(options);
-        this.setData(data);
+ window.document.addEvent('click', function() {
+ $$('.gridTipDiv').each(function(el){
+ el.inject(document.body);
+ el.setStyle('display','none');
+ })
+ })
 
-        //获取数据
-        if($chk(this.options.dataStr)) {
-            this.setData(JSON.decode(this.options.dataStr));
-        }
-        if(!$chk(this.getData()))
-            return [];
-        //排序前执行
-        this.fireEvent('onSortBegin', this.data);
-        //排序
-        this.getData().sort(this.compare.bind(this));
-        //排序后执行
-        this.fireEvent('onSortEnd', this.data);
-        return this.getData();
-    },
-    //比较函数
-    compare: function(obj1, obj2) {
-        var vValue1 = this.getValue(obj1);
-        var vValue2 = this.getValue(obj2);
-        if(vValue1 < vValue2) {
-            return (this.options.sortflag == "asc") ? -1 : 1;
-        } else if(vValue1 > vValue2) {
-            return (this.options.sortflag == "asc") ? 1 : -1;
-        }
-        return 0;
+ });
 
-    },
 
-    //获取比较值
-    getValue: function(obj) {
-        var data = "";
-        if(this.options.widget == "table") {
-            if(!$chk(this.options.sortName)) {
-                swordAlert("未指定排序列！！");
-                return false;
-            }
-            data = obj["tds"][this.options.sortName];
-            if(data) {
-                data = data["value"];
-            } else {
-                data = '';
-            }
+ */
 
-        }
-        if(this.options.widget == "array")
-            data = obj;
-        //数据转换
-        switch(this.options.type.toLowerCase()) {
-            case "int":
-                return parseInt(data, 10) || 0;
-            case "float":
-                return parseFloat(data, 10) || 0;
-            case "bool":
-                return data === true || String(data).toLowerCase() == "true" ? 1 : 0;
-            case "string":
-            default:
-                return data ? data.toString() : "";
-        }
-    },
 
-    setData: function(data) {
-        this.data = data;
-    },
-    getData: function() {
-        return this.data;
-    }
-});
+
+

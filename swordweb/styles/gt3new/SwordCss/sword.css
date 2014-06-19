@@ -35,7 +35,7 @@ body {
 	margin-top:4px;
 	margin-right:4px;
     cursor: pointer;
-    background: url(images/tool-sprites.gif) ;
+    background:url(images/form_s_s.gif) no-repeat right top;
     margin-left: 2px;
 }
 .x-tool-s{ background-position:left top;}
@@ -234,8 +234,3 @@ table.inner table{width:100%;}
 
 table.buttons{border-collapse:collapse;border: none;margin:2px auto;white-space:nowrap; }
 
-.searchDiv{margin:10px 0 0 10px;height:23px;}  
-.search_c input{ background:none repeat scroll 0 0 white; background-color:#fff;  height:21px; margin:0; padding:0px;border:1px solid #ABABAB; border-left:0px;border-right:0px;}
-.search_l{width:23px;height:23px;background:url(images/search_l.png) no-repeat ; float:left;}
-.search_r{width:17px;height:23px;background:url(images/search_r.png) no-repeat ; float:left;}
-.search_c{float:left;height:23px;*+margin-top:-1px;}

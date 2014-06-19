@@ -131,7 +131,6 @@ var SwordForm = new Class({
         		"label":SwordLabelTemplate,
         		"tree":SwordPulltreeTemplate,
         		"pulltree":SwordPulltreeTemplate,
-        		"pulllazytree":SwordPulllazytreeTemplate,
         		"file":SwordFileTemplate
         	};
         this.createForm();

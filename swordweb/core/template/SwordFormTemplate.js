@@ -14,8 +14,6 @@ $extend(SwordForm_Template, {
     'select':function(){return SwordSelectTemplate.render.apply(SwordSelectTemplate,Array.prototype.slice.call(arguments))},
     //下拉树
     'pulltree':function(){return SwordPulltreeTemplate.render.apply(SwordPulltreeTemplate,Array.prototype.slice.call(arguments))},
-    //懒加载下拉树
-    'pulllazytree':function(){return SwordPulllazytreeTemplate.render.apply(SwordPulllazytreeTemplate,Array.prototype.slice.call(arguments))},
     //日期
     'date':function(){return SwordCalendarTemplate.render.apply(SwordCalendarTemplate,Array.prototype.slice.call(arguments));},
     //单选框

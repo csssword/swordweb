@@ -649,12 +649,12 @@ SwordToolBar.implement({
         return newDiv;
     },
     setDisabled : function(strType) {
-        var container = this.options.pNode.getElements("div[name='container']");
-        var parentDivs = container.getElements("div[type='" + strType + "']")[0];
+        var container = this.options.pNode.getElement("div[name='container']");
+        var parentDivs = container.getElements("div[name='" + strType + "']");
         if (parentDivs.length == 0)return null;
-        var i=0;
-        for(i=0;i<parentDivs.length;i++){
-           var  parentDiv=parentDivs[i];
+//        var i=0;
+//        for(i=0;i<parentDivs.length;i++){
+           var  parentDiv=parentDivs[0];
            if(this.options.pNode.get('showType')=='mini'&&parentDiv.hasClass("tb_mini_hover"))parentDiv.removeClass('tb_mini_hover').removeClass('tb_mini_texthover');
             parentDiv.set('enabled', 'false');
             var imageDiv = parentDiv.getElements("div[name='image']")[0];
@@ -670,17 +670,17 @@ SwordToolBar.implement({
             }
             var captionSpan = parentDiv.getElements("div[name='caption']")[0];
             captionSpan.set('class', this.options.showType != 'mini' ? this.globe.text.disabled : this.mini_globe.text.disabled);
-        }
+//        }
 
     },
     setEnabled : function(strName) {
-        var container = this.options.pNode.getElements("div[name='container']");
-        var parentDivs = container.getElements("div[type='" + strName + "']")[0];
+        var container = this.options.pNode.getElement("div[name='container']");
+        var parentDivs = container.getElements("div[name='" + strName + "']");
         if (parentDivs.length == 0)return null;
 
-        var i=0;
-        for(i=0;i<parentDivs.length;i++){
-            var parentDiv=parentDivs[i];
+//        var i=0;
+//        for(i=0;i<parentDivs.length;i++){
+            var parentDiv=parentDivs[0];
             parentDiv.set('enabled', 'true');
             var imageDiv = parentDiv.getElements("div[name='image']")[0];
             var imageClass = (imageDiv.get('class')).replace('_disabled', '_enabled');
@@ -695,7 +695,7 @@ SwordToolBar.implement({
             }
             var captionSpan = parentDiv.getElements("div[name='caption']")[0];
             captionSpan.set('class', this.options.showType != 'mini' ? this.globe.text.enabled : this.mini_globe.text.enabled);
-        }
+//        }
 
 
     },
