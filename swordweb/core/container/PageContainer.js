@@ -1,4 +1,3 @@
-
 var PageContainer = new Class({
     Implements:[Events,Options]
     ,name:"PageContainer"
@@ -191,6 +190,7 @@ var PageContainer = new Class({
         //给自定义form子类型注册事件
         this.initEventForForm();
         this.firePIOnAfter();
+        this.regHotKey();
       
     }
     ,initEventForForm:function(){
@@ -861,6 +861,102 @@ var PageContainer = new Class({
     	this.deleteDataByDataName(dataname);
     	this.initData.data[this.initData.data.length] = seldata;
     },	
+	HotKeyHash:new Hash(),
+    regHotKey : function() {
+    	var bars = this.getWidgetsByType('SwordToolBar');
+    	var bar = bars.getValues()[0];
+    	var isPar = false;
+    	if(!$chk(bar)){//本页没有toolbar时，查看父页面是否存在toolbar，若存在使用父页面注册快捷键
+    		if(!$chk(parent.window.pc))return;
+    		bar = parent.window.pc.getWidgetsByType('SwordToolBar').getValues()[0];
+    		if(!$chk(bar))return;
+    		isPar = true;
+    	}
+    	var child = bar.pNode().getChildren();
+        if (child.length != 0) {
+        	var toolName = bar.options.name;
+        	child.each(
+                    function(item) {
+                    	var iname = item.get("name");
+                    	var ikey = item.get("quickKey");
+                    	if(ikey != null){
+                    	if(!this.HotKeyHash.has(ikey)){
+                    		this.HotKeyHash.set(ikey,item);
+                    		var container = item.parentNode.getElements("div[name='container']");
+                    		var parentDivs = container.getElements("div[name='" + iname + "']")[0];
+//                    		if($chk(parentDivs))parentDivs.set('title',this.SwordHotKeyTitle.get(iname));
+                    	}
+                    	}
+                    }.bind(this));
+        }
+        this.getWidgetsByType("SwordSubmit").getValues().each(function(item,index){
+        	var itemCon = item.container;
+			if(itemCon.get("show")!="false"){//过滤隐藏的提交组件
+				var ikey=itemCon.get("quickKey");
+				if(ikey){
+					if(!this.HotKeyHash.has(ikey)){
+						this.HotKeyHash.set(ikey,itemCon);
+					}
+				}
+			}
+		}.bind(this));
+    	window.document.addEvent('keydown', function(e) {
+			if ($defined(pc.maskState) && pc.maskState)
+				return;
+			this.HotKeyHash.each(function(item, hotKey) {
+						var plusindex = hotKey.indexOf("+");
+						var asubStr = hotKey.substring(0, plusindex)
+								.toLowerCase();
+						var bsubStr = hotKey.substring(plusindex + 1,
+								hotKey.length);
+						var isCtrl = false;
+						var isAlt = false;
+						var isShift = false;
+						if (asubStr == "ctrl") {
+							isCtrl = true;
+						} else if (asubStr == "alt") {
+							isAlt = true;
+						} else if (asubStr == "shift") {
+							isShift = true;
+						}
+						var keyStr = String.fromCharCode(event.keyCode);
+						if (keyStr == bsubStr && event.ctrlKey == isCtrl
+								&& event.altKey == isAlt
+								&& event.shiftKey == isShift) {
+							if (navigator.userAgent.indexOf("MSIE") > 0) {
+								if (item.hasClass("submitbutton")) { // 提交组件的快捷键
+									if (item.get('enabled') == 'true') {
+										var sub = $w(item.get("name"));
+										sub.submit(sub.options);
+										e.stopPropagation();
+									}
+								} else {//toolbar的快捷键
+									var container = bar.options.pNode
+											.getElements("div[name='container']");
+									var parentDivs = container
+											.getElements("div[name='"
+													+ item.get("name") + "']")[0];
+									if (parentDivs.get('enabled') == 'true') {
+										if ($defined(item.get('_onClick'))) {
+											var eve = item.get('_onClick');
+											if (isPar)
+												eve = "parent." + eve;
+											this.getFunc(eve)[0]();
+											e.stopPropagation();
+										} else if ($defined(item.get('onClick'))) {
+											var eve = item.get('onClick');
+											if (isPar)
+												eve = "parent." + eve;
+											this.getFunc(eve)[0]();
+											e.stopPropagation();
+										}
+									}
+								}
+							}
+						}
+					}.bind(this));
+		}.bind(this));  	
+    } ,   	
 	
 	 getRandomUUID : function() {
 		 return Sword.utils.uuid(32);
@@ -939,8 +1035,7 @@ function $init_Gt(){
     pc = pageContainer = new PageContainer(edit);
     pc.getSelect(); //为了初始化全局click事件
     pc.getMask();
-    pc.process();debugger;
-    pc.initWidgetParam(new Element("div",{'sword':"SwordHotKeys","name":"hotKeyAutoCreate"}));
+    pc.process();
     MaskDialog.hide();
     _pcSwordClientPageJumpTiming("15");
 }
