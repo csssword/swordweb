@@ -35,6 +35,7 @@ var swordCfg={
              , "Base":["gt_extend/js/onafter.js","gt3_public/jsDelegate.js","swordweb/kz.js"]
              , "SwordClientCache":["gt_extend/js/cacheTree.js","gt_extend/js/cacheSelect.js"]
              , "SwordValidator":["swordweb/biz/plugins/SwordValidator/SwordValidator.js"]
+             , "SwordPageCache":["gt_extend/js/SwordPageCache_extend.js"]
         }
         ,css:{//影响样式，先去掉
             //"SwordPopUpWindow":["swordweb/styles/gt3/SwordPopUpBox/ymPrompt.css"],
