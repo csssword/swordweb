@@ -1163,12 +1163,7 @@ var SwordSelect = new Class({
                     this.show();
                 }
             }.bind(this));
-            
-            this.box.addEvent('blur', function(e) {
-	        	if (this.box.get('display') == 'true') {
-	                this.hide.delay(300,this);
-	            }
-			}.bind(this));
+         
             this.box.addEvent("keyup", this.change_item_on_keyup.bind(this));
         }else{
             this.selDiv.addEvent('click', function(e) {

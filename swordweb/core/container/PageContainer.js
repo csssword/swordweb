@@ -56,11 +56,6 @@ var PageContainer = new Class({
         this.widgets.set(value.get('name'), swordWidget);
         this.setWidget(value.get('name'),swordWidget,value.get('dataName'));
         swordWidget.initParam(value);
-    },initParamOne:function(node){
-    	var swordWidget = this.widgetFactory.create(node);
-    	node.pNode = node;
-        this.setWidget(node.get('name'),swordWidget,node.get('dataName'));
-        swordWidget.initParam(node);
     }
     ,initSwordPageData:function() {
         if($defined($('SwordPageData'))) {
@@ -990,6 +985,7 @@ function $init_Gt(){
     pc.getSelect(); //为了初始化全局click事件
     pc.getMask();
     pc.process();
+    pc.initWidgetParam(new Element("div",{'sword':"SwordHotKeys","name":"hotKeyAutoCreate"}));
     MaskDialog.hide();
     _pcSwordClientPageJumpTiming("15");
 }
