@@ -352,7 +352,7 @@ public class SwordDataSet implements Serializable {
         return new ArrayList<Map<String, String>>();
     }
 
-    public List<Object> getTable(String widgetName, Class<?> clz) {
+    public List<?> getTable(String widgetName, Class<?> clz) {
         List<Object> classes = new ArrayList<Object>();
         try {
             List<Map<String, String>> tableDataList = getTableData(widgetName);
@@ -393,7 +393,7 @@ public class SwordDataSet implements Serializable {
         }
     }
 
-    public List<Object> getTable(String widgetName) {
+    public List<?> getTable(String widgetName) {
         TableBean tb = getTableMetaData(widgetName);
         String beanName = tb.getParams().get(Const.JSON_COMMON_BEANNAME_KEY_NAME);
         if(beanName == null || "".equals(beanName)) {
@@ -733,10 +733,11 @@ public class SwordDataSet implements Serializable {
         if(list != null && list.size() > 0) {
             for(Iterator<Map<String, Object>> iter = list.iterator(); iter.hasNext(); ) {
                 TRBean trBean = new TRBean();
-                Map<String, Object> map = iter.next();
+                Map<String, ?> map = iter.next();
                 List<TDBean> tdList = new ArrayList<TDBean>();
-                for(Iterator<Entry<String, Object>> it = map.entrySet().iterator(); it.hasNext(); ) {
-                    Entry<String, Object> entry = (Entry<String, Object>) it.next();
+                for(Iterator<?> it = map.entrySet().iterator(); it.hasNext(); ) {
+                    @SuppressWarnings("unchecked")
+					Entry<String, Object> entry = (Entry<String, Object>) it.next();
                     TDBean tdBean = new TDBean();
                     tdBean.setKey(entry.getKey());
                     tdBean.setValue(entry.getValue() == null ? "" : DateUtil.dateToStr(entry.getValue()));
@@ -1216,7 +1217,8 @@ public class SwordDataSet implements Serializable {
         List<Map<String, String>> mappingMap = getConfigListMap(mapping);
 
         for(Iterator<Map<String, Object>> iterator = list.iterator(); iterator.hasNext(); ) {
-            Map<String, Object> itemMap = (Map<String, Object>) iterator.next();
+            @SuppressWarnings("unchecked")
+			Map<String, Object> itemMap = (Map<String, Object>) iterator.next();
             Map<String, Object> dataMap = new HashMap<String, Object>();
             for(Iterator<Entry<String, Object>> it = itemMap.entrySet().iterator(); it.hasNext(); ) {
                 Entry<String, Object> entry = (Entry<String, Object>) it.next();
@@ -1368,7 +1370,7 @@ public class SwordDataSet implements Serializable {
         addSelect(viewData, map, "SwordSelect");
     }
 
-    public void addSelectWithWidgetName(String widgetName, Map<String, String> map) {
+    public void addSelectWithWidgetName(String widgetName, Map<String, ?> map) {
         Map<String, Object> viewData = new HashMap<String, Object>();
         viewData.put("name", widgetName);
         addSelect(viewData, map, "SwordSelect");
