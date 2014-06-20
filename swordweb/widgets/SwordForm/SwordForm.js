@@ -934,15 +934,18 @@ var SwordForm = new Class({
     },
     nextFocus:function(e) {
         e = Event(e);
-        if(e.key == 'enter') {
-        		if(this.options.valfocus=="false" || !this.options.valfocus){
-			    	var vs = this.Vobj.validate(e);
-				    if(!vs){
-				    	e.target.focus();
-				    	return;
-				    }
-		    }
-		    
+        if(e.key == 'enter') {alert(1);
+        	var name = e.target.get("name");
+                if(this.options.valfocus=="false" || !this.options.valfocus){
+            		var rule = e.target.get("rule");
+		    		if($chk(rule)){
+                    	var tag = this.validate(name);
+                    	if(!tag){
+                    		(function(){e.target.focus();}).delay(1);
+                       	 	return;
+                    	}
+            		}
+	    		}
             var tar = null;
             if(this.options.userDefine != "true") {
                 var idx = e.target.getParent(".swordform_item_div").getAttribute("idx").toInt() + 1;
@@ -959,17 +962,7 @@ var SwordForm = new Class({
                     }
                 }
             } else {
-                var name = e.target.get("name");
-                if(this.options.valfocus=="false" || !this.options.valfocus){
-            		var rule = e.target.get("rule");
-		    		if($chk(rule)){
-                    	var tag = this.validate(name);
-                    	if(!tag){
-                    		(function(){e.target.focus();}).delay(1);
-                       	 	return;
-                    	}
-            		}
-	    		}
+                
             	
                 var nfidx = this.fieldElOrderHash.keyOf(this.getFieldEl(name)) / 1;//自定义表单焦点转移的定义
                 var size = this.fieldElOrderHash.getKeys().length;
