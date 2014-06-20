@@ -935,6 +935,14 @@ var SwordForm = new Class({
     nextFocus:function(e) {
         e = Event(e);
         if(e.key == 'enter') {
+        		if(this.options.valfocus=="false" || !this.options.valfocus){
+			    	var vs = this.Vobj.validate(e);
+				    if(!vs){
+				    	e.target.focus();
+				    	return;
+				    }
+		    }
+		    
             var tar = null;
             if(this.options.userDefine != "true") {
                 var idx = e.target.getParent(".swordform_item_div").getAttribute("idx").toInt() + 1;
