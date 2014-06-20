@@ -1,4 +1,4 @@
-/*
+﻿/*
 document.addEvent('domready',function(){
 	  				var cachewarp = new Element("div").inject(document.body);
 	  				cachewarp.id = "_persist_flash_wrap";
@@ -13,6 +13,7 @@ var setRemoveCallback =function() {
        __flash__removeCallback =function(instance, name) {
 	      if(instance) {
 	          instance[name] =null;
+
 	        }
       };
       window.setTimeout(setRemoveCallback, 10);
