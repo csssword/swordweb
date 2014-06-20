@@ -1,5 +1,5 @@
-/**  
-  * Menu组件类
+/**   
+   * Menu组件类
   * @class swordweb.widgets.SwordMenu.SwordMenu
   * @implements Events
   * @implements Options
