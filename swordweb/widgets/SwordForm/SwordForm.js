@@ -23,7 +23,7 @@ var SwordForm = new Class({
         edit:null,//是否是只读form
         isShowTogdiv:false,
         valfocus:true,//表单焦点移动的时候如果校验不通过是否可以移动到下一元素 true可以移动 false不可以移动
-        noNextEvent:$empty//表单焦点移动没有时调用方法
+        noNextEvent:null//表单焦点移动没有时调用方法
     },
     el:{
         name:null,//name属性
