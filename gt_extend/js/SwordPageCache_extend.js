@@ -1,6 +1,7 @@
 
 SwordPageCache.implement({
     genUUIDTemplate:function() {
-        return "ut";
+    	
+        return top.getSwryDm()||"";
     }
 });
