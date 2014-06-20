@@ -820,96 +820,7 @@ var SwordForm = new Class({
         }
         var opras = this.getFieldEls();
         if(d.sword == "SwordForm") {
-            var data = d.data;
             opras.each(function(em) {
-            	/*if($chk(d.data[em.get('name')])) {
-                    if(['true','select','calendar'].contains(em.get('widget'))) {
-                        this.getWidget(em.get('name')).initData((d.data[em.get('name')].value), em);
-                    } else if(em.get('widget') == 'tree') {
-                        //下拉树的代码转名称
-                        var value = d.data[em.get('name')].value;
-                        if(value){
-                            if(value.contains("code") && value.contains("caption")) {
-                            	if(value.contains(";") || value.contains("checkPath")){
-                            		var varray = value.split(";");
-                            		var codeArray;
-                            		var capArray;
-                            		var checkArray;
-                            		varray.each(function(v,index){
-                            			var vs = v.split('|');
-                            			if(index == 0){
-                            				codeArray = vs[1].split(':')[1] + ","
-                            				capArray = vs[0].split(':')[1] + ",";
-                            				checkArray = vs[2].split(':')[1] + "|";
-                            			}else{
-                            				codeArray = codeArray + vs[1].split(':')[1] + ",";
-                            				capArray = capArray + vs[0].split(':')[1] + ",";
-                            				checkArray = checkArray + vs[2].split(':')[1] + "|";
-                            			}
-                            		});
-                            		 em.set('value', codeArray.substring(0,codeArray.length-1));
-                                     em.set('realvalue', capArray.substring(0,capArray.length-1));
-                                     em.set('checkPath',checkArray.substring(0,checkArray.length-1));
-                            	}else{
-                            		  var vs = value.split('|');
-                                      if(value.contains('codePath')) {
-                                          //懒加载树的反显路径
-                                          em.set('codePath', vs[2].substring('codePath,'.length));
-                                      }
-                                      em.set('value', vs[1].split(',')[1]);
-                                      em.set('realvalue', vs[0].split(',')[1]);
-                            	}
-//                                var vs = value.split('|');
-//                                if(value.contains('codePath')) {
-//                                    //懒加载树的反显路径
-//                                    em.set('codePath', vs[2].substring('codePath,'.length));
-//                                }
-//                                em.set('value', vs[1].split(',')[1]);
-//                                em.set('realvalue', vs[0].split(',')[1]);
-                            } else {
-                                var tr = this.getWidget(em.get('name'));
-                                var vs = value.split(',');
-                                tr.select.show();
-                                tr.select.hide();
-                                var node = [];
-                                vs.each(function(v) {
-                                    var query = new Hash();
-                                    query.set(tr.options.cascadeSign.id, v);
-                                    var findNode = tr.getTreeNode(query);
-                                    if($chk(findNode)){
-                                    	node.include(findNode);
-                                    }
-                                });
-                                if(node) {
-                                    tr.setSelectedNode(node);
-                                } else {
-                                    tr.setSelectValue(d.data[em.get('name')].value);
-                                }
-                            }
-                        }
-                    } else {
-                        if(!$dateFmt(d.data[em.get('name')].value, em)) {
-                        	if(em.get('placeholder') == "true"){
-                        		if($chk(d.data[em.get('name')].value)){
-                        			em.set('value', d.data[em.get('name')].value);
-                                    em.set('text', d.data[em.get('name')].value);
-                        			em.removeClass("swordform_item_input_placeholder");
-                        			em.set('oValue', em.get('value'));
-                        		}else{
-                        			if(!$chk(em.get("value"))){
-                        				em.set("value",em.get("defvalue"));
-                        			}
-                        		}
-                        	}else{
-                        		em.set('value', d.data[em.get('name')].value);
-                                em.set('text', d.data[em.get('name')].value);
-                                em.set('oValue', em.get('value'));
-                        	}
-                        }
-                    }
-                    this.initFormatVal(em);
-                }*/
-            	//此处替换成使用模板对象的初始化数据的方式.(不区分是否使用模板引擎)
             	var elData=d.data[em.get('name')];
             	if($chk(elData)){
 	            	var widgetStr=em.get('widget')||em.get("type");
@@ -1022,15 +933,6 @@ var SwordForm = new Class({
         return this.fieldElHash.getKeys();//this.options.pNode.getElements(".swordform_item_oprate").get('name');
     },
     nextFocus:function(e) {
-   
-    	if(this.options.valfocus=="false" || !this.options.valfocus){
-		    var vs = this.Vobj.validate(e);
-		    if(!vs){
-		    	e.target.focus();
-		    	return;
-		    }
-	    }
-	    
         e = Event(e);
         if(e.key == 'enter') {
             var tar = null;
@@ -1050,6 +952,17 @@ var SwordForm = new Class({
                 }
             } else {
                 var name = e.target.get("name");
+                if(this.options.valfocus=="false" || !this.options.valfocus){
+            		var rule = e.target.get("rule");
+		    		if($chk(rule)){
+                    	var tag = this.validate(name);
+                    	if(!tag){
+                    		(function(){e.target.focus();}).delay(1);
+                       	 	return;
+                    	}
+            		}
+	    		}
+            	
                 var nfidx = this.fieldElOrderHash.keyOf(this.getFieldEl(name)) / 1;//自定义表单焦点转移的定义
                 var size = this.fieldElOrderHash.getKeys().length;
                 if(nfidx && nfidx != size) {
@@ -1069,16 +982,12 @@ var SwordForm = new Class({
                 }
             }
             if($defined(tar)) {
-                tar.focus();
-               // tar.click();
+            	(function(){tar.focus();tar.focus();}).delay(1);
             } else {
-            
-	            if($chk(this.options.noNextEvent)){
+            	$(e.target.get("id")).blur();
+            	if($chk(this.options.noNextEvent)){
 	            	this.getFunc(this.options.noNextEvent)[0]();
-	            }else{
-	            	$(e.target.get("id")).blur();
 	            }
-            	
             }
         }
     },
@@ -1569,7 +1478,6 @@ var SwordForm = new Class({
     	}
     }
     ,allElEvent:function(el){
-//    	var typeArray=["text","label","password"];  
     	var tag = el.get("tag");
 		var input=tag=="input"||el.get("tag")=="textarea"?el:el.getElement("input");
 		if(input&&tag!='select'&&tag!='date'&&$chk(el.get("rule")))this.Vobj._add(el);
