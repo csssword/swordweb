@@ -1,4 +1,4 @@
-﻿/*
+﻿  /*
 document.addEvent('domready',function(){
 	  				var cachewarp = new Element("div").inject(document.body);
 	  				cachewarp.id = "_persist_flash_wrap";
