@@ -112,7 +112,6 @@ var SwordAnchorLayout = new Class({
     ,refreshDom:function(){
         var left  ,right ,top ,bottom ;
 
-                debugger
         if($chk(this.options.anchorLeft)){
 
             var widget = $w(this.options.anchorLeft);
