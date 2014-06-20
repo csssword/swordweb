@@ -18,12 +18,12 @@ import java.util.Map;
  * @author WJL <br>
  * @since Sword 4.0.0<br>
  */
-public class SelectBean extends AbsDataBean<Object> {
+public class SelectBean<T> extends AbsDataBean<T> {
 
 	private static final long serialVersionUID = -4103983252103569876L;
 	private List<Map<String, ?>> dataList = new ArrayList<Map<String, ?>>();
 
-	public Map<String, Object> viewData() {
+	public Map<String, T> viewData() {
 		return super.viewData;
 	}
 
