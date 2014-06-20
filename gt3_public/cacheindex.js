@@ -26,6 +26,7 @@ var $swfcacheobject = (function () {
 	var servercache = $H();
 //	var localcache = $H();	 
 	function getswfcacheobjct() {
+		
 		var  o ;
 		if (Browser.Engine.trident){
 			o = $("_persist_flash");
