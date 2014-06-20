@@ -438,7 +438,7 @@ var SwordForm = new Class({
 	        //this._parseItem(p, defineItem);
 	        CloneDefine.inject(p);
 	        this.fieldElHash.set(name,null);
-	        var idStr=SwordForm_Template[type](CloneDefine,'SwordForm',d);
+	        var idStr=SwordForm_Template[type](CloneDefine,'SwordForm',d,this);
 	        elTemp=$(idStr);
 	        this.fieldElHash.set(name,elTemp);
 //	        var tar = p.getElement("*[name='" + name + "']");
