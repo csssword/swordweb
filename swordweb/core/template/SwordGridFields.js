@@ -161,13 +161,16 @@ var SwordGridFields = new Class({
 		};
 	
 	}
-	,render:function (items) {
+	,render:function (items,formats) {
 		var row=[];
 		items.each(function(item){
 			var type = item.get('type');
 			if(item.getAttribute('show') == 'false') {//隐藏列
-				item.setStyle('display', 'none')
+				item.setStyle('display', 'none');
 	        }
+			if(item.getAttribute('format')){
+				formats.set(item.getAttribute('name'),item.getAttribute('format'));
+			}
 			row.push(this._findFieldHandler(type)(item,type));
 		},this);
 		return row.join("");
@@ -186,14 +189,13 @@ var SwordGridFields = new Class({
 		///可添加其他属性，可以是其他属性判断后添加的
 		
 		//可在字符串添加内部属性 或全局属性
-        return ' <div datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_label " '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+field.format+'"}';
+        return ' <div datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_label " '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
 	}
 	,_textHtmlHandler:function(item){
 		var field = this.findFieldOptions('text');
 		var attrs = this.copeHtmlOptions(field,item);
 		///可添加其他属性，可以是其他属性判断后添加的
-		
-        return '<div eventdele="text" datael="true"  class="sGrid_data_row_item_div sGrid_data_row_item_text "  '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+field.format+'"}';
+        return '<div eventdele="text" datael="true"  class="sGrid_data_row_item_div sGrid_data_row_item_text "  '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
 	}
 	,_rowNumHtmlHandler:function(item){
 		var field = this.findFieldOptions('rowNum');
