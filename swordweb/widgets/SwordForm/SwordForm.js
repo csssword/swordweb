@@ -934,7 +934,7 @@ var SwordForm = new Class({
     },
     nextFocus:function(e) {
         e = Event(e);
-        if(e.key == 'enter') {alert(1);
+        if(e.key == 'enter') {
         	var name = e.target.get("name");
                 if(this.options.valfocus=="false" || !this.options.valfocus){
             		var rule = e.target.get("rule");
@@ -962,8 +962,6 @@ var SwordForm = new Class({
                     }
                 }
             } else {
-                
-            	
                 var nfidx = this.fieldElOrderHash.keyOf(this.getFieldEl(name)) / 1;//自定义表单焦点转移的定义
                 var size = this.fieldElOrderHash.getKeys().length;
                 if(nfidx && nfidx != size) {
@@ -985,9 +983,10 @@ var SwordForm = new Class({
             if($defined(tar)) {
             	(function(){tar.focus();tar.focus();}).delay(1);
             } else {
-            	$(e.target.get("id")).blur();
             	if($chk(this.options.noNextEvent)){
 	            	this.getFunc(this.options.noNextEvent)[0]();
+	            }else{
+	            	$(e.target.get("id")).blur();
 	            }
             }
         }
