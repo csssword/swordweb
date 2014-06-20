@@ -19,9 +19,9 @@ var SwordGridRender = new Class(
 			,options : {
 				gridObj : null// 容器
 			}
-		   ,formats = new Hash();  ///format与juicer解析冲突，每列的format放在该对象中方便获取
+		   ,formats : new Hash() ///format与juicer解析冲突，每列的format放在该对象中方便获取
 
-			,initialize : function(options) {
+		   ,initialize : function(options) {
 				this.setOptions(options);
 				if (!this.options.gridObj)throw new Error("SwordGridRender 初始化必须要传入 gridObj");
 				this.g = this.options.gridObj;
