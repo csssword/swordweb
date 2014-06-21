@@ -14,7 +14,16 @@ var SwordGridFields = new Class({
 	}
 	,Fields:{
 		////各类型对外提供属性
-		label:{
+		a:{
+			name:""
+			,caption:""
+			,x:""
+			,type:'a'
+			,show:""
+			,style:""
+			,onClick:""
+		}
+		,label:{
 			format:""
 			,caption:""
 			,show:""
@@ -149,7 +158,8 @@ var SwordGridFields = new Class({
 		if(!this.options.gridObj)throw new Error("SwordGridRender 初始化必须要传入 gridObj");
 		this.g=this.options.gridObj;
 		this._showDataHandlers={//定义特殊数据处理器
-			'label':this._labelHtmlHandler.bind(this)
+			'a':this._aHtmlHandler.bind(this)
+			,'label':this._labelHtmlHandler.bind(this)
 			,'text':this._textHtmlHandler.bind(this)
 			,'textarea':this._textHtmlHandler.bind(this)
 			,'rowNum':this._rowNumHtmlHandler.bind(this)
@@ -182,6 +192,14 @@ var SwordGridFields = new Class({
 		}else{
 			throw new Error("_findFieldHandler 未知的列类型定义");
 		}
+	}
+	,_aHtmlHandler:function(item){
+		var field = this.findFieldOptions('a');
+		var attrs = this.copeHtmlOptions(field,item);
+		///可添加其他属性，可以是其他属性判断后添加的
+		
+		//可在字符串添加内部属性 或全局属性
+        return ' <div datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_a " '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
 	}
 	,_labelHtmlHandler:function(item){
 		var field = this.findFieldOptions('label');
