@@ -792,6 +792,7 @@ var SwordSelect = new Class({
     },
     change_item:function(li, notHide) {
         if(li) {
+        	if(li.get('name')=="loading")return;
             this.unselect_lis(this.selectbox);
             this.selectedIndex = li.getProperty('index');
             this.currentElement = li;
