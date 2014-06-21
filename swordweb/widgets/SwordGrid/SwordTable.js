@@ -4474,29 +4474,16 @@ var SwordGrid = new Class({
     
     //为输入框添加焦点转移事件,加一个参数，为了隐藏日历的弹出框
     ,addNextFocusEvent:function(srcEl, obj) {
-        srcEl.addEvent('keyup', function(event) {
+    	srcEl.addEvent('keyup', function(event) {
             var e = Event(event);
             
-            if(e.key == 'enter') {
-            	if(this.options.valfocus){
-            		var rule = srcEl.get('rule');
-            		if($chk(rule)){
-            			if(this.vObj.validate(srcEl)){
-            				this.nextCell(srcEl, event,obj);
-            			}
-            		}
-            	}else{
-                    this.nextCell(srcEl, event,obj);
-            	}
-            }else if (e.key== 'left' || e.key== 'up' || e.key== 'right' || e.key== 'down' ) {  //左
-            	if(this.options.valfocus){
-            		var rule = srcEl.get('rule');
-            		if($chk(rule)){
-            			if(this.vObj.validate(srcEl)){
-                        	this.nextCell(srcEl, event,obj,e.key);
-            			}
-            		}
-            	}else{
+            if(e.key == 'enter'||e.key== 'left' || e.key== 'up' || e.key== 'right' || e.key== 'down' ) {
+            	var rule = srcEl.get('rule');
+        		if($chk(rule)){
+        			if(this.options.valfocus=="true"&&this.vObj.validate(srcEl)){
+                    	this.nextCell(srcEl, event,obj,e.key);
+        			}
+        		}else{
                     this.nextCell(srcEl, event,obj);
             	}
             }
@@ -4526,7 +4513,6 @@ var SwordGrid = new Class({
             if(flag == false)return;
         }
         var nextEl;
-        
         if( nextOrder=="right"  || (!$chk(nextOrder) && this.options.nextOrder == 'row') ) {//以行的方向焦点转移，默认的方向
             
             nextEl = this.findNextFocusInOneRow(startEl);
