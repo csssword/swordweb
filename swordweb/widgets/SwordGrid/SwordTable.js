@@ -2100,6 +2100,9 @@ var SwordGrid = new Class({
             var allchk = item.get('allchk');
             this.headhash.set(name, caption);
             var sGrid_header_item_div = this.headerM.clone(false).set({'_for':name,'sortType':item.get('sortType') || ''}).inject(this.header());
+            if(item.get("x")=="0%"){
+            	sGrid_header_item_div.setStyle("display","none");
+            }
             if(lastName == name)sGrid_header_item_div.setStyle('border-right', 'none');
 
             if(this.options.headerY != -1) { //如果程序员定义了表头高度的话
