@@ -539,6 +539,10 @@ var SwordTree = new Class({
     	if(this.builder&&this.builder.draw)
         return this.builder.draw.getAllCheckedList(isLeaf);
     }
+    ,getAllUnCheckedList:function(isLeaf,where) {
+    	if(this.builder&&this.builder.draw)
+        return this.builder.draw.getAllUnCheckedList(isLeaf);
+    }
     /**
      * 设置选中的节点
      * @function {public null} setCheckedList

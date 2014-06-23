@@ -2056,6 +2056,21 @@ SwordTree.Draw = new Class({
             return array;
         }
         return str;
+    },
+    checkOrUnCheckList:function(isLeaf, where,tag){
+    	var test ="";
+    	if(tag == "checked"){
+    		test = "div[ischecked='true']";
+    	}else test = ">div.tree-node[ischecked!='true']"; 
+        if (where) {
+            test += where;
+        }
+        if ($chk(isLeaf)) {
+            if (isLeaf == 1)    test = test + "[leaftype='1']";
+            if (isLeaf == 0)    test = test + "[leaftype='0']";
+        }
+        var array = this.container.getElements(test);
+        return array;
     }
 
     /**
@@ -2066,16 +2081,19 @@ SwordTree.Draw = new Class({
      * @return {Array}
      */
     ,getAllCheckedList:function(isLeaf, where) {
-        var test = "div[ischecked='true']";
-        if (where) {
-            test += where;
-        }
-        if ($chk(isLeaf)) {
-            if (isLeaf == 1)    test = test + "[leaftype='1']";
-            if (isLeaf == 0)    test = test + "[leaftype='0']";
-        }
-        var array = this.container.getElements(test);
-        return array;
+//        var test = "div[ischecked='true']";
+//        if (where) {
+//            test += where;
+//        }
+//        if ($chk(isLeaf)) {
+//            if (isLeaf == 1)    test = test + "[leaftype='1']";
+//            if (isLeaf == 0)    test = test + "[leaftype='0']";
+//        }
+//        var array = this.container.getElements(test);
+        return this.checkOrUnCheckList(isLeaf, where,"checked");
+    },
+    getAllUnCheckedList:function(isLeaf, where){
+    	return this.checkOrUnCheckList(isLeaf, where,"unchecked");
     }
     /**
      * 判断是否父节点
