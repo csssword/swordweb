@@ -44,6 +44,7 @@ var SwordGridFields = new Class({
 			,name:""
 			,style:""
 			,msg:""
+			,maxlength:""
 		}
 		,rowNum:{
 			caption:""
