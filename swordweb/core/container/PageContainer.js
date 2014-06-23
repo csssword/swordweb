@@ -928,7 +928,6 @@ var PageContainer = new Class({
 									if (item.get('enabled') == 'true') {
 										var sub = $w(item.get("name"));
 										sub.submit(sub.options);
-										e.stopPropagation();
 									}
 								} else {//toolbar的快捷键
 									var container = bar.options.pNode
@@ -942,16 +941,15 @@ var PageContainer = new Class({
 											if (isPar)
 												eve = "parent." + eve;
 											this.getFunc(eve)[0]();
-											e.stopPropagation();
 										} else if ($defined(item.get('onClick'))) {
 											var eve = item.get('onClick');
 											if (isPar)
 												eve = "parent." + eve;
 											this.getFunc(eve)[0]();
-											e.stopPropagation();
 										}
 									}
 								}
+								e.stopPropagation();
 							}
 						}
 					}.bind(this));
