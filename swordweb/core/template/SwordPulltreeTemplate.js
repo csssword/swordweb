@@ -1,7 +1,7 @@
 //日期控件的模板引擎
 var SwordPulltreeTemplate = {
     'tablePre':'<table class="swordform_field_wrap swordtree_wrap" cellSpacing="0" cellPadding="0"><tbody><tr><td class="boxtd">',
-    'inputPre':'<input style="float: left; cursor: text;" class="swordform_item_oprate swordform_item_input"  type="text"  widget="tree" realvalue="" swordType="tree" display="true" evnSign="true" widgetGetValue="true"' ,
+    'inputPre':'<input style="float: left; cursor: text;" class="swordform_item_oprate swordform_item_input"  type="text"  widget="lazytree" realvalue="" swordType="lazytree" display="true" evnSign="true" widgetGetValue="true"' ,
     //'attr':'name="{name}" rule="{rule}" msg="{msg}" ',
     'id':' id="{PName}_{name}" ',
     'end':'></td><td width="17" class="tree-select-selimg"><div style="width: 17px; visibility: hidden;"></div></td></tr></tbody></table>',
@@ -13,24 +13,10 @@ $extend(SwordPulltreeTemplate, {
      * @param parent 父亲对象是谁
      * @param data 数据
      */
-    render:function (item ,parent ,data) {
-         var me = this, arr, html, node;
-        var d = $merge(me.datedef, data);
-        if ($defined(parent)&&parent== "SwordForm") {
-            arr = [me.tablePre,me.table, me.inputPre, SwordForm_Template.PUBATTR, me.id,me.imgtd, me.end];
-        } else {
-            arr = [me.tablePre,me.table, me.inputPre, SwordForm_Template.PUBATTR,me.imgtd, me.end];
-        }
-        html = STemplateEngine.render(arr.join(''), item, d);
-        node = STemplateEngine.createFragment(html);
-        if($defined(parent)&&parent== "SwordForm"){
-        	item.setStyle("display","none");
-        	item.parentNode.insertBefore(node, item);
-        	 return d.PName+"_"+item.get("name");
-        }else{
-        	item.appendChild(node);
-        	return $(item).getElement('table');
-        }
+    render:function (item ,parent ,data, formObj) {
+    	var itemName=item.get('name'),fName=formObj.options.name;
+    	this.initWidget(itemName, formObj);
+    	return fName + "_" + itemName;
     },
 	initData:function(em,elData){
     	var value = "";
@@ -99,7 +85,7 @@ $extend(SwordPulltreeTemplate, {
     	var name = ite.get('name');
     	var tree = formObj.getWidget(name);
     	if(!tree){
-    		tree = this.initWidget(name, formObj)
+    		tree = this.initWidget(name, formObj);
     	}
     },
     initWidget:function(name, formObj){
@@ -107,11 +93,27 @@ $extend(SwordPulltreeTemplate, {
     	item.pNode = item.getParent();
         var tree = pageContainer.create("SwordTree");
         formObj.setWidget(name, tree);
+        var id = formObj.options.name + "_" + name,tabindex=item.get("tabindex");
+        pc.setWidget(formObj.name+"."+name,tree,item.get('dataName'));
         pc.setWidget4loaddata(name, tree); //当pc.loaddata的时候会被调用get(elName, ta);
         item.setProperty("select", "true");
         tree.initParam(item, formObj);
+        tree.treeInForm=true;
         tree.setValidate(formObj.Vobj);
-//        tree.initData(item, formObj);
+        var data = item;
+        if(item.get("dataStr")){
+       	 	data= item.get("dataStr");
+        }
+        tree.initData(data, formObj);
+        var vobj = tree.select.selBox.set("id",id);
+        tree.select.selBox.set("msg",item.get("msg")).set("tabindex",tabindex=="-1"?0:tabindex);
+        vobj.addClass(item.get("class"));
+        if(item.get("style").lastIndexOf("display: none;")!=0){
+       	 vobj.set("style",vobj.get("style")+item.get("style"));
+        }
+        formObj.fieldElHash.set(name, vobj);
+        if("true"==item.get("disable"))tree.select.disable(vobj);
+        if($defined(item.get('rule')))formObj.Vobj._add(vobj);
         return tree;
     }
 });
