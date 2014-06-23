@@ -48,12 +48,12 @@ var SwordGridRender = new Class(
 				return rowsFragment;
 			}
 
-			,renderRow : function(rowData, items) {
+			,renderRow : function(rowData, items,status) {
 				var h = this._createRow([rowData], items);
 				var row = new Element('div', {
 					'html' : h
 				}).getFirst();
-
+				if(status=="insert"){row.set("status",status);}
 				this._renderAfter([ row ], [ rowData ], items);
 
 				return row;
