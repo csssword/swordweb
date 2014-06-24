@@ -22,6 +22,15 @@ var SwordGridFields = new Class({
 			,show:""
 			,style:""
 			,onClick:""
+		},
+		button:{
+			name:""
+			,caption:""
+			,x:""
+			,type:'button'
+			,show:""
+			,style:""
+			,onClick:""
 		}
 		,label:{
 			format:""
@@ -45,6 +54,22 @@ var SwordGridFields = new Class({
 			,style:""
 			,msg:""
 			,maxlength:""
+			,onEnterPress:""
+			,tipTitle:""
+		}
+		,password:{
+			caption:""
+			,show:""
+			,disable:""
+			,rule:""
+			,x:""
+			,type:'text'
+			,name:""
+			,style:""
+			,msg:""
+			,maxlength:""
+			,onEnterPress:""
+			,tipTitle:""
 		}
 		,rowNum:{
 			caption:""
@@ -56,9 +81,7 @@ var SwordGridFields = new Class({
 		}
 		,checkbox:{
 			caption:""
-			,show:""
 			,disable:""
-			,rule:""
 			,x:""
 			,type:'checkbox'
 			,name:""
@@ -162,6 +185,7 @@ var SwordGridFields = new Class({
 			'a':this._aHtmlHandler.bind(this)
 			,'label':this._labelHtmlHandler.bind(this)
 			,'text':this._textHtmlHandler.bind(this)
+			,'password':this._passwordHtmlHandler.bind(this)
 			,'textarea':this._textHtmlHandler.bind(this)
 			,'rowNum':this._rowNumHtmlHandler.bind(this)
 			,'checkbox':this._checkboxHtmlHandler.bind(this)
@@ -188,8 +212,9 @@ var SwordGridFields = new Class({
     }
 	,_findFieldHandler:function(type){
 		if(!$chk(type))type = 'label';
-		if(this._showDataHandlers[type]){
-			return this._showDataHandlers[type];
+		var typeElStr=this._showDataHandlers[type];
+		if(typeElStr){
+			return typeElStr;
 		}else{
 			throw new Error("_findFieldHandler 未知的列类型定义");
 		}
@@ -215,6 +240,13 @@ var SwordGridFields = new Class({
 		var attrs = this.copeHtmlOptions(field,item);
 		///可添加其他属性，可以是其他属性判断后添加的
         return '<div eventdele="text" datael="true"  class="sGrid_data_row_item_div sGrid_data_row_item_text "  '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
+	}
+	,_passwordHtmlHandler:function(item){
+		var field = this.findFieldOptions('password');
+		var attrs = this.copeHtmlOptions(field,item);
+		///可添加其他属性，可以是其他属性判断后添加的
+        return '<div eventdele="text" datael="true"  class="sGrid_data_row_item_div sGrid_data_row_item_password "  '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
+	
 	}
 	,_rowNumHtmlHandler:function(item){
 		var field = this.findFieldOptions('rowNum');
@@ -263,7 +295,7 @@ var SwordGridFields = new Class({
 	,copeHtmlOptions:function (field,htmlNode) {
 		 	var attrs = [];
 	        for (var key in (field || {})) {
-	            var v = htmlNode.get(key);
+	            var v = htmlNode.get(key)||htmlNode.getAttribute(key);
 	            field[key] = ($chk(v) && $defined(v)) ? v : field[key];
 	            if($chk(field[key])){
 	            	attrs.push(key+'="'+field[key]+'"  ');
