@@ -81,6 +81,12 @@ var PageContainer = new Class({
             }
         }
     }
+    ,getDataFunc4Name:function(key) {
+    	return this.data.filter(function(item){return item["name"]==key;})[0];
+    }
+    ,getDataFunc4DataName:function(key) {
+    	return this.data.filter(function(item){return item["dataname"]==key||item["dataName"]==key;})[0];
+    }
     ,initPageData:function() {
         var pi = this.getPageInit();
         if($defined($('SwordPageData'))) {
@@ -407,6 +413,12 @@ var PageContainer = new Class({
 //        logger.debug("装载数据开始。。。。。", 'PageContainer');
         if(!$defined(dataObj.getAttr)) {
             dataObj["getAttr"] = this.getAttrFunc;
+        }
+        if(!$defined(dataObj.getData)) {
+            dataObj["getData"] = this.getDataFunc4Name;
+        }
+        if(!$defined(dataObj.getDataByDataName)) {
+            dataObj["getDataByDataName"] = this.getDataFunc4DataName;
         }
         if(dataObj['exception']) {
             if($defined(onError)) {
