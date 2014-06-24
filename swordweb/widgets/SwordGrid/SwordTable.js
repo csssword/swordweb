@@ -1287,7 +1287,7 @@ var SwordGrid = new Class({
      * @returns deletingEl or null
      */
     ,deleting:function(el) {
-        var row = this.getRow(el);
+    	var row = this.getRow(el);
         var status = row.get('status');
         row.addClass('sGrid_data_row_delete_div');
         if(status == 'insert') {//是新增的行的时候直接执行删除操作
@@ -1298,9 +1298,9 @@ var SwordGrid = new Class({
         row.set('status', 'delete');
         var chks = row.getElements('input[type="checkbox"][checked]');
         row.getElements('input[type="checkbox"][checked]').set("checked",false)
-        var realRowNum = this.getRealRowNum(el);
+        /*var realRowNum = this.getRealRowNum(el);
         this.data()[realRowNum - 1]['status'] = 'delete';    //更新行的状态
-        row.retrieve('rowData')['status'] = 'delete';
+*/        row.retrieve('rowData')['status'] = 'delete';
         this.buildXY();
         this.scrollHeader();
         this.rereshHjRowData();
@@ -3942,7 +3942,6 @@ var SwordGrid = new Class({
     }
 
     ,createRow:function(rowNum, dataObj, items, status, row) {
-    	
     	 if(!row) row=this._getRender().renderRow(dataObj, items,status);
          return row;
 
@@ -4827,7 +4826,7 @@ var SwordGrid = new Class({
 
     //传入cell 元素 ，返回cell所在行的行号,当前台分页时候，返回此cell处于所有数据的第几行， 后台分页返回同 getRowNum 处于当前页面的第几行
     ,getRealRowNum:function(cell) {
-        var rowNum = cell;
+    	var rowNum = cell;
         if($type(cell) == 'element') {
             rowNum = this.getRowNum(cell);
         }
@@ -5968,7 +5967,7 @@ var SwordGrid = new Class({
         };
     },
     _itemSwitch:function(name, type, options, row) {
-        if(!$chk(name) || !$chk(type))return;
+    	if(!$chk(name) || !$chk(type))return;
         var updaterow = row || this.getCheckedRow();
         var cell = updaterow.getCell(name).set('type', type);
         if(options.css){
