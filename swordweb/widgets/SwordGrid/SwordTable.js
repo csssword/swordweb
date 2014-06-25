@@ -1909,7 +1909,7 @@ var SwordGrid = new Class({
     	var h=this.scrollDiv.getHeight();
     	var sh=this.scrollDiv.getScrollHeight();
     	var tempTop;
-    	if(Browser.Engine.trident4||Browser.Engine.trident5||Browser.Engine.webkit){
+    	if(Browser.Engine.trident4||Browser.Engine.trident5||Browser.Engine.trident8||Browser.Engine.webkit||Browser.Engine.gecko19){
         	if(h<=sh){
         		tempTop = h - sh + this.scrollDiv.getScrollTop();
         		if(this.options.scrollX > "100%") {
