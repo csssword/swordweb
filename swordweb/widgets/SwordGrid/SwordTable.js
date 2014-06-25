@@ -5485,13 +5485,14 @@ var SwordGrid = new Class({
     }
 
     //点击控制台上确定后的相关操作
-    ,clickQueDing:function() {
+    ,clickQueDing:function() { 
         if(this.vObj.validate(this.sGrid_console_target_input)) {
             if(this.sGrid_console_target_input.get('value') / 1 == this.pageNum()) {
                 this.alert('' + i18n.gridGo);
                 return;
             }
             this.loadPage(this.sGrid_console_target_input.get('value') / 1);
+            this.sGrid_console_target_input.focus();
         }
     }
 
@@ -5668,17 +5669,28 @@ var SwordGrid = new Class({
                 ,'error':'' + i18n.gridGoErr
                 ,'name':this.options.name + '_sGrid_console_target_input'
                 ,'fenye':'true'
-            }).inject(this.console());
+            }).addEvent('keydown', function(e) {
+            		var tv = e.target.value/1;
+            		if(!$type(tv)) return;
+                    if(e.code==13){
+                    	this.clickQueDing();
+                    }else if(e.code==40){
+                    	if(tv==1) return;
+                    	e.target.value = tv-1;
+                    }else if(e.code==38){//up
+                    	e.target.value = tv+1;
+                    }
+                }.bind(this)).inject(this.console());
 
             this.vObj._add(this.sGrid_console_target_input);
-
+/*
             this.consoleButton_ok = new Element('input', {
                 'type':'button',
                 'class': 'sGrid_console_item_button sGrid_console_target_ok'
                 ,'value':'' + i18n.okBtnName
                 ,'fenye':'true'
             }).hoverClass('sGrid_console_target_ok_hover').inject(this.console());
-
+*/
 
             //每页 条
             new Element('lable', {
