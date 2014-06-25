@@ -773,7 +773,8 @@ var SwordCalendar = new Class({
                 this.dateInput.set('oValue', ' ');
             }
             if (this.dateInput.get("rule")) {
-                this.validate.validate(this.dateInput);
+                var state=this.validate.validate(this.dateInput);
+                if(!state){return;}
             }
             this.execGridOnFinished();
             if (this.dateInput.get('oValue').trim() != this.dateInput.value) {
