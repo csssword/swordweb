@@ -692,13 +692,14 @@ var SwordSelect = new Class({
                     this.currentElement = li.addClass('swordselect-selected');
                 }
             }.bind(this));
-            if(this.box.get('rule')) {
-                this.validate.validate(this.box);
-            }
             this.options.onHide = this.box.get("onHide")||this.box.retrieve("onHide");
             if($defined(this.options.onHide) && $chk(this.options.onHide)) {
                 this.execGridOnFinished();//onchange时，更新表格数据
                 this.getFunc(this.options.onHide)[0](this.currentElement, this);
+            }
+            if(this.box.get('rule')) {
+                var state=this.validate.validate(this.box);
+                if(!state){return state;}//阻断元素的移除操作
             }
         }
     },
