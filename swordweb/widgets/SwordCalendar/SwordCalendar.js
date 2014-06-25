@@ -772,6 +772,9 @@ var SwordCalendar = new Class({
             if (this.dateInput.get('oValue') == null) {
                 this.dateInput.set('oValue', ' ');
             }
+            if (this.dateInput.get("rule")) {
+                this.validate.validate(this.dateInput);
+            }
             this.execGridOnFinished();
             if (this.dateInput.get('oValue').trim() != this.dateInput.value) {
             	var changeFunc;
@@ -782,10 +785,6 @@ var SwordCalendar = new Class({
                 if (changeFunc) this.getFunc(changeFunc)[0](this.dateInput, this);
                 this.dateInput.set('oValue', this.dateInput.value);
             }
-            if (this.dateInput.get("rule")) {
-                this.validate.validate(this.dateInput);
-            }
-
             if (this.dateInput.get('onHide')) this.getFunc(this.dateInput.get('onHide'))[0](this.dateInput);
             this.dateInput.set('show', 'false');
             this.defaultValidate(this.dateInput.value, this.dateInput);
