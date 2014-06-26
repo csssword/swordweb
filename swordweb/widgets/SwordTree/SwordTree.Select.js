@@ -95,8 +95,7 @@ SwordTree.Select = new Class({
             'disabled':(this.options.selReadOnly == "true" || this.options.disable == "true"),
             'styles':{
 //                'width':w    //0511
-                'float':"left"
-                ,'cursor':"text"
+                'cursor':"text"
             }
             ,'class':this.options.formSubSign
         }).inject(this.boxtd);
