@@ -79,6 +79,14 @@ var SwordGridFields = new Class({
 			,name:""
 			,style:""
 		}
+		,rowNumOnePage:{
+			caption:""
+			,show:""
+			,x:""
+			,type:'rowNumOnePage'
+			,name:""
+			,style:""
+		}
 		,checkbox:{
 			caption:""
 			,disable:""
@@ -194,6 +202,7 @@ var SwordGridFields = new Class({
 			,'password':this._passwordHtmlHandler.bind(this)
 			,'textarea':this._textHtmlHandler.bind(this)
 			,'rowNum':this._rowNumHtmlHandler.bind(this)
+			,'rowNumOnePage':this._rowNumOnePageHtmlHandler.bind(this)
 			,'checkbox':this._checkboxHtmlHandler.bind(this)
 			,'radio':this._checkboxHtmlHandler.bind(this)//
 			,'date':this._dateHtmlHandler.bind(this)
@@ -260,6 +269,12 @@ var SwordGridFields = new Class({
 		var attrs = this.copeHtmlOptions(field,item);
 		///可添加其他属性，可以是其他属性判断后添加的
         return '<div  datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_rowNum "  "'+attrs.join("")+'  $${_|dataHandler,"'+field.type+'"}';
+	}
+	,_rowNumOnePageHtmlHandler:function(item){
+		var field = this.findFieldOptions('rowNumOnePage');
+		var attrs = this.copeHtmlOptions(field,item);
+		///可添加其他属性，可以是其他属性判断后添加的
+        return '<div  datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_rowNumOnePage "  "'+attrs.join("")+'  $${_|dataHandler,"'+field.type+'"}';
 	}
 	,_checkboxHtmlHandler:function(item){
 		var field = this.findFieldOptions('checkbox');
