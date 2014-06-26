@@ -115,8 +115,10 @@ SwordGrid.implement({
         	treeObj.setValidate(this.vObj);
         	treeObj.initData(pc.getInitData(treename));
             this.addNextFocusEvent(treeObj.select.selBox);
-            treeObj.select.addEvent('onSelectHide', function(input) {
-                treeObj.options.pNode.inject(document.body);
+        }
+        if(treeObj.select&&!treeObj.select.hasOnSelectHide){
+        	treeObj.select.addEvent('onSelectHide', function(input) {
+            	treeObj.options.pNode.inject(document.body);
                 treeObj.options.pNode.setStyle('display', 'none');
                 if(!this.targetCell)return;
                 treeObj.select.selBox.store('lastCell', this.targetCell);
@@ -129,7 +131,9 @@ SwordGrid.implement({
                 input.set('value', '');
                 input.set('realvalue', '');
                 this.targetCell = null;
+                treeObj.leaveSign=true;//todo 关键代码,阻止弹出层立即消失.
             }.bind(this));
+        	treeObj.select.hasOnSelectHide=true;
         }
         this.targetCell = el;
         treeObj.options.pNode.inject(el);
@@ -137,8 +141,9 @@ SwordGrid.implement({
         var input = treeObj.select.selBox;
         input.set('value', el.get('title'));
         input.set('realvalue', el.get('realvalue'));
+        input.set("display","true");
         treeObj.select.showByJs = true;
-        treeObj.select.selInput();//触发创建方法  
+        //treeObj.select.selInput();//触发创建方法  
         var rule = el.get('rule');
         if($defined(rule) && rule.contains('must'))treeObj.select.selBox.setStyle('background-color','#b5e3df');
         if(treeObj.options.onClickBefore)this.getFunc(treeObj.options.onClickBefore)[0](dataObj, el);

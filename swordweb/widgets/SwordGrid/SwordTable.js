@@ -1763,7 +1763,18 @@ var SwordGrid = new Class({
 
         //隐藏 userdefine 元素
         this.options.pNode.getChildren('div[type=userdefine]').setStyle('display', 'none');
-
+        //没有数据行的话，隐藏下拉树
+        //debugger;
+        this.options.pNode.getChildren('div[type=pulltree]').each(function(t) {
+        	var treeName=t.get('treename'),treeDataName=t.get("dataname")||t.get("dataName");
+            var treeObj=$w(treeName);
+            treeObj.options.pNode.setStyle('display', 'none');
+            /*t.set('notFirst','true');*/
+            /*if(treeObj.initDataFlag != true) {
+                treeObj.initData(pc.getInitData(treeName)||pc.getInitData(treeDataName));
+                treeObj.initDataFlag = true;
+            }*/
+        });
        
         //初始化 console 的配置信息
         this.options.consoleItems = this.options.pNode.getChildren(">div[console]");
@@ -5678,6 +5689,7 @@ var SwordGrid = new Class({
                     	if(tv==1) return;
                     	e.target.value = tv-1;
                     }else if(e.code==38){//up
+                    	if(tv == this.totalPage()) return;
                     	e.target.value = tv+1;
                     }
                 }.bind(this)).inject(this.console());
