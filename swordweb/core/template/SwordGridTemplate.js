@@ -277,7 +277,7 @@ var SwordGridRender = new Class(
 					var code = vs[0].split(',')[1];
 					return ' title="'+text+'" realvalue="'+code+'">'+text+'</div>';
 				} else {
-					var data = pc.getInitData(treeName);
+					var data = pc.getInitData(treeName)||JSON.decode($w(treeName).options.dataStr);
 					if(data){
 						data = data.data;
 						if (checkbox == "true") {// checkbox树

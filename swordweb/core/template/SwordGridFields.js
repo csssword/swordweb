@@ -147,7 +147,7 @@ var SwordGridFields = new Class({
 		    ,caption:""
 		    ,style:""
 		    ,type:"pulltree"
-		    ,checkbox:"false"
+		    ,checkbox:""
 		    ,selectrule:""
 		    ,selectRealKey:""
 		    ,filterSign:""
@@ -292,6 +292,12 @@ var SwordGridFields = new Class({
 	,_pulltreeHtmlHandler:function(item){
 		var field = this.findFieldOptions('pulltree');
 		var attrs = this.copeHtmlOptions(field,item);
+		var treename=field.treeName||field.treename;
+		if(treename){
+			if($w(treename).options.pNode.get("treeType")=="1"){
+				field.checkbox="true";
+			}
+		}
 		///可添加其他属性，可以是其他属性判断后添加的
         return '<div datael="true" eventdele="pulltree" select="true" class="sGrid_data_row_item_div sGrid_data_row_item_pulltree"  '+attrs.join("")+ '  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+field.treeName+'","'+field.checkbox+'"}';
 	}
