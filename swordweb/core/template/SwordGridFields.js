@@ -174,7 +174,13 @@ var SwordGridFields = new Class({
 	    	,handInput:"false"
 	    	,cascadeSign:""
 	    	,echoExtend:""
-	}
+		}
+		,userdefine:{
+			name:""
+			,type:"userdefine"
+			,show:""
+			,disable:""
+		}
 	}
 		
 	,initialize : function(options) {
@@ -193,6 +199,7 @@ var SwordGridFields = new Class({
 			,'date':this._dateHtmlHandler.bind(this)
 			,'select':this._selectHtmlHandler.bind(this)
 			,'pulltree':this._pulltreeHtmlHandler.bind(this)
+			,'userdefine':this._userdefineHtmlHandler.bind(this)
 		};
 	
 	}
@@ -287,6 +294,17 @@ var SwordGridFields = new Class({
 		var attrs = this.copeHtmlOptions(field,item);
 		///可添加其他属性，可以是其他属性判断后添加的
         return '<div datael="true" eventdele="pulltree" select="true" class="sGrid_data_row_item_div sGrid_data_row_item_pulltree"  '+attrs.join("")+ '  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+field.treeName+'","'+field.checkbox+'"}';
+	}
+	,_userdefineHtmlHandler:function(item){
+		var field = this.findFieldOptions('userdefine');
+		var attrs = this.copeHtmlOptions(field,item);
+		///可添加其他属性，可以是其他属性判断后添加的
+		if(item.get("disable")=="true"){item.getElements("input").each(function(item){item.set("disabled","true");});}
+		var json = {value: item.innerHTML.replace(/[\n,\t]/g,"")};
+		var escape_tpl='${value}';
+		var htmlStr=juicer(escape_tpl, json); 
+		if(item.get("show")=="false"){attrs.push("style=\"display:none\"");}
+        return '<div datael="true" eventdele="userdefine" class="sGrid_data_row_item_div sGrid_data_row_item_userdefine"  '+attrs.join("")+ '  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+htmlStr+'"}';
 	}
 	,findFieldOptions:function (type) {
 		var field = this.Fields[type];

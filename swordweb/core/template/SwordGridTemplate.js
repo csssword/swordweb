@@ -36,7 +36,8 @@ var SwordGridRender = new Class(
 //					'password' : this._textDataHandler.bind(this),
 					'pulltree' : this._pulltreeDataHandler.bind(this),
 					'select' : this._selectDataHandler.bind(this),
-					'rowNum' : this._rowNumDataHandler.bind(this)
+					'rowNum' : this._rowNumDataHandler.bind(this),
+					"userdefine":this._userdefineDataHandler.bind(this)
 				};
 			}
 
@@ -167,6 +168,11 @@ var SwordGridRender = new Class(
 															// ，应该在表格上加属性 不以数据为准
 //				var rowNum = 1 / 1 + 1;
 				return ' title=""></div>';
+			}
+			,_userdefineDataHandler : function(rwoData,type,name,html) {
+				var htmlStr=html.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+				.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+				return ' title="">'+htmlStr+'</div>';
 			}
 			,_checkbox_radioDataHandler : function(rowData, type, name,
 					userClicked, checkAllFlag) {
