@@ -4463,6 +4463,7 @@ var SwordGrid = new Class({
         			rowShowIndex ++;
          			item.set("rowShowIndex",rowShowIndex);
          			item.getElements("div[type='rowNum']").set("html",rowShowIndex);
+         			item.getElements("div[type='rowNumOnePage']").set("html",index+1);
      	    	});
         	 }else{
         		 if(totalPage == p){
