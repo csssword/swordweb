@@ -56,6 +56,10 @@ $extend(SwordTextTemplate, {
     	if($chk(change)){
 	        $(id).set('_onchange',this.eraseFunc(change));
     	}
+        var dblclick = item.get('ondblclick');
+        if($chk(dblclick)){
+            $(id).set('_ondblclick',this.eraseFunc(dblclick));
+        }
         return id;
     },
 	initData:function(el,elData,formObj){
@@ -75,10 +79,16 @@ $extend(SwordTextTemplate, {
             vobj.select();
         	this.showTip(name, vobj);
         }.bind(formObj));
-        	var keyup = vobj.get('_onkeyup');
-        	if($chk(keyup)){
-	            vobj.addEvent('keyup', function(e){
-	            		this.getFunc(keyup)[0](e);
+        var keyup = vobj.get('_onkeyup');
+        if($chk(keyup)){
+            vobj.addEvent('keyup', function(e){
+                this.getFunc(keyup)[0](e);
+            }.bind(formObj));
+        }
+        	var dblclick = vobj.get('_ondblclick');
+        	if($chk(dblclick)){
+	            vobj.addEvent('dblclick', function(e){
+	            		this.getFunc(dblclick)[0](e);
 	            }.bind(formObj));
         	}
         	var change = vobj.get('_onchange');
