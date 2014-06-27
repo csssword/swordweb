@@ -6146,7 +6146,35 @@ var SwordGrid = new Class({
 	   input.set('value','1');
 	   this.updateCell(cell, input.get('checked') ? '1' : '0');
 	   this.isradioSetChecked = true;
-   }
+   },
+      setCellFocus : function(rownum, colname) {
+   	    var childs = this.dataDiv().childNodes;
+		var dlen = childs.length;
+		var rownum = rownum - 1;
+		if (rownum >= 0 && dlen != 0 && dlen >= rownum) {
+			var ite = childs[rownum]
+					.getElement('div.sGrid_data_row_item_div[name="' + colname
+							+ '"]');
+			var type = ite.get("type");
+			if (type == "radio" || type == "checkbox") {
+				ite.getElement("input[type=" + type + "]").set('checked',true);;
+			} else {
+				var ls = this.eDelegator._listener.get("click");
+				var e = new Event();
+				if (ls) {
+					ls.each(function(l) {
+								if (l['condition']
+										.indexOf(ite.get("eventdele")) > 0) {
+									if (l['args'])
+										l['fn'](e, ite, l['args']);
+									else
+										l['fn'](e, ite);
+								}
+							}, this);
+				}
+			}
+		}
+	}
 
 });
 var DelayedTask = function(fn, scope, args) {
