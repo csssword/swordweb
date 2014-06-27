@@ -18,7 +18,7 @@ $extend(SwordPulltreeTemplate, {
     	this.initWidget(itemName, formObj);
     	return fName + "_" + itemName;
     },
-	initData:function(em,elData){
+	initData:function(em,elData,formObj,resData){
     	var value = "";
     	var temp = elData.value;
 		if($defined(temp)){
@@ -58,11 +58,21 @@ $extend(SwordPulltreeTemplate, {
                             } else {
 								 var vs = value.split(',');
 								 var Captionvalue = [];
-								 var initData = pc.getInitData(em.get('name'));
+								 var initData = (pc.getInitData(em.get('name')))||(resData.getData(em.get('name')));
 								 if($chk(initData)){
+								 	var initData = initData.data;
+								 	var tag = "code";
+								 	var icode = initData[0].code;
+								 	if(!$chk(icode)){
+								 		icode = initData[0].CODE;
+								 		tag = "CODE";
+								 	} 
 								 	vs.each(function(v) {
-									 	initData.data.each(function(el){
-									 		if((el.code||el.CODE) == v){
+								 		if($type(icode) != "string"){
+								 		v = Number(v);
+								 	     }
+									 	initData.each(function(el){
+									 		if((el[tag]) == v){
 									 			Captionvalue.include((el.caption||el.CAPTION));
 									 		}
 									 	})

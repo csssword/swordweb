@@ -814,7 +814,7 @@ var SwordForm = new Class({
         }.bind(this));
         new Element('td', {'class':'swordform_btn_right','html':'<i>&nbsp;</i>'}).inject(tr);
     },
-    initData:function(d) {
+    initData:function(d,resdata) {
     	if(!$chk(d)) {
             return;
         }
@@ -824,7 +824,7 @@ var SwordForm = new Class({
             	var elData=d.data[em.get('name')];
             	if($chk(elData)){
 	            	var widgetStr=em.get('widget')||em.get("type");
-	            	if(widgetStr!="hidden")this.templateObj[widgetStr].initData(em,elData,this);
+	            	if(widgetStr!="hidden")this.templateObj[widgetStr].initData(em,elData,this,resdata);
 	                else em.set("value",elData.value).set("realvalue",elData.value);
             	}
             	this.initFormatVal(em);

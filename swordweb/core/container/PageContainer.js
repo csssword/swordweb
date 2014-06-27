@@ -81,10 +81,10 @@ var PageContainer = new Class({
             }
         }
     }
-    ,getDataFunc4Name:function(key) {
+    ,getData4Name:function(key) {
     	return this.data.filter(function(item){return item["name"]==key;})[0];
     }
-    ,getDataFunc4DataName:function(key) {
+    ,getData4DataName:function(key) {
     	return this.data.filter(function(item){return item["dataname"]==key||item["dataName"]==key;})[0];
     }
     ,initPageData:function() {
@@ -415,10 +415,10 @@ var PageContainer = new Class({
             dataObj["getAttr"] = this.getAttrFunc;
         }
         if(!$defined(dataObj.getData)) {
-            dataObj["getData"] = this.getDataFunc4Name;
+            dataObj["getData"] = this.getData4Name;
         }
         if(!$defined(dataObj.getDataByDataName)) {
-            dataObj["getDataByDataName"] = this.getDataFunc4DataName;
+            dataObj["getDataByDataName"] = this.getData4DataName;
         }
         if(dataObj['exception']) {
             if($defined(onError)) {
@@ -527,7 +527,7 @@ var PageContainer = new Class({
                     var name = widgetName.split('.');
                     pageContainer.getWidget4loaddata(name[0]).initData(widgetData);
                 } else {
-                    pageContainer.getWidget4loaddata(widgetName).initData(widgetData);
+                    pageContainer.getWidget4loaddata(widgetName).initData(widgetData,dataObj);
                 }
             }
         }, this);
