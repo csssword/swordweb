@@ -42,6 +42,7 @@ var SwordSelect = new Class({
     selFx : null,
     rebuild:null,
     hasBoxDiv:false,
+    cachearray :[],
     CacheData:null,//数据缓存,管理懒加载过来的数据
     updateCache:function(name, data) {
         if(this.CacheData == null) {
@@ -591,6 +592,38 @@ var SwordSelect = new Class({
         }
         return loadData;
     },
+    setCacheArray : function(code){
+    	if (code instanceof Array){    		 
+    		for (var i=0;i< code.length;i++){
+    			var index = this.cachearray.indexOf(code[i]);
+    	    	if (index == -1){
+    	    		this.cachearray.push(code[i]);
+    	    	}
+    		}
+    	}else{
+	    	var index = this.cachearray.indexOf(code);
+	    	if (index != -1){
+	    		if (index ==0) return;
+	    		var c = this.cachearray[index];
+	    		var b = this.cachearray[0];
+	    		this.cachearray[index] = b;
+	    		this.cachearray[0] = c;
+	    	}else{
+	    		if (this.cachearray.length >= 5){
+	    			this.cachearray.pop();
+	    		}
+	    		//this.cachearray.push(code);
+	    		if (this.cachearray.length != 0){
+		    		var f = this.cachearray[0];
+		    		this.cachearray[0] = code;
+		    		this.cachearray.push(f);
+	    		}else{
+	    			this.cachearray.push(code);
+	    		}
+	    	}
+	    	$swfcacheobject.set(this.box.get("dataname")+"_"+this.box.id,this.cachearray.join(","));
+    	}
+    },
     build_options: function(loadData) {
         var height = this.options.height * 2;
         if($defined(loadData)) {
@@ -599,7 +632,16 @@ var SwordSelect = new Class({
 //                {caption:this.box.get("allItemCap"),code:this.box.get("allItemCode") || "all"}
 //            ].extend(loadData);
             height = (loadData.length < this.box.get('lines')) ? this.options.height * loadData.length : this.options.height * this.box.get('lines');//this.options.lines;
-            var tempFrac = document.createDocumentFragment();//yt修改guoyan,createDocumentFragment高效一些
+            var tempFrac  = document.createDocumentFragment();//yt修改guoyan,createDocumentFragment高效一些
+            var cacheFrac = document.createDocumentFragment();
+            var tempCacheArr = [];
+            var templilist = [];
+            $swfcacheobject.get(this.box.get("dataname")+"_"+this.box.id,function(isOK,value){
+            	if (isOK){
+            		tempCacheArr = value.split(",");
+            	}
+            });
+            this.setCacheArray(tempCacheArr);    
             loadData.each(function(node, index) {
                 if($type(node) == 'element') {
                     node = {caption:node.get('caption'),code:node.get('code')}
@@ -622,18 +664,29 @@ var SwordSelect = new Class({
                 });//.inject(this.selectbox);
                 li.store("allDb", node);
                 li.addEvent('click', function(e) {
+                	this.setCacheArray(li.get("value"));
                     this.change_item(li);
                     if(this.box.get("mode") == 2) {
                         this.getNextPageData();
                     } else {
                         this.hide();
-
                     }
                     this.execGridOnFinished();
-
                 }.bind(this));
-                tempFrac.appendChild(li);
-            }.bind(this));
+                var temp_index = tempCacheArr.indexOf(li.get("value"));
+                if (temp_index != -1 ){
+                	templilist[temp_index] = li;                	
+                }else{
+                	tempFrac.appendChild(li);
+                }
+            }.bind(this)); 
+            templilist.each(function(li){
+            	cacheFrac.appendChild(li);
+            });
+            this.selectbox.appendChild(cacheFrac);
+            if (tempCacheArr.length >0){
+            	this.selectbox.appendChild(new Element('hr'));
+            }
             this.selectbox.appendChild(tempFrac);
             this.calculateConsole();
             //用户设置弹出层的宽度
@@ -731,6 +784,9 @@ var SwordSelect = new Class({
     },
     reBuild: function(data) {
         this.selectbox.getElements('div').each(function(li) {
+            li.dispose();
+        });
+        this.selectbox.getElements('hr').each(function(li) {
             li.dispose();
         });
         this.options.data = data;
