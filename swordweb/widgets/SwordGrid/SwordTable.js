@@ -749,7 +749,7 @@ var SwordGrid = new Class({
             input.set('value', realvalue);
             var type = cell.get('type');
             if(type == 'text'){
-            	 cell.set('text',showvalue);
+            	 cell.set('value',showvalue);
                  cell.set('createInput','false');
             }
            
