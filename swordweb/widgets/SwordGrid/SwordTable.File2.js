@@ -42,10 +42,30 @@ SwordGrid.implement({
                 }
 
             }
+            
+            ,lazyInitFile2:function(itemEl,el,html,dataObj){
+                itemEl.setAttribute('multiple', 'false'); //强制使用单个文件选择方式 ，表格暂时不支持多单cell多文件上传模式
+                var n = itemEl.get("name");
+                el.addClass('sGrid_data_row_item_file2');
+                var up = initIntimeUp(el, n, itemEl);
+                up.addEvent('onFileSuccess',this.file2_onComplete.bind(this, [up,el,n]));
+                up.addEvent('onFileRemove', this.file2_onFileRemove.bind(this, [up,el,n]));
+                up.addEvent('onStart', this.file2_onStart.bind(this, [up]));
+                el.store('up', up);
+                                
+                var d=this.file2_Data(html);
+                if(d){
+                    var ui=Swiff.Uploader.createFileUi('id',d.name,d.size);
+                    Swiff.Uploader.uiAddOverOutEvent(ui,up);
+                    ui.element.inject(up.list);
+                    up.target.setStyle('display', 'none');
+                    ui.del.addEvent('click',this.file2_delete.bind(this,[ui,up,dataObj,el,n,d,itemEl]));
+                    ui.title.addEvent('click',this.file2_download.bind(this,[ui,up,dataObj,el,n,d,itemEl]));
+                }
+            	
+            }
 
             ,file2_delete:function(ui,up,dataObj,el,n,d,itemEl) {
-
-
                 if (this.file2_isTmp(dataObj,n)) {//调用删除临时文件的方法
                     Swiff.Uploader.deleteTmp(d.fileId,function(){
                         ui.element.destroy();
@@ -73,6 +93,8 @@ SwordGrid.implement({
                     var d = JSON.decode(s);
                     if ($type(d) == 'array') {
                         if (d.length == 1)return d[0];
+                    }else{
+                    	return d;
                     }
                 } catch(e) {
                     return {name:s};
