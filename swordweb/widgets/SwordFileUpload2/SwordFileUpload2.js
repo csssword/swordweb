@@ -448,6 +448,107 @@ $extend(Swiff.Uploader, {
         return ui;
 
     }
+    ,uiAddOverOutEvent:function(ui,bindObj){
+    	if(ui.element){
+    		ui.element.addEvents({
+	            'mouseover': function() {
+	                if(ui.progress)return;
+	                ui.del.setStyle('visibility','visible');
+	                if(ui.detail) ui.detail.setStyle('visibility','visible');
+		            		  }.bind(this),
+	            'mouseout': function() {
+	                if(ui.progress)return;
+	                ui.del.setStyle('visibility','hidden');
+	                if(ui.detail) ui.detail.setStyle('visibility','hidden');
+	                           }.bind(this)
+	    	});
+    	}
+    }
+    
+    ,uiAddEvent:function(ui,bindObj){
+    	this.uiAddOverOutEvent(ui,bindObj);
+    	if(ui.element){
+	    	ui.element.addEvents('click', function() {
+				this.remove();
+				return false;
+			}.bind(bindObj));
+    	}
+		if(ui.cancel){
+			ui.cancel.addEvent('click', function() {
+				this.remove();
+				return false;
+			}.bind(bindObj));
+		}
+        if(ui.del){
+        	ui.del.addEvent('click',function(){
+        		if(this.isTmp(ui)){
+	                 Swiff.Uploader.deleteTmp(this.res.getAttr("fileId"),this.base, function() {
+	                     this.remove();
+	                 }.bind(this));
+	             }else{   //调用业务注册的删除方法,暂时不用调用，因为保存时候提交即可
+	                  this.remove();
+	                  if($chk(ui.element.get("datamap"))){
+	                	  var tempTarget=this.base.options.deleteCtrl||this.base.options.deleteTid;
+	                	  if($chk(tempTarget)){
+	                		  Swiff.Uploader.deleteF(tempTarget,this.base,this.getSubmitData(ui),this.base.form,function(){
+		                    	  var elid=ui.element.get("id");
+			                	  this.onRemove();
+			                	  this.base.fileList.each(function(item,i,a){
+			                		  if(item&&item.id==elid)a.splice(i,1);
+			                	  });
+		                      }.bind(this));
+	                	  }else{alert("服务初始化的文件数据必须走服务删除(请定义deleteCtrl或者deleteTid)");}
+	                  }
+	             }
+        	}.bind(bindObj));
+        }
+        if(ui.detail){
+        	ui.detail.addEvents({'click':function(e){
+        			if(["jpg","JPG","bmp","png","jpeg","gif"].contains(this.extension)){
+        				Swiff.Uploader.preview(e,this.base,this);
+        			}
+        		}.bind(bindObj)
+        	});
+        }
+        if(ui.title){
+        	ui.title.addEvents({'click':function(e){
+        		if(!ui.element.getParent("div").hasClass("sword_file_upload2_disable")){
+		        	this.isStopClick=false;
+		        	this.base.fireEvent("onFileClick",[e,this.base,this]);
+		        	if(this.base.imgView)this.base.imgView.setStyle("display","none");
+//		        	if(["jpg","JPG","bmp","png","jpeg","gif"].contains(this.extension)){
+//		        		Swiff.Uploader.preview(e,this.base,this);
+//		        	}else
+		        	if(!this.isStopClick){
+			        	if(this.isTmp(ui)){
+			                 Swiff.Uploader.downloadTmp(this.res.getAttr("fileId"),e.target.get("text"));
+			             }else{   //调用业务的下载方法
+			            	 if(this.base.options.downloadCtrl)
+			                      Swiff.Uploader.download(this.base.options.downloadCtrl,this.base,this.getSubmitData(ui),this.base.form);
+			             }
+		        	}
+        		}
+	        }.bind(bindObj),
+	        'dblclick':function(e){
+	        	this.base.fireEvent("onFileDbClick",[e,this.base,this]);
+	        }.bind(bindObj),
+	        'mouseenter':function(e){
+	        	this.base.fireEvent("onFileMouseOver",[e,this.base,this]);
+	        }.bind(bindObj),
+	        'mouseleave':function(e){
+	        	this.base.fireEvent("onFileMouseOut",[e,this.base,this]);
+	        }.bind(bindObj),
+	        'mousedown':function(e){
+	        	if ( e.event.button == 2 ){
+            		e.preventDefault();
+            		this.base.fireEvent("onFileRightClick", [e,this.base,this]);
+            		document.oncontextmenu = function() {return false;};
+            	}
+	        }.bind(bindObj)
+	        });
+        }
+        
+    }
     , deleteTmp:function(fileId,onSubmitAfter){
         var delSubmit = $submit(null,null,{"ctrl":"FileHandleCtrl_clearOne","onSubmitAfter":onSubmitAfter});
         delSubmit.pushData("fileId", fileId);
@@ -651,6 +752,8 @@ SwordUpload2.Attach = new Class({
                           'name':f.name
                          ,'fileId':f.res.getAttr('fileId')
                          ,'size':f.size
+                         ,'status':f.status
+                         ,'dataMap':$chk(f.ui.element.get("dataMap"))?JSON.decode(f.ui.element.get("dataMap")):null
                      };
                     res.push(one);
                 });
@@ -857,9 +960,56 @@ SwordUpload2.Attach.File = new Class({
 })();
 
 
+function file2OptionsReset(op,item){
+	var newop={};
+    for (var key in op) {
+        var v = item.getAttribute(key);
+        if (v == 'true') {
+            newop[key] = true;
+            continue;
+        }
+        if (v == 'false') {
+            newop[key] = false;
+            continue;
+        }
 
+        if('typeFilter'==key&&v){
+            newop[key] = JSON.decode(v);
+            continue;
+        }
+
+        if ((/^on[A-Z]/).test(key) && v) {
+            var methods = sword_getFunc(v);
+            if (methods.length > 0)newop[key] = methods[0];
+            continue;
+        }
+
+        newop[key] = ($chk(v) && $defined(v)) ? v : op[key];
+    }
+    return newop;
+}
 
 function initIntimeUp(p,name,item){
+    var addCaption=item.get('addCaption')||'添加文件';
+    var op=SwordUpload2.Attach.prototype.options;
+    var newop=file2OptionsReset(op,item);
+    
+    var t=item.get('title')||'';
+    if(t)t='title="'+t+'"';
+
+    p.set('html','<div '+t+' name="'+name+'" class="sword_file_upload2" style="background-color:;"> <ul name="up-list" class="up-list"></ul> <a style=" color:blue;text-decoration: underline;" name="up-attach" >'+addCaption+'</a></div>');
+    var up = new SwordUpload2.Attach(p,'[name=up-list]', '[name=up-attach]', newop);
+    up.con=p.getElement('div.sword_file_upload2') ;
+    var rule=item.get('rule');
+    if(rule) up.con.set('rule',rule);
+    var msg = item.get('msg');
+    if(msg) up.con.set('msg',msg);
+    up.con.store('upManager',up);
+    //up.box.inject(p);
+    return up;
+}
+
+/*function initIntimeUp(p,name,item){
     var addCaption=item.get('addCaption')||'添加文件';
     var op=SwordUpload2.Attach.prototype.options;
     var newop={};
@@ -897,5 +1047,5 @@ function initIntimeUp(p,name,item){
     up.con.store('upManager',up);
     //up.box.inject(p);
     return up;
-}
+}*/
 
