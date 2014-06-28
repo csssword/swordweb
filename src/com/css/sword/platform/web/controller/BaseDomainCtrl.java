@@ -7,17 +7,30 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+
 import com.css.sword.platform.comm.exception.CSSBaseCheckedException;
 import com.css.sword.platform.comm.pool.ThreadLocalManager;
+import com.css.sword.platform.web.comm.CommParas;
 import com.css.sword.platform.web.context.ContextAPI;
 import com.css.sword.platform.web.event.IReqData;
 import com.css.sword.platform.web.event.IResData;
 import com.css.sword.platform.web.event.SwordRes;
+import com.css.sword.platform.web.fileupload.SwordFileItem;
+import com.css.sword.platform.web.fileupload.UploadTools;
 import com.css.sword.platform.web.mvc.SwordDataSet;
+import com.css.sword.platform.web.mvc.util.json.JSON;
 
 /**
  * Controller Loader类 <br>
@@ -120,4 +133,63 @@ public class BaseDomainCtrl {
 			throws FileNotFoundException {
 		this.downLoad(new FileInputStream(file), fileName);
 	}
+	 private UploadTools ut;
+	private void getUploadInstance() {
+		 ut=(UploadTools)ContextAPI.getReqDataSet().getReqDataObject().getViewData().get("uploadOject");
+		if (ut == null) {
+			ut = new UploadTools();
+		}
+	}
+	public List<FileItem> getUploadList() throws UnsupportedEncodingException,
+		FileUploadException {
+	HttpServletRequest request = ContextAPI.getReq();
+	this.getUploadInstance();
+	ut.upload(request);
+	return ut.getFileList();
+	}
+	
+	 /**
+	  * 
+	  * @param req
+	  * 		IReqData类型	 req对象
+	  * @param formName
+	  * 		java.lang.String 表格名字
+	  * @param fieldName
+	  * 		java.lang.String 列名
+	  * @return List
+	  * 		java.util.List  文件LIST
+	  */
+   public List<SwordFileItem> getGridUploadFile2(IReqData req,String tableName,String fieldName) {
+   	List tableList=  req.getTableData(tableName);
+   	List res=new ArrayList();
+   	Iterator bb= tableList.iterator();
+       while(bb.hasNext()){
+       	Map map=(Map)bb.next();
+	        String filestr= (String) map.get(fieldName);
+	        if(filestr==null||"".equals(filestr)){
+	        	return res;
+	        }
+	        List list= new ArrayList();
+	        try{
+	        	list=JSON.getJsonList(filestr);
+	        }catch(RuntimeException e){
+	        	list.add(JSON.getJsonObject(filestr));
+	        }
+	        Set<String> fileSet=new HashSet<String>();
+	        for (int i = 0; i < list.size(); i++) {
+	            Map map1 = (Map) list.get(i);
+	            String fileId=(String)map1.get("fileId");
+	            Integer status=(Integer)map1.get("status");
+	            SwordFileItem item=new SwordFileItem((String)map1.get("name"),fileId,status);
+	            item.setDataMap((Map)map1.get("dataMap"));
+	            res.add(item);
+	            fileSet.add(fileId);
+	        }
+	        if(fileSet.size()!=0){
+	        	Set<String> uplodFileSet=(Set<String>) ThreadLocalManager.get("uploadFileSet");
+	            uplodFileSet.addAll(fileSet);
+	        }
+       }
+       return res;
+   }
 }
