@@ -109,8 +109,9 @@ var SwordToolTips = new Class({
 		
 		window.refToFormTooltip.tooltipDiv = document.createElement('DIV');
 		window.refToFormTooltip.tooltipDiv.style.position = 'absolute';
-		$(window.refToFormTooltip.tooltipDiv).setStyle("z-index","1000");
-		$(window.refToFormTooltip.tooltipDiv).set("id","formTooltipDivPNode");
+		window.refToFormTooltip.tooltipDiv.style.zIndex = 1000;
+		window.refToFormTooltip.tooltipDiv.id = "formTooltipDivPNode";
+	
 		var topDiv = new Element("div") ;
 		if(window.refToFormTooltip.options.displayArrow){
 			if(window.refToFormTooltip.options.tooltipPosition=='below'){
