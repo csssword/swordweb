@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -131,6 +132,8 @@ public class Sword extends HttpServlet {
 			// 1 web
 			ThreadLocalManager.add(CommParas.httpReq, request);
 			ThreadLocalManager.add(CommParas.httpRes, response);
+			ThreadLocalManager.add("uploadFileSet",
+					new HashSet<String>());
 			String requestUri = request.getRequestURI();
 
 			// 创建web端的sword session
@@ -244,10 +247,15 @@ public class Sword extends HttpServlet {
 					log.debug("Request URI:" + requestUri + ",本次请求为文件上传请求。");
 					UploadTools ut = new UploadTools();
 					handleUploadParam(request, ut);
-					ut.upload(request);
+//					ut.upload(request);//upload方法重复调用了
 					json = ut.getParam("postData");
+					if (json == null) {
+						json = request.getParameter("postData");
+					}
+					ThreadLocalManager.add("reqType", "upload");
 					reqDataSet = new SwordDataSet(json);
-					reqDataSet.getReqDataObject().getViewData().put("uploadOject", ut);
+					reqDataSet.getReqDataObject().getViewData()
+							.put("uploadOject", ut);
 				} else if (requestUri.indexOf("form.sword") != -1) {
 					log.debug("Request URI:" + requestUri + ",本次提交为form提交......");
 					json = request.getParameter("postData");
