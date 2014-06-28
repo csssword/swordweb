@@ -67,6 +67,7 @@ var SwordGridRender = new Class(
 				if(len<=0)return;
 				setTimeout(function() {
 					var row = rows[timeNum];
+					if(row.get("status")=="deleting"||row.get("status")=="delete") row.setStyle("display","none");
 					if (!row.retrieve('rowData')) {
 						self._renderRowAfter(row, datas[timeNum]);
 						self._renderCellAfter(datas[timeNum], row, timeNum + 1,
@@ -116,6 +117,7 @@ var SwordGridRender = new Class(
 					var row_dan = [ SwordGrid_OTemplate['row_dan'], cellsDom,
 							SwordGrid_OTemplate['div_end'] ].join("");
 					datas.each(function(rowData, i) { // IE9以上 数组没有字符串拼接快
+						
 						if (i % 2 == 0) { // 偶数行
 							h.push(juicer(row_shuang, rowData));
 						} else {// 奇数行 singular
