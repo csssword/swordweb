@@ -621,7 +621,7 @@ var SwordSelect = new Class({
 	    			this.cachearray.push(code);
 	    		}
 	    	}
-	    	$swfcacheobject.set(this.box.get("dataname")+"_"+this.box.id,this.cachearray.join(","));
+	    	if(top.$swfcacheobject) top.$swfcacheobject.set(this.box.get("dataname")+"_"+this.box.id,this.cachearray.join(","));
     	}
     },
     build_options: function(loadData) {
@@ -636,7 +636,7 @@ var SwordSelect = new Class({
             var cacheFrac = document.createDocumentFragment();
             var tempCacheArr = [];
             var templilist = [];
-            $swfcacheobject.get(this.box.get("dataname")+"_"+this.box.id,function(isOK,value){
+            if(top.$swfcacheobject) top.$swfcacheobject.get(this.box.get("dataname")+"_"+this.box.id,function(isOK,value){
             	if (isOK){
             		tempCacheArr = value.split(",");
             	}
