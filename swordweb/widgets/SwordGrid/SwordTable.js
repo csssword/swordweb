@@ -4919,7 +4919,10 @@ var SwordGrid = new Class({
             } else if(type == 'password') {
                 value = cell.retrieve('realvalue');
             } else if(type == 'file2') {
-                value = cell.retrieve('up').getValue();
+            	var file2Obj=cell.retrieve('up');
+            	if(file2Obj){
+            		value = cell.retrieve('up').getValue();
+            	}else{value="";}
             } else if($chk(cell.get('code'))) {
                 td['code'] = cell.get('code');
                 value = cell.get('text');
