@@ -32,7 +32,7 @@ var SwordGridRender = new Class(
 					'checkbox' : this._checkbox_radioDataHandler.bind(this),
 					'radio' : this._checkbox_radioDataHandler.bind(this),
 					'date' : this._dateDataHandler.bind(this),
-//					'file2' : this._file2DataHandler.bind(this),
+					'file2' : this._file2DataHandler.bind(this),
 //					'password' : this._textDataHandler.bind(this),
 					'pulltree' : this._pulltreeDataHandler.bind(this),
 					'select' : this._selectDataHandler.bind(this),
@@ -317,31 +317,22 @@ var SwordGridRender = new Class(
 					}
 				}
 			}
-//			,_file2DataHandler : function(item, cellData) {
-//				if (!$chk(cellData))
-//					return;
-//				var html = cellData.value;
-//				var itemEl = item;
-//				var r;
-//				var d = this.g.file2_Data(html);
-//				if (d) {
-//					// s='<li class="file" id="file-id"><span
-//					// class="file-title">'+d.name+'</span></li></ul></div>';
-//					r = this._getRes({
-//						'filename' : d.name
-//					});
-//				} else {
-//					var addCaption = itemEl.get('addCaption') || '添加文件';
-//					// s='</ul><a name="up-attach" style="color: blue;
-//					// text-decoration: underline; ">'+addCaption+'</a></div>';
-//					r = this._getRes({
-//						'addCaption' : addCaption
-//					});
-//				}
-//				// var s1='<div class="sword_file_upload2" name="tmp"> <ul
-//				// class="up-list" name="up-list">';
-//
-//				return r;
-//			}
+			
+			,_file2DataHandler:function(rowData, type, name,dataName,addCaption){ 
+				var dataValue=rowData?(rowData.tds[name]?rowData.tds[name].value:''):'';
+				var htmlStr='<div class="sword_file_upload2" style="background-color:;" name="'+name+'"><ul class="up-list" name="up-list">',htmlStrR='';
+				var addc=addCaption||'添加文件';
+				if(dataValue){
+					var dName="";
+					try{var dObj=JSON.decode(dataValue);dName=dObj.name;
+					}catch(e){}	
+					dName=dName||dataValue;
+					htmlStrR=" >"+htmlStr+'<li id="file-id" class="file"><span class="file-title">'+dName+'</span><span class="file-delete" style="visibility: hidden;"></span></li>'+
+			   		'</ul><a name="up-attach" style="color: blue; text-decoration: underline; display: none;">'+addc+'</a></div></div>';
+			   	}else{
+			   		 htmlStrR=" >"+htmlStr+'</ul><a name="up-attach" style="color: blue; text-decoration: underline; ">'+addc+'</a></div></div>';
+			    }
+				return htmlStrR;
+			}
 
 		});

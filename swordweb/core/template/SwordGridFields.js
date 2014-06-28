@@ -188,6 +188,18 @@ var SwordGridFields = new Class({
 			,type:"userdefine"
 			,show:""
 			,disable:""
+			,x:""
+		}
+		,file2:{
+			name:""
+			,caption:""
+			,addCaption:""
+			,type:"file2"
+			,show:""
+			,disable:""
+			,x:""
+			,style:""
+			,downloadCtrl:""
 		}
 	}
 		
@@ -209,6 +221,7 @@ var SwordGridFields = new Class({
 			,'select':this._selectHtmlHandler.bind(this)
 			,'pulltree':this._pulltreeHtmlHandler.bind(this)
 			,'userdefine':this._userdefineHtmlHandler.bind(this)
+			,'file2':this._file2HtmlHandler.bind(this)
 		};
 	
 	}
@@ -326,6 +339,11 @@ var SwordGridFields = new Class({
 		var htmlStr=juicer(escape_tpl, json); 
 		if(item.get("show")=="false"){attrs.push("style=\"display:none\"");}
         return '<div datael="true" eventdele="userdefine" class="sGrid_data_row_item_div sGrid_data_row_item_userdefine"  '+attrs.join("")+ '  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+htmlStr+'"}';
+	}
+	,_file2HtmlHandler:function(item){
+		var field = this.findFieldOptions('file2');
+		var attrs = this.copeHtmlOptions(field,item);
+	    return '<div datael="true" eventdele="file2" class="sGrid_data_row_item_div sGrid_data_row_item_file2  "'+attrs.join("")+ '  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+field.dataName+'","'+field.addCaption+'"}';
 	}
 	,findFieldOptions:function (type) {
 		var field = this.Fields[type];
