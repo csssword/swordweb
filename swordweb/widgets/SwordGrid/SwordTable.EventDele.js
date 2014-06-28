@@ -39,7 +39,8 @@ SwordGrid.implement({
         var html = dataObj.tds[elName];
         if(html)html = html['value'];	
         
-		el.getElement('div[name=tmp]').destroy();
+		var tmpEl=el.getElement('div[name=tmp]');
+		if(tmpEl)tmpEl.destroy();
 		this.lazyInitFile2(itemEl,el,html,dataObj);
 		
 	}
