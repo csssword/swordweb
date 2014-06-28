@@ -259,40 +259,32 @@ var SwordGridFields = new Class({
 	,_labelHtmlHandler:function(item){
 		var field = this.findFieldOptions('label');
 		var attrs = this.copeHtmlOptions(field,item);
-		///可添加其他属性，可以是其他属性判断后添加的
-		
-		//可在字符串添加内部属性 或全局属性
         return ' <div datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_label " '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
 	}
 	,_textHtmlHandler:function(item){
 		var field = this.findFieldOptions('text');
 		var attrs = this.copeHtmlOptions(field,item);
-		///可添加其他属性，可以是其他属性判断后添加的
         return '<div eventdele="text" datael="true"  class="sGrid_data_row_item_div sGrid_data_row_item_text "  '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
 	}
 	,_passwordHtmlHandler:function(item){
 		var field = this.findFieldOptions('password');
 		var attrs = this.copeHtmlOptions(field,item);
-		///可添加其他属性，可以是其他属性判断后添加的
         return '<div eventdele="text" datael="true"  class="sGrid_data_row_item_div sGrid_data_row_item_password "  '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
 	
 	}
 	,_rowNumHtmlHandler:function(item){
 		var field = this.findFieldOptions('rowNum');
 		var attrs = this.copeHtmlOptions(field,item);
-		///可添加其他属性，可以是其他属性判断后添加的
-        return '<div  datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_rowNum "  "'+attrs.join("")+'  $${_|dataHandler,"'+field.type+'"}';
+        return '<div  datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_rowNum "  "'+attrs.join("")+'  $${_|dataHandler,"'+field.type+'"} ></div>';
 	}
 	,_rowNumOnePageHtmlHandler:function(item){
 		var field = this.findFieldOptions('rowNumOnePage');
 		var attrs = this.copeHtmlOptions(field,item);
-		///可添加其他属性，可以是其他属性判断后添加的
-        return '<div  datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_rowNumOnePage "  "'+attrs.join("")+'  $${_|dataHandler,"'+field.type+'"}';
+        return '<div  datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_rowNumOnePage "  "'+attrs.join("")+'  $${_|dataHandler,"'+field.type+'"} ></div>';
 	}
 	,_checkboxHtmlHandler:function(item){
 		var field = this.findFieldOptions('checkbox');
 		var attrs = this.copeHtmlOptions(field,item);
-		///可添加其他属性，可以是其他属性判断后添加的
 		var disabled = "";
 		if(field.disable == "true"){
 			disabled = "disabled";
@@ -308,13 +300,11 @@ var SwordGridFields = new Class({
 	,_dateHtmlHandler:function(item){
 		var field = this.findFieldOptions('date');
 		var attrs = this.copeHtmlOptions(field,item);
-		///可添加其他属性，可以是其他属性判断后添加的
         return '<div datael="true"  eventdele="date" class="sGrid_data_row_item_div sGrid_data_row_item_date   "'+attrs.join("")+  '  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+field.dataformat+'","'+field.defValue+'","'+field.showCurDate+'","'+field.submitDateformat+'"}';
 	}
 	,_selectHtmlHandler:function(item){
 		var field = this.findFieldOptions('select');
 		var attrs = this.copeHtmlOptions(field,item);
-		///可添加其他属性，可以是其他属性判断后添加的
         return '<div datael="true" eventdele="select" class="sGrid_data_row_item_div sGrid_data_row_item_select  "'+attrs.join("")+ '  $${_|dataHandler,"'+field.type+'","'+field.defValue+'","'+field.defIndex+'","'+field.parent+'","'+field.name+'","'+field.dataName+'"}';
 	}
 	,_pulltreeHtmlHandler:function(item){
@@ -334,11 +324,9 @@ var SwordGridFields = new Class({
 		var attrs = this.copeHtmlOptions(field,item);
 		///可添加其他属性，可以是其他属性判断后添加的
 		if(item.get("disable")=="true"){item.getElements("input").each(function(item){item.set("disabled","true");});}
-		var json = {value: item.innerHTML.replace(/[\n,\t]/g,"")};
-		var escape_tpl='${value}';
-		var htmlStr=juicer(escape_tpl, json); 
+
 		if(item.get("show")=="false"){attrs.push("style=\"display:none\"");}
-        return '<div datael="true" eventdele="userdefine" class="sGrid_data_row_item_div sGrid_data_row_item_userdefine"  '+attrs.join("")+ '  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+htmlStr+'"}';
+        return '<div datael="true" eventdele="userdefine" class="sGrid_data_row_item_div sGrid_data_row_item_userdefine"  '+attrs.join("")+ ' title="">'+item.innerHTML+'</div>';
 	}
 	,_file2HtmlHandler:function(item){
 		var field = this.findFieldOptions('file2');

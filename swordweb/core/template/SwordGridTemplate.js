@@ -35,9 +35,7 @@ var SwordGridRender = new Class(
 //					'file2' : this._file2DataHandler.bind(this),
 //					'password' : this._textDataHandler.bind(this),
 					'pulltree' : this._pulltreeDataHandler.bind(this),
-					'select' : this._selectDataHandler.bind(this),
-					'rowNum' : this._rowNumDataHandler.bind(this),
-					"userdefine":this._userdefineDataHandler.bind(this)
+					'select' : this._selectDataHandler.bind(this)
 				};
 			}
 
@@ -142,8 +140,11 @@ var SwordGridRender = new Class(
 				return tmp['value'];
 			}
 			,_findDataHandler : function(type) {
-				if (this._showDataHandlers[type])
-					return this._showDataHandlers[type];
+				if(["rowNum","rowNumOnePage","userdefineName"].contains(type)){
+					return $empty;
+				}
+				var typeHander=this._showDataHandlers[type];
+				if (typeHander){return typeHander;}
 				return this._defalutDataHandler.bind(this);
 			}
 			,_defalutDataHandler : function(rowData, type, name) {
@@ -168,16 +169,7 @@ var SwordGridRender = new Class(
 						+ '" showValue="' + showValue + '">' + showValue
 						+ '</div>';
 			}
-			,_rowNumDataHandler : function(rowData, type) {// 删除过行后 显示与内部值不一样
-															// ，应该在表格上加属性 不以数据为准
-//				var rowNum = 1 / 1 + 1;
-				return ' title=""></div>';
-			}
-			,_userdefineDataHandler : function(rwoData,type,name,html) {
-				var htmlStr=html.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
-				.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
-				return ' title="">'+htmlStr+'</div>';
-			}
+			
 			,_checkbox_radioDataHandler : function(rowData, type, name,
 					userClicked, checkAllFlag) {
 				var value = rowData['tds'][name];
