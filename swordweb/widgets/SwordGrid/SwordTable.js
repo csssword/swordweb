@@ -184,7 +184,10 @@ var SwordGrid = new Class({
         ,treeRootNum:'false'
 
         ,collapse:'false'	//默认是否收缩表格
-
+		,isRowEdit:"false"
+		,openerWidth:"600px"
+		,rowEditFinish:null
+		,openerNoNextEvent:null
         //私有属性结束。。。。。。
 
         //以下为事件。。。
@@ -6174,9 +6177,179 @@ var SwordGrid = new Class({
 				}
 			}
 		}
-	}
+	},formToRow:function(obj){
+		var json = {};
+		for(o in obj){
+			json[o] = {'value':obj[o].value};
+		}
+		return {
+			'tds':json
+		};
+	},objToForm:function(obj,fromName){
+		var fd = {
+			'sword':'SwordForm',
+			'name' :fromName,
+			'data' :{}
+		};
+		var json = {};
+		for(o in obj.tds){
+			json[o] = {'value':obj.tds[o].value};
+		}
+
+		fd['data'] = json;
+		return fd;
+	},
+    gridToForm : function(dataObj,sGrid_data_row_div,e){
+    	
+        
+    	var caption = this.options.caption||"";
+	    var formName = "pop_panel_"+this.options.name+"_form";
+	    var pop_panel = $(document.body).getElement("div[class='pop_panel']");
+	    var pop_mask_div = $(document.body).getElement("div[class='pop_mask_div']");
+	    var pop_panel_form="",pop_panel_form_item="",itemVal="",itemRule="",itemType="",itemName="",itemCpation="",i = 1,pNode="",itemDisable="",itemFormat="";
+	    var pop_panel_table = new Element("div",{'class':'pop_panel_div'});
+		var pop_panel_table_sbutton = $(document.body).getElement("input[class='pop_panel_sbutton']");
+		
+       	if(pop_panel_table_sbutton){
+       		$(pop_panel_table_sbutton).destroy();
+       		$(pop_panel_table_cbutton).destroy();
+       	}
+       	
+	    pop_panel_table_sbutton = new Element("input",{'type':'button','value':'确定','class':'pop_panel_sbutton'}).inject(pop_panel_table);
+	    pop_panel_table_cbutton = new Element("input",{'type':'button','value':'取消','class':'pop_panel_cbutton'}).inject(pop_panel_table);
+	    
+	    if(!pop_mask_div){
+	    	pop_mask_div = 	new Element("div", {'class':'pop_mask_div'}).inject($(document.body));
+	    	pop_mask_div.setStyle("height",$(document.body).getScrollSize().y);
+	    	pop_panel =	new Element("div", {'class':'pop_panel'}).inject($(document.body));
+	    	var w = this.options.openerWidth;
+	    	if(w.indexOf("px")<1) w =  w+"px";
+	    	pop_panel.setStyle("width",w)
+	    }else{
+			$(pop_panel.getElement("div[sword='SwordForm']")).destroy();
+	    }
+	    var onne = this.options.openerNoNextEvent||"";
+	    
+		pop_panel_form = new Element("div", {'sword':'SwordForm','name':formName,'caption':caption,'userdefine':'true','noNextEvent':onne,'vType':'intime'}).inject(pop_panel);
+		if(caption!=""){
+			pop_panel_form.set("panel","true");
+		}
+		var pop_panel_form_table='<table class="tab_form" border="0" cellpadding="0" cellspacing="0"><colgroup><col style="width: 16%"></col><col style="width: 16%"></col><col style="width: 16%"></col><col style="width: 16%"></col><col style="width: 16%"></col><col style="width: 16%"></col></colgroup><tr>'
+		pNode = this.options.pNode; 
+		var so = pc.getSelect();
+		var co = pc.getCalendar();
+		if(so.box&&so.box.get('display')=="true"){
+			so.hide();
+			if(!$(e.target).hasClass('sGrid_data_row_item_select')) {
+				so.execGridOnFinished();
+	         }
+		}
+		if(co.dateInput&&co.dateInput.get('show')=="true"){
+			co.hide();
+		}
+
+    	sGrid_data_row_div.getElements(".sGrid_data_row_item_div").each(function(item,index){
+    		var f = (i)/2+""; 
+    		var tpl = this.options.pNode.getElements("div[class='sGrid_data_row_item_div']")[index];
+			itemName = tpl.get("name");
+			itemType = tpl.get("type") ||"label";
+			itemCaption = tpl.get("caption")||"";
+			itemDisable = tpl.get("disable")||"";
+			itemFormat = tpl.get("format")||"";
+			itemRule = item.get("rule")||"";
+			itemNoView = tpl.get("noView")||"";
+			
+			if(!itemName) return;
+			
+			if(itemNoView=="true"||itemType=="checkbox"||itemType=="radio"||itemType=="rowNum"||itemType=="rowNumOnePage") return;
+			if(itemType=="label"||itemType=="a" ||itemType=="select"||itemType=="pulltree"){
+				itemVal = item.get("realvalue")||"";
+			}else{
+				itemVal = item.get("showValue")||"";
+			}
+			
+			if(itemType=="a"){
+				var oc = tpl.get("_onclick")||"";
+			 	pop_panel_form_item += '<th>'+itemCaption+'</th><td><a href="#a" onclick=\"'+oc+'\">'+itemVal+'</a></td>';
+			}else if(itemType=="userdefine"){
+				pop_panel_form_item += '<th>'+itemCaption+'</th><td>'+item.innerHTML+'</td>';
+			}else if(itemType=="pulltree"){
+				pop_panel_form_item += '<th>'+itemCaption+'</th><td><div name=\"'+item.get("treename")+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+item.get("title")+'\" defRealvalue=\"'+itemVal+'\"></div></td>';
+			}else if(itemType=="select"){
+				var df =  tpl.get("dataFilter")||"",dn = tpl.get("dataName")||"",sc = tpl.get("sbmitcontent")||"",pd = tpl.get("popdisplay")||"",ind = tpl.get("inputdisplay")||"";
+				if(item.get("code")&&item.get("caption")&&dn==""){
+					itemVal = "code,"+item.get("code")+"|caption,"+item.get("caption");
+				}
+					pop_panel_form_item += '<th>'+itemCaption+'</th><td><div name=\"'+itemName+'\" dataFilter=\"'+df+'\" sbmitcontent=\"'+sc+'\" popdisplay=\"'+pd+'\" inputdisplay=\"'+ind+'\"  disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" dataName=\"'+dn+'\" defValue=\"'+itemVal+'\"></div></td>';
+			}else{
+				var ob = tpl.get("_onBlur")||"";
+				pop_panel_form_item += '<th>'+itemCaption+'</th><td><div name=\"'+itemName+'\"  onBlur=\"'+ob+'\"  format=\"'+ itemFormat+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+itemVal+'\"></div></td>';
+			}
+    	 	
+    	 	if(f.indexOf(".")==-1){
+    	 		pop_panel_form_item +=  "</tr>";
+	    	 			if(index<sGrid_data_row_div.getElements("div").length){
+	    					pop_panel_form_item += "<tr>"	 
+	    				}
+    				}
+	    	 	i++;
+	    	 	
+    	}.bind(this)); 
+    	
+    	pop_panel_form_table += pop_panel_form_item +"</table>"; 
+    	pop_panel_form.set("html",pop_panel_form_table)  ;
+
+    	pop_panel_table_sbutton.addEvent('click', function() {
+    		if(!$w(formName).validate()) return;
+	    	var rowData = this.formToRow($w(formName).getSubmitData().data);
+			var row=$w(this.options.name).getCheckedRow();
+			var treeDivEl = row.getElement("[type='pulltree']");
+			if(treeDivEl){
+				var treeName=treeDivEl.get("treename"),treedivname=treeDivEl.get("name");
+				rowData.tds[treedivname] = rowData.tds[treeName];
+			}
+			$w(this.options.name).updateRow(row,rowData)   
+			$(pop_panel).destroy();
+			$(pop_mask_div).destroy();
+    	}.bind(this));
+    	
+		pop_panel_table_cbutton.addEvent('click', function() {	
+			$(pop_panel).destroy();
+			$(pop_mask_div).destroy();
+    	}.bind(this));
+    	
+		pop_panel.addEvent('keydown', function(e) {	
+			if(e.code==27){
+				$(pop_panel).destroy();
+				$(pop_mask_div).destroy();
+			}
+		
+    	}.bind(this));
+	    pop_panel_table.inject(pop_panel);
+	    pc.initWidgetParam(pop_panel_form);
+		pc.initEventForForm();
+	
+	    var l =  ($((self||window).document.body).getSize().x - pop_panel.getSize().x)/2;
+		var t = ($((self||window).document.body).getSize().y - pop_panel.getSize().y)/3+getScrollTop();
+		pop_panel.setStyles({'left': l,'top':t});
+	
+		var ref = this.options.rowEditFinish;
+		if(ref) this.getFunc(ref)[0]();
+		if($('formTooltipDivPNode'))$('formTooltipDivPNode').destroy();
+    }
 
 });
+
+function getScrollTop(){
+	var doctemp=window.document;
+	var scrollTop=0;
+	if (doctemp.body && doctemp.body.scrollTop){
+		scrollTop=doctemp.body.scrollTop;
+	}else if (doctemp.documentElement && doctemp.documentElement.scrollTop){
+		scrollTop=doctemp.documentElement.scrollTop;
+	}
+		return scrollTop; 
+}
 var DelayedTask = function(fn, scope, args) {
     var me = this,
             id,

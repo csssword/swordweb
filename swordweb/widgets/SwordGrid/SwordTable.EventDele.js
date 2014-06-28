@@ -453,7 +453,11 @@ SwordGrid.implement({
     	var obj = $(e.target);
     	var sGrid_data_row_div=this.getRow(obj);
         var dataObj=this.getOneRowData(sGrid_data_row_div);
-    	this.fireEvent('onRowDbClick', [dataObj,sGrid_data_row_div,e]);
+    	if(this.options.isRowEdit!="false"){
+			this.gridToForm(dataObj,sGrid_data_row_div,e);
+    	}else{
+    		this.fireEvent('onRowDbClick', [dataObj,sGrid_data_row_div,e]);
+    	}
     }
     
 	,rowContextmenuDele:function(e,defEl){

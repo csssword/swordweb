@@ -52,7 +52,7 @@ var SwordToolTips = new Class({
         	window.refToFormTooltip.options.tooltipBgColor = '#7d9bc5';
         }
     },
-    createTip:function(activeInput,msg) {
+    createTip:function(activeInput,msg) { 
     	var top = window.refToFormTooltip.getTopPos(activeInput);
     	if($(document.body).getScroll().y == top)return;  //如果显示的时候input对象已经被删除，$(document.body).getScroll().y == top，无法定位直接返回。
     	window.refToFormTooltip.tooltipText = msg;
@@ -90,6 +90,7 @@ var SwordToolTips = new Class({
         var msgDiv = window.refToFormTooltip.tooltipContentDiv.getElements("div[id='cont']")[0];
         msgDiv.appendText(window.refToFormTooltip.tooltipText);
 		window.refToFormTooltip.tooltipDiv.style.display='block';
+		
 //		window.refToFormTooltip.tooltipDiv.addEvent("click", function (e) {
 //            window.refToFormTooltip.__hideTooltip();
 //        }
@@ -105,9 +106,11 @@ var SwordToolTips = new Class({
     */	
 	__createTooltip : function()
 	{
+		
 		window.refToFormTooltip.tooltipDiv = document.createElement('DIV');
 		window.refToFormTooltip.tooltipDiv.style.position = 'absolute';
-
+		window.refToFormTooltip.tooltipDiv.setStyle("z-index","1000");
+		window.refToFormTooltip.tooltipDiv.set("id","formTooltipDivPNode");
 		var topDiv = new Element("div") ;
 		if(window.refToFormTooltip.options.displayArrow){
 			if(window.refToFormTooltip.options.tooltipPosition=='below'){
@@ -137,6 +140,7 @@ var SwordToolTips = new Class({
 		var outerDiv = document.createElement('DIV');
 		outerDiv.style.position = 'relative';
 		outerDiv.style.zIndex = 1000;
+	
 		if(window.refToFormTooltip.options.tooltipPosition!='up' &&window.refToFormTooltip.options.tooltipPosition!='below' && window.refToFormTooltip.options.displayArrow){			
 			outerDiv.style.left = window.refToFormTooltip.options.arrowRightWidth + 'px';
 		}
