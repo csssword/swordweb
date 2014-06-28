@@ -50,7 +50,18 @@
         var data = box.options.param.data;
       //  document.getElementById("cwbmTR").style.display = (data['exceptionMes'] == "系统出错" || data['exceptionMes'] == data['exceptionName']) ? "none" : "";
       //  document.getElementById('exceptionName').innerHTML = data['exceptionName'];
-        document.getElementById('exceptionMes').innerHTML = data['exceptionMes'].replace(/&lt;br&gt;/g, '<br>');
+        var mes = data['exceptionMes'].replace(/&lt;br&gt;/g, '<br>');
+        var exnum = mes.substring(0,15);
+        if(/^(\d{15})$/.test(exnum)){
+        var tag = exnum.substring(5,6);
+        var cl = this.document.getElementById('tubiao')
+        if(tag==2){
+        cl.style.background='url(swordweb/html/error/styles/images/warning.png) no-repeat'; 
+        }else if(tag ==3){
+        cl.style.background='url(swordweb/html/error/styles/images/error.png) no-repeat';
+        }
+        }
+        document.getElementById('exceptionMes').innerHTML = mes;
         document.getElementById('detailMsgObj').innerHTML = ['<pre>',data['debugMes'],'</pre>'].join('');
     }
     var _ChargeClickMele_ = 0;
