@@ -6256,7 +6256,7 @@ var SwordGrid = new Class({
     		var tpl = this.options.pNode.getElements("div[class='sGrid_data_row_item_div']")[index];
 			itemName = tpl.get("name");
 			itemType = tpl.get("type") ||"label";
-			itemCaption = tpl.get("caption")||"";
+			itemCaption = (itemRule=="must" ? '<span class="red">*</span>' : '')  + tpl.get("caption")||"";
 			itemDisable = tpl.get("disable")||"";
 			itemFormat = tpl.get("format")||"";
 			itemRule = item.get("rule")||"";
@@ -6314,17 +6314,20 @@ var SwordGrid = new Class({
 			$w(this.options.name).updateRow(row,rowData)   
 			$(pop_panel).destroy();
 			$(pop_mask_div).destroy();
+            pc.widgets.erase(formName);
     	}.bind(this));
     	
 		pop_panel_table_cbutton.addEvent('click', function() {	
 			$(pop_panel).destroy();
 			$(pop_mask_div).destroy();
+            pc.widgets.erase(formName);
     	}.bind(this));
     	
 		pop_panel.addEvent('keydown', function(e) {	
 			if(e.code==27){
 				$(pop_panel).destroy();
 				$(pop_mask_div).destroy();
+                pc.widgets.erase(formName);
 			}
 		
     	}.bind(this));
