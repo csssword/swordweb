@@ -936,6 +936,8 @@ var PageContainer = new Class({
 								&& event.altKey == isAlt
 								&& event.shiftKey == isShift) {
 							if (navigator.userAgent.indexOf("MSIE") > 0) {
+								 event.keyCode = 0;
+                                 event.returnValue = false;
 								if (item.hasClass("submitbutton")) { // 提交组件的快捷键
 									if (item.get('enabled') == 'true') {
 										var sub = $w(item.get("name"));
@@ -961,7 +963,6 @@ var PageContainer = new Class({
 										}
 									}
 								}
-								e.stopPropagation();
 							}
 						}
 					}.bind(this));
