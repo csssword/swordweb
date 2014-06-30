@@ -4505,7 +4505,7 @@ var SwordGrid = new Class({
         }.bind(this));
     }
     //加一个参数，为了解决GIRD中连续日期列，不触发hide时间，不执行校验及事件的BUG
-    ,nextCell:function(srcEl, e,obj,nextOrder) {
+    ,nextCell:function(srcEl, e,obj,nextOrder,autoinsert) {
         this.autoScroll = true;
         var startEl;
         var cell;
@@ -4532,15 +4532,15 @@ var SwordGrid = new Class({
             nextEl = this.findNextFocusInOneRow(startEl);
             while(!nextEl) {
                 var nextRow = this.getRow(startEl).getNext();
-                if(nextRow == null) {//没有下一行
+                if(nextRow == null && !$chk(autoinsert)) {//没有下一行
                 	if( !$chk(nextOrder) ){
 	                	try{
 	                    	if($chk(this.autoInsertFunc)){
 	                    		this.autoInsertFunc();
-		                        	var nextFunc = function(src, e, obj){
-		                        		this.nextCell(src, e, obj,nextOrder);
+		                        	var nextFunc = function(src, e, obj,autoinsert){
+		                        		this.nextCell(src, e, obj,nextOrder,autoinsert);
 		                        	}.bind(this);
-	                        		nextFunc.delay(50,this, [startEl, e, obj]);
+	                        		nextFunc.delay(50,this, [startEl, e, obj,"insert"]);
 	                        		e.target.blur();
 	                    	}else{
 		                    	if(this.options.noNextEvent)this.getFunc(this.options.noNextEvent)[0]();
