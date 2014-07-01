@@ -7,7 +7,7 @@
  */
 var SwordTextTemplate = {
     start:'<table cellspacing="0" cellpadding="0" class="swordform_field_wrap"><tbody><tr><td class="boxtd">',
-    inputPre:'<input type="text" style="float:left;<tpl if="values.get(\'show\')==\'false\'">display:none;</tpl>"  defValue="{defValue}" maxlength="{maxlength}" <tpl if="values.get(\'defValue\')">value="{defValue}" oValue="{defValue}"</tpl> placeholder="{placeholder}"<tpl if="values.get(\'disabled\')">disabled</tpl> <tpl if="values.get(\'disable\')==\'true\'">disabled</tpl> class="swordform_item_oprate swordform_item_input <tpl if="values.get(\'disabled\')">swordform_item_input_disable</tpl> <tpl if="values.get(\'disable\')==\'true\'">swordform_item_input_disable</tpl>"',	
+    inputPre:'<input type="text" style="float:left;<tpl if="values.get(\'show\')==\'false\'">display:none;</tpl>" realvalue="{realvalue}" defValue="{defValue}" maxlength="{maxlength}" <tpl if="values.get(\'defValue\')">value="{defValue}" oValue="{defValue}"</tpl> placeholder="{placeholder}"<tpl if="values.get(\'disabled\')">disabled</tpl> <tpl if="values.get(\'disable\')==\'true\'">disabled</tpl> class="swordform_item_oprate swordform_item_input <tpl if="values.get(\'disabled\')">swordform_item_input_disable</tpl> <tpl if="values.get(\'disable\')==\'true\'">swordform_item_input_disable</tpl>"',	
     id:' id="{PName}_{name}" ',
     end: '></td></tr></tbody></table>',
     textdef:{
