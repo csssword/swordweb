@@ -190,7 +190,8 @@ var SwordSelect = new Class({
                 if(this.box.get('handInput') == "true" && !$chk(this.box.get('realvalue')) && $chk(this.box.get("value"))) {
                     this.box.set({'code':this.box.get("value"),'realvalue':this.box.get("value")});
                 }
-                this.hide();
+                var isgo=this.hide();
+	            if(isgo===false){return;}
                 if(!$(e.target).hasClass('sGrid_data_row_item_select')) {
                     this.execGridOnFinished();
                 }
