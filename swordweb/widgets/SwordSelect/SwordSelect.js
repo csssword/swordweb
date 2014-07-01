@@ -594,7 +594,8 @@ var SwordSelect = new Class({
         return loadData;
     },
     setCacheArray : function(code){
-    	if (code instanceof Array){    		 
+    	if (code instanceof Array){
+            this.cachearray = [];
     		for (var i=0;i< code.length;i++){
     			var index = this.cachearray.indexOf(code[i]);
     	    	if (index == -1){
@@ -634,15 +635,22 @@ var SwordSelect = new Class({
 //            ].extend(loadData);
             height = (loadData.length < this.box.get('lines')) ? this.options.height * loadData.length : this.options.height * this.box.get('lines');//this.options.lines;
             var tempFrac  = document.createDocumentFragment();//yt修改guoyan,createDocumentFragment高效一些
+            /* 置顶功能 */
             var cacheFrac = document.createDocumentFragment();
             var tempCacheArr = [];
             var templilist = [];
-            if(top.$swfcacheobject) top.$swfcacheobject.get(this.box.get("dataname")+"_"+this.box.id,function(isOK,value){
-            	if (isOK){
-            		tempCacheArr = value.split(",");
-            	}
-            });
-            this.setCacheArray(tempCacheArr);    
+            var key = this.box.get("dataname")+"_"+this.box.id;
+            if (this.box.get("cacheSelected") == "true" ){
+                if(top.$swfcacheobject) {
+                    top.$swfcacheobject.get(key,function(isOK,value){
+                        if (isOK){
+                            tempCacheArr = value.split(",");
+                        }
+                    });
+                }
+                this.setCacheArray(tempCacheArr);
+            }
+            /* 置顶功能 */
             loadData.each(function(node, index) {
                 if($type(node) == 'element') {
                     node = {caption:node.get('caption'),code:node.get('code')}
@@ -665,7 +673,10 @@ var SwordSelect = new Class({
                 });//.inject(this.selectbox);
                 li.store("allDb", node);
                 li.addEvent('click', function(e) {
-                	this.setCacheArray(li.get("value"));
+                    /* 置顶功能 */
+                    if (this.box.get("cacheSelected") == "true" ){
+                        this.setCacheArray(li.get("value"));
+                    }
                     this.change_item(li);
                     if(this.box.get("mode") == 2) {
                         this.getNextPageData();
@@ -682,11 +693,13 @@ var SwordSelect = new Class({
                 }
             }.bind(this)); 
             templilist.each(function(li){
-            	cacheFrac.appendChild(li);
+                if ($chk(li)) cacheFrac.appendChild(li);
             });
             this.selectbox.appendChild(cacheFrac);
             if (tempCacheArr.length >0){
-            	this.selectbox.appendChild(new Element('hr'));
+                /*增加分割线*/
+                //this.selectbox.appendChild(new Element('div').setStyles({"height":"1px","background":"#00CCFF","overflow":"hidden"}));
+                this.selectbox.appendChild(new Element('hr').setStyles({"size":"1","border-style":"outset","color":"gray"}));
             }
             this.selectbox.appendChild(tempFrac);
             this.calculateConsole();
@@ -694,7 +707,7 @@ var SwordSelect = new Class({
             this.options.popWidth = this.box.get("popWidth");
             this.selectbox.setStyles({
                 'width'      : $chk(this.options.popWidth) ? this.options.popWidth : this.box.getWidth() + 14,
-                'height'     : height + 'px',
+                'height'     : (height+5) + 'px',
                 'overflow-y' : 'auto'
             });
 
@@ -787,6 +800,7 @@ var SwordSelect = new Class({
         this.selectbox.getElements('div').each(function(li) {
             li.dispose();
         });
+        //置顶功能，删除hr分割线
         this.selectbox.getElements('hr').each(function(li) {
             li.dispose();
         });
@@ -837,7 +851,7 @@ var SwordSelect = new Class({
         return this.dataDivFxScroll;
     },
     def_select:function(id) {
-        var nodes = this.selectbox.getChildren();
+        var nodes = this.selectbox.getChildren("div"); //置顶功能 ，分割线不增加样式
         var i;
         for(i = 0; i < nodes.length; i++) {
             nodes[i].removeClass('swordselect-selected-fix');
