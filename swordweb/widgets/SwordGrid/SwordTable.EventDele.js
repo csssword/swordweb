@@ -29,10 +29,8 @@ SwordGrid.implement({
 		defEl.set('first','true');
 		
 		var el=defEl, 
-		type=defEl.get('type'), 
 		elName=defEl.get('name'), 
-		itemEl=this.getItemElByName(elName)[0],
-		rowNum=this.getRowNum(defEl);
+		itemEl=this.getItemElByName(elName)[0];
 		
 		var sGrid_data_row_div=this.getRow(el);
         var dataObj=this.getOneRowData(sGrid_data_row_div);

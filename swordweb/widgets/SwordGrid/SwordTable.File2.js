@@ -56,7 +56,7 @@ SwordGrid.implement({
                 var d=this.file2_Data(html);
                 if(d){
                     var ui=Swiff.Uploader.createFileUi('id',d.name,d.size);
-                    Swiff.Uploader.uiAddOverOutEvent(ui,up);
+                    Swiff.Uploader.uiAddEvent(ui,up);
                     ui.element.inject(up.list);
                     up.target.setStyle('display', 'none');
                     ui.del.addEvent('click',this.file2_delete.bind(this,[ui,up,dataObj,el,n,d,itemEl]));
