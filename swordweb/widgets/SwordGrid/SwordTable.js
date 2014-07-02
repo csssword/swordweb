@@ -6342,6 +6342,16 @@ var SwordGrid = new Class({
 		var ref = this.options.rowEditFinish;
 		if(ref) this.getFunc(ref)[0]();
 		if($('formTooltipDivPNode'))$('formTooltipDivPNode').destroy();
+
+        var dragObj = new Drag(pop_panel, {
+            snap :5,
+            limit: {
+                x:[0,$(document.body).getWidth()- pop_panel.getWidth()],
+                y:[0,$(document.body).getHeight()-pop_panel.height-20]
+            },
+            handle: pop_panel
+            //
+        });
     }
 
 });
