@@ -1,28 +1,28 @@
 SwordSelect
 		.implement({
-			initialize: function(options) {
-	        if(pc.SwordSelectWindowClick) return;
-	        pc.SwordSelectWindowClick = true;
-	        window.document.addEvent('click', function(e) {
-	            var obj = e.target;
-	            while(obj.parentNode && obj != this.box && obj != this.selDiv) obj = obj.parentNode;
-	            if(obj != this.box && obj != this.selDiv && this.box) {
-	                if(this.box.get("display") == 'true') {
-	                    if($defined(this.box.onSelectBlur)) {
-	                        this.box.onSelectBlur(this.box.get('value'));
-	                    }
-	                }
-	                if(this.box.get('handInput') == "true" && !$chk(this.box.get('realvalue')) && $chk(this.box.get("value"))) {
-	                    this.box.set({'code':this.box.get("value"),'realvalue':this.box.get("value")});
-	                }
-	                var isgo=this.hide();
-	                if(isgo===false){return;}
-	                if(!$(e.target).hasClass('sGrid_data_row_item_select')) {
-	                    this.execGridOnFinished();
-	                }
-	            }
-	        }.bind(this));
-	    },
+//			initialize: function(options) {
+//	        if(pc.SwordSelectWindowClick) return;
+//	        pc.SwordSelectWindowClick = true;
+//	        window.document.addEvent('click', function(e) {
+//	            var obj = e.target;
+//	            while(obj.parentNode && obj != this.box && obj != this.selDiv) obj = obj.parentNode;
+//	            if(obj != this.box && obj != this.selDiv && this.box) {
+//	                if(this.box.get("display") == 'true') {
+//	                    if($defined(this.box.onSelectBlur)) {
+//	                        this.box.onSelectBlur(this.box.get('value'));
+//	                    }
+//	                }
+//	                if(this.box.get('handInput') == "true" && !$chk(this.box.get('realvalue')) && $chk(this.box.get("value"))) {
+//	                    this.box.set({'code':this.box.get("value"),'realvalue':this.box.get("value")});
+//	                }
+//	                var isgo=this.hide();
+//	                if(isgo===false){return;}
+//	                if(!$(e.target).hasClass('sGrid_data_row_item_select')) {
+//	                    this.execGridOnFinished();
+//	                }
+//	            }
+//	        }.bind(this));
+//	    },
 			exSelectDataFunc : function() {
 				for ( var i = 0; i < pc.swordCacheArray.length; i++) {
 					var q = pc.swordCacheArray[i];
