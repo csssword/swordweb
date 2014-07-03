@@ -478,9 +478,9 @@ var SwordTree = new Class({
                     this.select.build(this.container,parent);
                 }else{
                     this.select.isBuild=false;
-                    setTimeout(this.select.buildTree.bind(this,[this.container]));
+//                    setTimeout(this.select.buildTree.bind(this,[this,this.container]));
                     
-//                  this.select.buildTree(this.container);
+                  this.select.buildTree(this.container);
                 }
                 Sword.utils.setWidth(this.options.inputWidth,((parent)?parent.userSize:null),this.select.divTable,this.select.selBox,true);//0511
             } else {
