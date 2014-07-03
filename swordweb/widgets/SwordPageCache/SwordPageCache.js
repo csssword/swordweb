@@ -11,7 +11,7 @@ var SwordPageCache = new Class({
     ,collectInfoKey:"sword_page_cache_collect_info"
     ,uuid : null
     ,cacheObj: null
-    ,jsVariableScope: ["gt3"]
+    ,jsVariableScope: ["sword"]
     ,uuidSign:["tid","ctrl"]
     
     ,constant:{
