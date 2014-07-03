@@ -1222,11 +1222,13 @@ public class SwordDataSet implements Serializable {
             Map<String, Object> dataMap = new HashMap<String, Object>();
             for(Iterator<Entry<String, Object>> it = itemMap.entrySet().iterator(); it.hasNext(); ) {
                 Entry<String, Object> entry = (Entry<String, Object>) it.next();
-
-                String key = entry.getKey().toLowerCase();
-                for(Map<String, String> configMap : mappingMap) {
-                    if(configMap.containsKey(key)) {
-                        key = configMap.get(key);
+                String key = entry.getKey();
+                if(!mappingMap.isEmpty()){
+                	key = key.toLowerCase();
+                	for(Map<String, String> configMap : mappingMap) {
+                        if(configMap.containsKey(key)) {
+                            key = configMap.get(key);
+                        }
                     }
                 }
 
@@ -1240,6 +1242,39 @@ public class SwordDataSet implements Serializable {
             sb.add(dataMap);
         }
 
+        sb.setViewData(viewData);
+        resData.setObjectBean(sb);
+        resData = DataBuilder.selectBeanToJson(resData);
+    }
+    
+    private void addSelectVO(Map<String, Object> viewData, List<?> list, String swordName, String... mapping) {
+        viewData.put("sword", swordName);
+        SelectBean sb = new SelectBean();
+        for(int i = 0; i < list.size(); i++) {
+            Object obj = list.get(i);
+            try {
+                Field[] fields = build.getAllFields(obj);
+                Map<String, Object> dataMap = new HashMap<String, Object>();
+                for(int j = 0; j < fields.length; j++) {
+                    String fieldName = fields[j].getName();
+                    String fieldGetterName = getGetterName(fieldName);
+                    Method getterMethod = build.getMethod(fieldGetterName, obj);
+                    if(getterMethod!=null){
+    	                Object value = getterMethod.invoke(obj, new Object[]{});
+    	                dataMap.put(fieldName, value);
+                    }
+                }
+                sb.add(dataMap);
+            } catch(SecurityException e) {
+                throw new RuntimeException(e);
+            } catch(IllegalArgumentException e) {
+                throw new RuntimeException(e);
+            } catch(IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch(InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
         sb.setViewData(viewData);
         resData.setObjectBean(sb);
         resData = DataBuilder.selectBeanToJson(resData);
@@ -1345,11 +1380,11 @@ public class SwordDataSet implements Serializable {
         return configList;
     }
 
-    public void addSelectWithWidgetName(String widgetName, CachedRowSet crs) {
-        Map<String, Object> viewData = new HashMap<String, Object>();
-        viewData.put("name", widgetName);
-        addSelect(viewData, crs, "SwordSelect");
-    }
+//    public void addSelectWithWidgetName(String widgetName, CachedRowSet crs) {
+//        Map<String, Object> viewData = new HashMap<String, Object>();
+//        viewData.put("name", widgetName);
+//        addSelect(viewData, crs, "SwordSelect");
+//    }
 
     public void addSelectWithCacheData(String widgetName, String tableName, String... mapping) {
 
@@ -1370,25 +1405,35 @@ public class SwordDataSet implements Serializable {
         addSelect(viewData, map, "SwordSelect");
     }
 
-    public void addSelectWithWidgetName(String widgetName, Map<String, ?> map) {
-        Map<String, Object> viewData = new HashMap<String, Object>();
-        viewData.put("name", widgetName);
-        addSelect(viewData, map, "SwordSelect");
-    }
+//    public void addSelectWithWidgetName(String widgetName, Map<String, ?> map) {
+//        Map<String, Object> viewData = new HashMap<String, Object>();
+//        viewData.put("name", widgetName);
+//        addSelect(viewData, map, "SwordSelect");
+//    }
 
     // add
-    public void addSelectWithDataName(String dataName, List<Map<String, Object>> list, String... mapping) {
+    public void addSelectWithDataName(String dataName, List<?> list, String... mapping) {
         Map<String, Object> viewData = new HashMap<String, Object>();
         viewData.put("dataName", dataName);
-        addSelect(viewData, list, "SwordSelect", mapping);
+        if(list != null && list.size() >0){
+			Object obj = list.get(0);
+			if (obj instanceof Map){
+				List<Map<String, Object>> objMapList = (List<Map<String, Object>>)list;
+				addSelect(viewData, objMapList, "SwordSelect", mapping);
+			}else
+				addSelectVO(viewData, list, "SwordSelect", mapping);
+		}else{
+			List<Map<String, Object>> objMapList = new ArrayList<Map<String, Object>>();
+			addSelect(viewData, objMapList, "SwordSelect", mapping);
+		}
     }
 
     // add
-    public void addSelectWithWidgetName(String widgetName, List<Map<String, Object>> list, String... mapping) {
-        Map<String, Object> viewData = new HashMap<String, Object>();
-        viewData.put("name", widgetName);
-        addSelect(viewData, list, "SwordSelect", mapping);
-    }
+//    public void addSelectWithWidgetName(String widgetName, List<Map<String, Object>> list, String... mapping) {
+//        Map<String, Object> viewData = new HashMap<String, Object>();
+//        viewData.put("name", widgetName);
+//        addSelect(viewData, list, "SwordSelect", mapping);
+//    }
 
     public void addSelectWithDataName(String dataName, Object obj) {
         Map<String, Object> viewData = new HashMap<String, Object>();
@@ -1396,11 +1441,11 @@ public class SwordDataSet implements Serializable {
         addSelect(viewData, obj, "SwordSelect");
     }
 
-    public void addSelectWithWidgetName(String widgetName, Object obj) {
-        Map<String, Object> viewData = new HashMap<String, Object>();
-        viewData.put("name", widgetName);
-        addSelect(viewData, obj, "SwordSelect");
-    }
+//    public void addSelectWithWidgetName(String widgetName, Object obj) {
+//        Map<String, Object> viewData = new HashMap<String, Object>();
+//        viewData.put("name", widgetName);
+//        addSelect(viewData, obj, "SwordSelect");
+//    }
 
     public void addRadioWithWidgetName(String widgetName, CachedRowSet crs) {
         Map<String, Object> viewData = new HashMap<String, Object>();
@@ -1474,11 +1519,11 @@ public class SwordDataSet implements Serializable {
         addSelect(viewData, obj, "SwordCheckBox");
     }
 
-    public void addListWithWidgetName(String widgetName, CachedRowSet crs) {
-        Map<String, Object> viewData = new HashMap<String, Object>();
-        viewData.put("name", widgetName);
-        addSelect(viewData, crs, "SwordList");
-    }
+//    public void addListWithWidgetName(String widgetName, CachedRowSet crs) {
+//        Map<String, Object> viewData = new HashMap<String, Object>();
+//        viewData.put("name", widgetName);
+//        addSelect(viewData, crs, "SwordList");
+//    }
 
     public void addListWithDataName(String dataName, CachedRowSet crs) {
         Map<String, Object> viewData = new HashMap<String, Object>();
@@ -1492,11 +1537,11 @@ public class SwordDataSet implements Serializable {
         addSelect(viewData, map, "SwordList");
     }
 
-    public void addListWithWidgetName(String widgetName, Map<String, Object> map) {
-        Map<String, Object> viewData = new HashMap<String, Object>();
-        viewData.put("name", widgetName);
-        addSelect(viewData, map, "SwordList");
-    }
+//    public void addListWithWidgetName(String widgetName, Map<String, Object> map) {
+//        Map<String, Object> viewData = new HashMap<String, Object>();
+//        viewData.put("name", widgetName);
+//        addSelect(viewData, map, "SwordList");
+//    }
 
     public void addListWithDataName(String dataName, Object obj) {
         Map<String, Object> viewData = new HashMap<String, Object>();
@@ -1504,11 +1549,11 @@ public class SwordDataSet implements Serializable {
         addSelect(viewData, obj, "SwordList");
     }
 
-    public void addListWithWidgetName(String widgetName, Object obj) {
-        Map<String, Object> viewData = new HashMap<String, Object>();
-        viewData.put("name", widgetName);
-        addSelect(viewData, obj, "SwordList");
-    }
+//    public void addListWithWidgetName(String widgetName, Object obj) {
+//        Map<String, Object> viewData = new HashMap<String, Object>();
+//        viewData.put("name", widgetName);
+//        addSelect(viewData, obj, "SwordList");
+//    }
 
     public void addTree(String widgetName, CachedRowSet crs) {
         Map<String, Object> viewData = new HashMap<String, Object>();
@@ -1525,10 +1570,46 @@ public class SwordDataSet implements Serializable {
         buildTreeType(viewData, "SwordTree", widgetName, crs);
     }
 
-    public void addTree(String widgetName, List<Map<String, Object>> treeDatas) {
+    public void addTree(String widgetName, List<?> treeDatas) {
         TreeBean tb = new TreeBean();
-        tb.setDataList(treeDatas);
         Map<String, Object> viewData = new HashMap<String, Object>();
+        if(treeDatas != null && treeDatas.size() >0){
+			Object obj = treeDatas.get(0);
+			if (obj instanceof Map){
+				List<Map<String, Object>> objMapList = (List<Map<String, Object>>)treeDatas;
+				tb.setDataList(objMapList);
+			}else{
+				try {
+					for (int i = 0; i < treeDatas.size(); i++) {
+						Object treeobj = treeDatas.get(i);
+						Field[] fields = build.getAllFields(treeobj);
+						Map<String, Object> dataMap = new HashMap<String, Object>();
+						for (int j = 0; j < fields.length; j++) {
+							String fieldName = fields[j].getName();
+							String fieldGetterName = getGetterName(fieldName);
+							Method getterMethod = build.getMethod(fieldGetterName, treeobj);
+							if (getterMethod != null) {
+								Object value = getterMethod
+										.invoke(treeobj, new Object[] {});
+								dataMap.put(fieldName, value);
+							}
+						}
+						tb.add(dataMap);
+					}
+				} catch (SecurityException e) {
+					throw new RuntimeException(e);
+				} catch (IllegalArgumentException e) {
+					throw new RuntimeException(e);
+				} catch (IllegalAccessException e) {
+					throw new RuntimeException(e);
+				} catch (InvocationTargetException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}else{
+			List<Map<String, Object>> objMapList = new ArrayList<Map<String, Object>>();
+			tb.setDataList(objMapList);
+		}
         viewData.put("sword", "SwordTree");
         viewData.put("name", widgetName);
         tb.setViewData(viewData);

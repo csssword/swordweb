@@ -168,9 +168,11 @@ public class ViewDataHelper {
                     if (!"".equals(type) && type != null) {
                         if ("select".equalsIgnoreCase(type)) {
                             res.addSelectWithDataName(key, valueList);
-                        } else if ("multiselect".equalsIgnoreCase(type)) {
-                            res.addListWithWidgetName(rowMap.get(formName)+ "." + key, comMap);
-                        } else if ("checkbox".equalsIgnoreCase(type)) {
+                        }
+//                        else if ("multiselect".equalsIgnoreCase(type)) {
+//                            res.addListWithWidgetName(rowMap.get(formName)+ "." + key, comMap);
+//                        } 
+                        else if ("checkbox".equalsIgnoreCase(type)) {
                             res.addCheckBoxWithWidgetName(rowMap.get(formName)+ "." + key, comMap);
                         } else if ("radio".equalsIgnoreCase(type)) {
                             res.addRadioWithWidgetName(rowMap.get(formName)+ "." + key, comMap);

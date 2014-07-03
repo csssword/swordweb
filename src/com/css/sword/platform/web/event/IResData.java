@@ -196,8 +196,8 @@ public interface IResData extends IResponseEvent {
 	 * @param map
 	 *            原生Map数据
 	 */
-	public void addSelectWithWidgetName(String widgetName,
-			Map<String, Object> map);
+//	public void addSelectWithWidgetName(String widgetName,
+//			Map<String, Object> map);
 
 	//add
     /**
@@ -211,7 +211,7 @@ public interface IResData extends IResponseEvent {
 	 * @param list
 	 *            数据list
 	 */
-	public void addSelectWithWidgetName(String dataName, List <Map<String, Object>> list,String... mapping);
+//	public void addSelectWithWidgetName(String dataName, List <Map<String, Object>> list,String... mapping);
 
 	/**
 	 * 将持久化信息转化为SwordSelect组件可解析的数据。<br>
@@ -248,7 +248,7 @@ public interface IResData extends IResponseEvent {
 	 * @param list
 	 *            数据list
 	 */
-	public void addSelectWithDataName(String dataName, List <Map<String, Object>> list,String... mapping);
+	public void addSelectWithDataName(String dataName, List <?> list,String... mapping);
 
 	/**
 	 * 将数据集转化成级联下拉菜单组件可解析的数据。<br>
@@ -311,7 +311,7 @@ public interface IResData extends IResponseEvent {
 	 * @param treeDatas
 	 *            树的数据
 	 */
-	public void addTree(String widgetName, List<Map<String, Object>> treeDatas);
+	public void addTree(String widgetName, List<?> treeDatas);
 
 	/**
 	 * 获得ResData的Json数据。用作前台组件解析。

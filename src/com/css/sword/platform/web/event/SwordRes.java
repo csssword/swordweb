@@ -12,7 +12,10 @@ import sun.jdbc.rowset.CachedRowSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -93,6 +96,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 *      java.lang.Object)
 	 */
 	public void addForm(String widgetName, Object obj) {
+		if(null == obj){
+			obj = new HashMap<String, Object>();
+		}
 		if (obj instanceof Map)
 			resDataSet.addForm(widgetName, (Map) obj);
 		else
@@ -176,9 +182,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addSelectWithWidgetName(java.lang.String,
 	 *      sun.jdbc.rowset.CachedRowSet)
 	 */
-	public void addSelectWithWidgetName(String widgetName, CachedRowSet crs) {
-		resDataSet.addSelectWithWidgetName(widgetName, crs);
-	}
+//	public void addSelectWithWidgetName(String widgetName, CachedRowSet crs) {
+//		resDataSet.addSelectWithWidgetName(widgetName, crs);
+//	}
 
 	/**
 	 * (non-Javadoc)
@@ -186,10 +192,10 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addSelectWithWidgetName(java.lang.String,
 	 *      java.util.Map)
 	 */
-	public void addSelectWithWidgetName(String widgetName,
-			Map<String, Object> map) {
-		resDataSet.addSelectWithWidgetName(widgetName, map);
-	}
+//	public void addSelectWithWidgetName(String widgetName,
+//			Map<String, Object> map) {
+//		resDataSet.addSelectWithWidgetName(widgetName, map);
+//	}
 
 	public void addTableMap(String widgetName, List<Map<String, Object>> list) {
 		resDataSet.addTableMap(widgetName, list);
@@ -324,6 +330,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 				resDataSet.addTableMap(widgetName, objMapList);
 			}else
 				resDataSet.addTable(widgetName, objList);
+		}else{
+			List<Map<String, Object>> objMapList = new ArrayList<Map<String, Object>>();
+			resDataSet.addTableMap(widgetName, objMapList);
 		}
 //		resDataSet.addTable(widgetName, objList);
 	}
@@ -354,7 +363,7 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addTree(java.lang.String,
 	 *      java.util.List, java.util.Map)
 	 */
-	public void addTree(String widgetName, List<Map<String, Object>> treeDatas) {
+	public void addTree(String widgetName, List<?> treeDatas) {
 		resDataSet.addTree(widgetName, treeDatas);
 	}
 
@@ -452,7 +461,7 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 
 	// add
 	public void addSelectWithDataName(String dataName,
-			List<Map<String, Object>> list, String... mapping) {
+			List<?> list, String... mapping) {
 		resDataSet.addSelectWithDataName(dataName, list, mapping);
 	}
 
@@ -460,23 +469,23 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		resDataSet.addListWithDataName(dataName, obj);
 	}
 
-	public void addListWithWidgetName(String widgetName, CachedRowSet crs) {
-		resDataSet.addListWithWidgetName(widgetName, crs);
-	}
+//	public void addListWithWidgetName(String widgetName, CachedRowSet crs) {
+//		resDataSet.addListWithWidgetName(widgetName, crs);
+//	}
 
-	public void addListWithWidgetName(String widgetName, Map<String, ?> map) {
-		resDataSet.addListWithWidgetName(widgetName, map);
-	}
+//	public void addListWithWidgetName(String widgetName, Map<String, ?> map) {
+//		resDataSet.addListWithWidgetName(widgetName, map);
+//	}
 
 	// add
-	public void addSelectWithWidgetName(String dataName,
-			List<Map<String, Object>> list, String... mapping) {
-		resDataSet.addSelectWithWidgetName(dataName, list, mapping);
-	}
+//	public void addSelectWithWidgetName(String dataName,
+//			List<Map<String, Object>> list, String... mapping) {
+//		resDataSet.addSelectWithWidgetName(dataName, list, mapping);
+//	}
 
-	public void addListWithWidgetName(String widgetName, Object obj) {
-		resDataSet.addListWithWidgetName(widgetName, obj);
-	}
+//	public void addListWithWidgetName(String widgetName, Object obj) {
+//		resDataSet.addListWithWidgetName(widgetName, obj);
+//	}
 
 	public void addRadioWithDataName(String dataName, CachedRowSet crs) {
 		resDataSet.addRadioWithDataName(dataName, crs);
