@@ -50,8 +50,8 @@ $extend(SwordRadioCheckboxTemplate, {
     },
     initData:function (el, d,formObj,item) {
     	var innerWrap;
-    	if($defined(item)){
-    		innerWrap=item;
+    	if($defined(el)){
+    		innerWrap=el;
     	}else innerWrap=formObj.getWidget(el.get("name")).innerWrap;
     	var dv = innerWrap.get("defValue");
     	if(d == "" && $defined(dv)){
