@@ -5767,52 +5767,54 @@ var SwordGrid = new Class({
     ,textClick: function(el, itemEl, type, elName, rowNum) {
         var rule = el.get('rule');
         var msg = el.get('msg');
+        var inputEL;
         if(el.get('disable') == 'true' || el.get('disabled')==true)return;
-
-        if(el.get('createInput') == 'true') {
-            return;
-        }
         //                    var text=el.get('text');
         var text = el.get('realvalue');
-        if(type == 'password')
+        if(type == 'password') {
             text = el.retrieve('realvalue');
+        }
 
-
-        el.set('html', ''); //todo ？清理html
-
-
-        var inputEL = this.createInput(type, text, elName).inject(el).addEvent('blur', function() {
-            if(!$chk(rule) || this.vObj.doValidate(inputEL).state) { //校验通过 或 没有校验
-            	el.set('createInput', 'false');
-                var realvalue = inputEL.get('value');
-                var showvalue = sword_fmt.convertText(itemEl, realvalue).value;
-                el.set('value', realvalue);//李伟杰  2012-3-22添加  避免 自定义校验  el.get(value)为空  校验不通过
-                el.set('realvalue', realvalue);
-                el.set('showvalue', showvalue);
-                this.updateCell(el, realvalue);//统一使用realvalue来更新值
-                if(itemEl.get('_onBlur')) {
-                    this.getFunc(itemEl.get('_onBlur'))[0](realvalue, showvalue, this.getOneRowData(el), el, this.getRow(el), text || '', this);
-                    this.refreshConsole();
+        if(el.get('createInput') == 'true') {
+            inputEL = el.getFirst();
+        }else{
+            el.set('html', ''); //todo ？清理html
+            inputEL = this.createInput(type, text, elName).inject(el).addEvent('blur', function() {
+                if(!$chk(rule) || this.vObj.doValidate(inputEL).state) { //校验通过 或 没有校验
+                    el.set('createInput', 'false');
+                    var realvalue = inputEL.get('value');
+                    var showvalue = sword_fmt.convertText(itemEl, realvalue).value;
+                    el.set('value', realvalue);//李伟杰  2012-3-22添加  避免 自定义校验  el.get(value)为空  校验不通过
+                    el.set('realvalue', realvalue);
+                    el.set('showvalue', showvalue);
+                    this.updateCell(el, realvalue);//统一使用realvalue来更新值
+                    if(itemEl.get('_onBlur')) {
+                        this.getFunc(itemEl.get('_onBlur'))[0](realvalue, showvalue, this.getOneRowData(el), el, this.getRow(el), text || '', this);
+                        this.refreshConsole();
+                    }
+                    this.celltooltips.hide();
+                    inputEL.destroy();
+                } else {//校验没有通过
+                    if(el.get("realvalue") != "")el.setProperties({realvalue:'',title:'',showvalue:'',value:''});
                 }
-                this.celltooltips.hide();
-                inputEL.destroy();
-            } else {//校验没有通过
-                if(el.get("realvalue") != "")el.setProperties({realvalue:'',title:'',showvalue:'',value:''});
-            }
-            //TODO ----------------------------------------------------
-            if(this.hjRow) {
-                var hjdiv = this.hjRow.getElement("div[name='" + el.get("name") + "']");
-                if(hjdiv) {
-                    if(hjdiv.get("isHj") && hjdiv.get("isHj").toUpperCase() == "TRUE") {
-                    	var oldValue=hjdiv.get("text");
-                        var showvalue = html = this.getHj(el.get("name")) || '';
-                        if(hjdiv.get('format')) showvalue = sword_fmt.convertText(hjdiv, showvalue).value;
-                        hjdiv.set({'text':showvalue,'realvalue':html || "",'title':showvalue});
-                        hjdiv.fireEvent('onchange',[oldValue,hjdiv.get("text")]);
+                //TODO ----------------------------------------------------
+                if(this.hjRow) {
+                    var hjdiv = this.hjRow.getElement("div[name='" + el.get("name") + "']");
+                    if(hjdiv) {
+                        if(hjdiv.get("isHj") && hjdiv.get("isHj").toUpperCase() == "TRUE") {
+                            var oldValue=hjdiv.get("text");
+                            var showvalue = html = this.getHj(el.get("name")) || '';
+                            if(hjdiv.get('format')) showvalue = sword_fmt.convertText(hjdiv, showvalue).value;
+                            hjdiv.set({'text':showvalue,'realvalue':html || "",'title':showvalue});
+                            hjdiv.fireEvent('onchange',[oldValue,hjdiv.get("text")]);
+                        }
                     }
                 }
-            }
-        }.bind(this));
+            }.bind(this));
+        }
+
+
+
         this.tableCellTip(el, inputEL, elName);
         if($chk(rule)) {
             inputEL.set('rule', rule);
