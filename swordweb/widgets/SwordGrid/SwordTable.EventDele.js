@@ -53,7 +53,7 @@ SwordGrid.implement({
 		var el=defEl, 
 		elName=defEl.get('name'), 
 		itemEl=this.getItemElByName(elName)[0];
-		
+		var type=el.get('type');
 		if(itemEl.get('data') == 'true') {//当checkbox是一个数据的时候才注册更新数据的操作
 			if(type=='radio'){
             	this.radioSetChecked(el.getParent());
