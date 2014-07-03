@@ -650,16 +650,25 @@ var SwordSelect = new Class({
                 }
                 this.setCacheArray(tempCacheArr);
             }
+            var codesign=this.box.get('codeSign');
+            var captionsign = this.box.get('captionSign');
             /* 置顶功能 */
             loadData.each(function(node, index) {
                 if($type(node) == 'element') {
                     node = {caption:node.get('caption'),code:node.get('code')}
                 }
+                var content = this.box.get('popdisplay');
+                var title = "";
+                if(!$defined(content)){
+                title = node[captionsign];
+                }else{
+                	title = content.substitute(node);
+                }
                 var li = new Element('div', {
-                    'title':this.genaratePopContent(node),
-                    'text':this.genaratePopContent(node),
-                    'value':node.code,
-                    'caption':node.caption,
+                    'title':title,
+                    'text':title,
+                    'value':node[codesign],
+                    'caption':node[captionsign],
                     'index':index,
                     'class':'swordselect-list-item',
                     'events':{
