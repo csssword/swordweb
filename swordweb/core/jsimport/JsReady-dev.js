@@ -20,7 +20,7 @@ jsR.addWidget({name:"SwordForm",prefixPath:"swordweb/widgets/SwordForm",jsPath:[
 jsR.addWidget({name:"SwordSelect",prefixPath:"swordweb/widgets/SwordSelect",jsPath:['SwordSelect.js'],cssPath:['select.css']});
 jsR.addWidget({name:"SwordGrid",prefixPath:"swordweb/widgets/SwordGrid",jsPath:['SwordTable.js','SwordTable.Tree.js','SwordTable.File2.js','SwordTable.EventDele.js'],cssPath:['SwordTable.css']});
 jsR.addWidget({name:"SwordMove",prefixPath:"swordweb/widgets/SwordMove",jsPath:['SwordMoveBase.js','SwordMove.js'],cssPath:['SwordMove.css']});
-//jsR.addWidget({name:"SwordMoveButton",prefixPath:"swordweb/widgets/SwordMove",jsPath:['SwordMoveBase.js','SwordMoveButton.js'],cssPath:['SwordMove.css']});
+jsR.addWidget({name:"SwordMoveButton",prefixPath:"swordweb/widgets/SwordMove",jsPath:['SwordMoveBase.js','SwordMoveButton.js'],cssPath:['SwordMove.css']});
 jsR.addWidget({name:"PageInit",prefixPath:"swordweb/core/initpage",jsPath:['PageInit.js']});
 jsR.addWidget({name:"SwordToolTips",prefixPath:"swordweb/widgets/SwordToolTips",jsPath:['SwordToolTips.js'],cssPath:['tooltips.css']});
 jsR.addWidget({name:"SwordValidator",prefixPath:"swordweb/widgets/SwordValidator",jsPath:['SwordValidator.js'],cssPath:['validator.css']});
