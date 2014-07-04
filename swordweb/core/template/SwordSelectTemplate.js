@@ -4,7 +4,7 @@
 var SwordSelectTemplate = {
     // 下拉的HTML结构
     'pre':'<table class="swordform_field_wrap" cellspacing="0" cellpadding="0"><tbody><tr><td class="boxtd">',
-    'select':'<input type="text" codeSign="{codeSign}" captionSign="{captionSign}" widget="select" <tpl if="values.get(\'edit\')==\'false\'">readonly="true"</tpl><tpl if="values.get(\'type\')==\'selectsolely\'">mode=2</tpl><tpl if="values.get(\'disable\')==\'true\'">disabled="true" class="swordform_item_oprate swordform_item_input select_input_disable" style="float:left;cursor:default;"</tpl><tpl if="values.get(\'rule\')==\'must\' && values.get(\'disable\')!=\'true\'">style="float:left;background-color:#b5e3df;" class="{class}"</tpl><tpl if="values.get(\'disable\')!=\'true\'&& values.get(\'rule\')!=\'must\'">style="{style}" class="{class}"</tpl>',
+    'select':'<input type="text" codeSign="{codeSign}" captionSign="{captionSign}" pcodeSign="{pcodeSign}" widget="select" <tpl if="values.get(\'edit\')==\'false\'">readonly="true"</tpl><tpl if="values.get(\'type\')==\'selectsolely\'">mode=2</tpl><tpl if="values.get(\'disable\')==\'true\'">disabled="true" class="swordform_item_oprate swordform_item_input select_input_disable" style="float:left;cursor:default;"</tpl><tpl if="values.get(\'rule\')==\'must\' && values.get(\'disable\')!=\'true\'">style="float:left;background-color:#b5e3df;" class="{class}"</tpl><tpl if="values.get(\'disable\')!=\'true\'&& values.get(\'rule\')!=\'must\'">style="{style}" class="{class}"</tpl>',
     'end':' ></td><td class="swordselect-selimg <tpl if="values.get(\'disable\')==\'true\'">swordselect-selimg-disable</tpl>" width="17px" vtype="fldiv"><div style="width:17px;visibility:hidden;"></div></td></tr></tbody></table>',
     // 日期属性
     'attr':'name="{name}" cacheSelected="{cacheSelected}" rule="{rule}" prikey="{prikey}" msg="{msg}" sbmitcontent="{sbmitcontent}" _onChange="{onChange}" _onSelect="{onSelect}" onShow="{onShow}" onHide="{onHide}" onSubmitBefore="{onSubmitBefore}" value="{value}" parent="{parent}" lines="{lines}" lineheight="{height}" dataname="{dataname}" pcode="{pcode}" tid="{tid}" defValue="{defValue}" defIndex="{defIndex}" dataFilter="{dataFilter}" style="float: left;" popWidth="{popWidth}" displayCode="{displayCode}" inputdisplay="{inputdisplay}" popdisplay="{popdisplay}" handInput="{handInput}" addAllItem="{addAllItem}" allItemCode="{allItemCode}" allItemCap="{allItemCap}"',
@@ -20,6 +20,7 @@ var SwordSelectTemplate = {
         'handInput':'false',
         'codeSign':'code',
         'captionSign':'caption',
+        'pcodeSign':'pcode',
         'addAllItem':'false',
         'allItemCode':'',
         'displayCode':'false',

@@ -576,19 +576,20 @@ var SwordSelect = new Class({
     },
     dataFilter:function(loadData) {
         var topCode = this.box.get("pcode");
+        var psign = this.box.get("pcodeSign");
         if(this.isMulti(loadData) && $defined(this.box.get("parent"))) {
             var pcode = this.getParentValue();
             if($chk(pcode)) {
                 loadData = loadData.filter(function(item) {
-                    return ($type(item) == 'element') ? (item.get('pcode') == pcode) : (item.pcode == pcode);
+                    return ($type(item) == 'element') ? (item.get(psign) == pcode) : (item[psign] == pcode);
                 }, this);
             } else {
                 loadData = [];
             }
         } else if(this.isMulti(loadData)) {
-            var b = $defined(topCode) ? [topCode,null,'',undefined] : [null,'',undefined];
+            var b = $defined(topCode) ? [topCode,null,'',undefined,'null'] : [null,'',undefined,'null'];
             loadData = loadData.filter(function(item) {
-                return ($type(item) == 'element') ? b.contains(item.get('pcode')) : b.contains(item.pcode);
+                return ($type(item) == 'element') ? b.contains(item.get(psign)) : b.contains(item[psign]);
             }, this);
         }
         return loadData;
