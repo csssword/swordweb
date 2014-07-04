@@ -494,6 +494,8 @@ SwordToolBar.implement({
         }
         if($chk(altMes))
         	newDoc.set("title",altMes);
+
+
         var newDes = new Element('div', {
             'class' : this.options.showType!='mini'?(obj.get('enabled') == 'true'
                     || obj.get('enabled') == null ? this.globe.text.enabled
@@ -580,6 +582,20 @@ SwordToolBar.implement({
         }
         if($chk(altMes))
         	newDiv.set("title",altMes);
+
+
+        var quickKey = obj.get("quickKey");
+        var n_caption="";
+        if($chk(quickKey)){
+            var temp_arr = quickKey.match(/\+[^#]+/g);
+            if ($chk(temp_arr)){
+                for(var i=0,len=temp_arr.length;i<len;i++){
+                    temp_arr[i] = temp_arr[i].replace("+","");
+                }
+                n_caption = '(<u>'+temp_arr.join('').toUpperCase() +'</u>)';
+            }
+        }
+
         var newDes = new Element('div', {
             'class' : this.options.showType!='mini'?($chk(obj.get('enabled')) ? (obj
                     .get('enabled') == 'true' ? this.globe.text.enabled
@@ -593,7 +609,7 @@ SwordToolBar.implement({
                                     : this.mini_globe.text.disabled)
                                     : this.mini_globe.text.enabled)),
             'name' : 'caption',
-            'html' : obj.get('caption') == null ? caption : newDesCap
+            'html' :  obj.get('caption') == null ? (caption + n_caption) : (newDesCap+ n_caption)
         });
         newDiv.adopt(newPic, newDes);
         if($chk(obj.get('x'))){
@@ -894,6 +910,7 @@ var ItemEvent = new Class({
         }
         if (!$chk(this.options.onMouseover)) {
             this.addEvent('onMouseover', function(e) {
+                e.target = $(e.target);
                 var div = e.target.getParent("div[name='"+ this.options.name + "']") ;
                 if(!div)return;
                 var docClass = div.get('class')[0];
