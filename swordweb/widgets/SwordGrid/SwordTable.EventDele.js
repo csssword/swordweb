@@ -365,20 +365,22 @@ SwordGrid.implement({
         sel.box.set('code', el.get('code'));   //在box上赋值，好让onfinish能取到
         sel.box.set('realvalue', el.get('realvalue'));
 
-        sel.show.delay(1, sel); //延迟执行是为了。。略过全局的click事件,不被hide掉
+//        sel.show.delay(1, sel); //延迟执行是为了。。略过全局的click事件,不被hide掉
 
-        el.set('createSelect', 'true');
+        sel.box.set('createSelect', 'true');
+        sel.box.set('codeSign',el.get('codeSign'));
+        sel.box.set('captionSign',el.get('captionSign'));
+        sel.box.set('pcodeSign',el.get('pcodeSign'));
 
         //添加焦点转移事件
 //                    this.addNextFocusEvent(sel.box);
-
         sel.box.focus();
         sel.box.focus(); //todo 为什么要2次才能获得焦点？？？
-        if(Browser.Engine.webkit){
-        	event.cancelBubble = true;
-        }else{
+//        if(Browser.Engine.webkit){
+//        	event.cancelBubble = true;
+//        }else{
         	sel.show.delay(1, sel); //延迟执行是为了。。略过全局的click事件,不被hide掉
-        }
+//        }
     }
     
     ,dateClickDele:function(e,defEl){

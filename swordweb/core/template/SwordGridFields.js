@@ -144,6 +144,9 @@ var SwordGridFields = new Class({
 	            ,caption:""
 	            ,msg:""
 	            ,style:""
+	            ,codeSign:'code'
+                ,captionSign:'caption'
+                ,pcodeSign:'pcode'
 		}
 		,pulltree:{
 		 	name : ""//组件name

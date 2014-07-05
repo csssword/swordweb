@@ -2459,7 +2459,7 @@ var SwordGrid = new Class({
                                     }
                                 }
                                 if(els.length == 0) {
-                                    pc.alert('请至少选择一行！');
+                                    swordAlert('请至少选择一行！');
                                     return;
                                 }
 
