@@ -84,14 +84,36 @@ var SwordToolBar = new Class({
             	//container.setStyles({'border':'none','border-bottom':'1px solid #7F9DB9'});
             }
     	}
+        //Toolbar组件换行，当this.options.showType == mini 时不需要设置高度24px
+        /*
     	if(this.options.isFixed=='true'&&!this.options.bindTo){
 	    	this.pNode().adopt(new Element('div', {
 	    		'styles': {
 	    			'height':this.options.showType=='mini'?'24px':'69px'
 	            	}
 	        }));
-    	}
+    	}*/
     	this.pNode().adopt(container);
+        if (this.options.isFixed=='true'&&!this.options.bindTo) {
+            //ToolBar组件置顶，增加scroll事件
+            var top = container.getPosition().y, pos = container.getStyle("position");
+            $(window).addEvent("scroll", function () {
+                var scrolls = document.getScroll().y;
+                if (scrolls > top) {
+                    container.setStyles({
+                        position: "fixed",
+                        top: 0,
+                        width: "100%"
+                    });
+                } else {
+                    container.setStyles({
+                        position: pos,
+                        top: top,
+                        width: "100%"
+                    });
+                }
+            });
+        }
         this.containerBuffer = container;
         this.setEnabledStatus(container);
     },
@@ -752,9 +774,11 @@ SwordToolBar.implement({
             'class' : this.options.showType!='mini'?this.globe.box.right:this.mini_globe.box.right
         });
         container.adopt(containerLeft, containerRight);
+        //Toolbar组件换行时不需要设置 toolbar_fixed
+        /*
         if(this.options.isFixed=='true'&&!this.options.bindTo){
         	container.addClass('toolbar_fixed');
-        }
+        }*/
         return container;
     },
     createBackBox : function(container) {

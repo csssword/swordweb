@@ -100,8 +100,8 @@
 .tb_mini_texthover{background:url(images/toolbarbg_mov.jpg) repeat-x right; padding:3px 6px 5px 5px; height:13px;}
 .tb_mini_click{background:url(images/toolbarbg_click.jpg) left 0; }
 .tb_mini_textclick{background:url(images/toolbarbg_click.jpg) repeat-x right; padding:3px 6px 5px 5px; height:13px;}
-.tb_mini_box {border:1px solid #7DB5DE; border-bottom:0; background:#ECF4FA; height:24px;}
-.tb_mini_box .l {float:left; width:10px; height:24px; display:block;}
+.tb_mini_box {border:1px solid #7DB5DE; border-bottom:0; background:#ECF4FA; }
+.tb_mini_box .l {float:left; width:10px; height:24px; display:inline;}
 .tb_mini_box .c {overflow:hidden;}
 .tb_mini_box .r {float:right; width:0px; height:24px; display:block;}
 .tb_mini_a_enabled {text-decoration:none;}
