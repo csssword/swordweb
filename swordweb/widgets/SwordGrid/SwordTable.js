@@ -206,7 +206,7 @@ var SwordGrid = new Class({
         ,onAfterCreateRow:$empty
         ,onBeforeCreateRow:$empty
         ,onAfterInsertRow:$empty
-        ,valfocus:'true' //表格焦点移动的时候如果校验不通过是否可以移动到下一元素 true可以移动 false不可以移动
+        ,valfocus:"true"//表格焦点移动的时候如果校验不通过是否可以移动到下一元素 true可以移动 false不可以移动
         ,noNextEvent:null//表格焦点移动没有时调用方法
         /**
          * 在创建完一个元素之后触发；在表格组件的根标签上可以声明此属性        rowData,cellValue,cellEl,itemEl
@@ -1767,7 +1767,6 @@ var SwordGrid = new Class({
         //隐藏 userdefine 元素
         this.options.pNode.getChildren('div[type=userdefine]').setStyle('display', 'none');
         //没有数据行的话，隐藏下拉树
-        //debugger;
         this.options.pNode.getChildren('div[type=pulltree]').each(function(t) {
         	var treeName=t.get('treename'),treeDataName=t.get("dataname")||t.get("dataName");
             var treeObj=$w(treeName);
@@ -4490,7 +4489,6 @@ var SwordGrid = new Class({
     ,addNextFocusEvent:function(srcEl, obj) {
     	srcEl.addEvent('keyup', function(event) {
             var e = Event(event);
-
             if(e.key == 'enter'||e.key== 'left' || e.key== 'up' || e.key== 'right' || e.key== 'down' ) {
             	var rule = srcEl.get('rule');
         		if($chk(rule)){
@@ -4528,7 +4526,6 @@ var SwordGrid = new Class({
         }
         var nextEl;
         if( nextOrder=="right" || nextOrder=="enter"  || (!$chk(nextOrder) && this.options.nextOrder == 'row') ) {//以行的方向焦点转移，默认的方向
-            
             nextEl = this.findNextFocusInOneRow(startEl);
             while(!nextEl) {
                 var nextRow = this.getRow(startEl).getNext();
@@ -6198,50 +6195,23 @@ var SwordGrid = new Class({
 		};
 		var json = {};
 		for(o in obj.tds){
-			json[o] = {'value':obj.tds[o].value};
+			var val = obj.tds[o].value;
+			if($chk(val)){
+				json[o] = {'value':obj.tds[o].value};
+			}
 		}
 
 		fd['data'] = json;
 		return fd;
 	},
     gridToForm : function(dataObj,sGrid_data_row_div,e){
-    	
-        
     	var caption = this.options.caption||"";
-	    var formName = "pop_panel_"+this.options.name+"_form";
-	    var pop_panel = $(document.body).getElement("div[class='pop_panel']");
-	    var pop_mask_div = $(document.body).getElement("div[class='pop_mask_div']");
-	    var pop_panel_form="",pop_panel_form_item="",itemVal="",itemRule="",itemType="",itemName="",itemCpation="",i = 1,pNode="",itemDisable="",itemFormat="";
-	    var pop_panel_table = new Element("div",{'class':'pop_panel_div'});
-		var pop_panel_table_sbutton = $(document.body).getElement("input[class='pop_panel_sbutton']");
-		
-       	if(pop_panel_table_sbutton){
-       		$(pop_panel_table_sbutton).destroy();
-       		$(pop_panel_table_cbutton).destroy();
-       	}
-       	
-	    pop_panel_table_sbutton = new Element("input",{'type':'button','value':'确定','class':'pop_panel_sbutton'}).inject(pop_panel_table);
-	    pop_panel_table_cbutton = new Element("input",{'type':'button','value':'取消','class':'pop_panel_cbutton'}).inject(pop_panel_table);
-	    
-	    if(!pop_mask_div){
-	    	pop_mask_div = 	new Element("div", {'class':'pop_mask_div'}).inject($(document.body));
-	    	pop_mask_div.setStyle("height",$(document.body).getScrollSize().y);
-	    	pop_panel =	new Element("div", {'class':'pop_panel'}).inject($(document.body));
-	    	var w = this.options.openerWidth;
-	    	if(w.indexOf("px")<1) w =  w+"px";
-	    	pop_panel.setStyle("width",w)
-	    }else{
-			$(pop_panel.getElement("div[sword='SwordForm']")).destroy();
-	    }
-	    var onne = this.options.openerNoNextEvent||"";
-	    
-		pop_panel_form = new Element("div", {'sword':'SwordForm','name':formName,'caption':caption,'userdefine':'true','noNextEvent':onne,'vType':'intime'}).inject(pop_panel);
-		if(caption!=""){
-			pop_panel_form.set("panel","true");
-		}
-		var pop_panel_form_table='<table class="tab_form" border="0" cellpadding="0" cellspacing="0"><colgroup><col style="width: 16%"></col><col style="width: 16%"></col><col style="width: 16%"></col><col style="width: 16%"></col><col style="width: 16%"></col><col style="width: 16%"></col></colgroup><tr>'
-		pNode = this.options.pNode; 
-		var so = pc.getSelect();
+    	var gridname = this.options.name;
+	    var formName = "sword_"+gridname+"_form";
+	    var docbody = $(document.body);
+	    var pop_panel = docbody.getElement("div[class='pop_panel'][name='"+gridname+"'");
+	    var pop_mask_div = "";
+	    var so = pc.getSelect();
 		var co = pc.getCalendar();
 		if(so.box&&so.box.get('display')=="true"){
 			so.hide();
@@ -6252,7 +6222,34 @@ var SwordGrid = new Class({
 		if(co.dateInput&&co.dateInput.get('show')=="true"){
 			co.hide();
 		}
-
+	    if($chk(pop_panel)){
+	    	pop_mask_div = docbody.getElement("div[class='pop_mask_div']");
+	    	pop_mask_div.setStyles({"height":docbody.getScrollSize().y,"display":""});
+	    	pop_panel.setStyle("display","");
+	    	$w(formName).initData(this.objToForm(dataObj,formName));
+	    }else{
+	    var form_item="",itemVal="",itemRule="",itemType="",itemName="",itemCpation="",i = 1,pNode="",itemDisable="",itemFormat="";
+	    var pop_panel_table = new Element("div",{'class':'pop_panel_div'});
+	    var pop_panel_table_sbutton = new Element("input",{'type':'button','value':'确定','class':'pop_panel_sbutton'}).inject(pop_panel_table);
+	    var pop_panel_table_cbutton = new Element("input",{'type':'button','value':'取消','class':'pop_panel_cbutton'}).inject(pop_panel_table);
+	    
+	    pop_mask_div = 	new Element("div", {'class':'pop_mask_div'}).inject(docbody);
+	    pop_mask_div.setStyle("height",docbody.getScrollSize().y);
+	    pop_panel =	new Element("div", {'class':'pop_panel'}).inject(docbody);
+	    var w = this.options.openerWidth;
+	    if(w.indexOf("px")<1) w =  w+"px";
+	    pop_panel.setStyle("width",w);
+	    var onne = this.options.openerNoNextEvent||"";
+	    
+		var pop_panel_form = new Element("div", {'sword':'SwordForm','name':formName,'caption':caption,'userdefine':'true','noNextEvent':onne,'vType':'intime'}).inject(pop_panel);
+		if(caption!=""){
+			pop_panel_form.set("panel","true");
+		}
+		var gtable = [];
+		gtable.push('<table class="tab_form" border="0" cellpadding="0" cellspacing="0"><colgroup><col style="width: 20%"></col><col style="width: 30%"></col><col style="width: 20%"></col><col style="width: 30%"></col></colgroup><tr>');
+//		var pop_panel_form_table=
+		pNode = this.options.pNode; 
+        var ellen = sGrid_data_row_div.getElements("div").length;
     	sGrid_data_row_div.getElements(".sGrid_data_row_item_div").each(function(item,index){
     		var f = (i)/2+""; 
     		var tpl = this.options.pNode.getElements("div[class='sGrid_data_row_item_div']")[index];
@@ -6272,64 +6269,156 @@ var SwordGrid = new Class({
 			}else{
 				itemVal = item.get("showValue")||"";
 			}
-			
+			gtable.push('<th>');
+			gtable.push(itemCaption);
+			gtable.push("</th><td>");
 			if(itemType=="a"){
 				var oc = tpl.get("_onclick")||"";
-			 	pop_panel_form_item += '<th>'+itemCaption+'</th><td><a href="#a" onclick=\"'+oc+'\">'+itemVal+'</a></td>';
+//				gtable.push('<th>');
+//				gtable.push(itemCaption);
+				gtable.push('<a href="#a" onclick=\"');
+				gtable.push(oc);
+				gtable.push('\">');
+				gtable.push(itemVal);
+				gtable.push('</a></td>');
+//			 	form_item += '<th>'+itemCaption+'</th><td><a href="#a" onclick=\"'+oc+'\">'+itemVal+'</a></td>';
 			}else if(itemType=="userdefine"){
-				pop_panel_form_item += '<th>'+itemCaption+'</th><td>'+item.innerHTML+'</td>';
+//				gtable.push('<th>');
+//				gtable.push(itemCaption);
+//				gtable.push('</th><td>');
+				gtable.push(item.innerHTML);
+				gtable.push('</td>');
+//				form_item += '<th>'+itemCaption+'</th><td>'+item.innerHTML+'</td>';
 			}else if(itemType=="pulltree"){
-				pop_panel_form_item += '<th>'+itemCaption+'</th><td><div name=\"'+item.get("treename")+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+item.get("title")+'\" defRealvalue=\"'+itemVal+'\"></div></td>';
-			}else if(itemType=="select"){
+//				gtable.push('<th>');
+//				gtable.push(itemCaption);
+				gtable.push('<div name=\"');
+				gtable.push(item.get("treename"));
+				gtable.push('\" disable=\"');
+				gtable.push(itemDisable);
+				gtable.push('\" type=\"');
+				gtable.push(itemType);
+				gtable.push('\" rule=\"');
+				gtable.push(itemRule);
+				gtable.push('\" defValue=\"');
+				gtable.push(item.get("title"));
+				gtable.push('\" defRealvalue=\"');
+				gtable.push(itemVal);
+				gtable.push('\"></div></td>');
+//				form_item += '<th>'+itemCaption+'</th><td><div name=\"'+item.get("treename")
+//				+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+item.get("title")
+//				+'\" defRealvalue=\"'+itemVal+'\"></div></td>';
+			}else if(itemType=="select"){debugger;
 				var df =  tpl.get("dataFilter")||"",dn = tpl.get("dataName")||"",sc = tpl.get("sbmitcontent")||"",pd = tpl.get("popdisplay")||"",ind = tpl.get("inputdisplay")||"";
 				if(item.get("code")&&item.get("caption")&&dn==""){
 					itemVal = "code,"+item.get("code")+"|caption,"+item.get("caption");
 				}
-					pop_panel_form_item += '<th>'+itemCaption+'</th><td><div name=\"'+itemName+'\" dataFilter=\"'+df+'\" sbmitcontent=\"'+sc+'\" popdisplay=\"'+pd+'\" inputdisplay=\"'+ind+'\"  disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" dataName=\"'+dn+'\" defValue=\"'+itemVal+'\"></div></td>';
+				
+				gtable.push('<div name=\"');
+				gtable.push(itemName);
+				gtable.push('\" dataFilter=\"');
+				gtable.push(df);
+				gtable.push('\" sbmitcontent=\"');
+				gtable.push(sc);
+				gtable.push('\" popdisplay=\"');
+				gtable.push(pd);
+				gtable.push('\" inputdisplay=\"');
+				gtable.push(ind);
+				gtable.push('\"  disable=\"');
+				gtable.push(itemDisable);
+				gtable.push('\" type=\"');
+				gtable.push(itemType);
+				gtable.push('\" rule=\"');
+				gtable.push(itemRule);
+				gtable.push('\" dataName=\"');
+				gtable.push(dn);
+				gtable.push('\" pcodesign=\"');
+				gtable.push(item.get("pcodesign"));
+				gtable.push('\" captionsign=\"');
+				gtable.push(item.get("captionsign"));
+				gtable.push('\" codesign=\"');
+				gtable.push(item.get("codesign"));
+				gtable.push('\" child=\"');
+				gtable.push(item.get("child"));
+				gtable.push('\" parent=\"');
+				gtable.push(item.get("parent"));
+				gtable.push('\" defValue=\"');
+				gtable.push(itemVal);
+				gtable.push('\" code=\"');
+				gtable.push(item.get("code"));
+				gtable.push('\"></div></td>');
+//					form_item += '<th>'+itemCaption+'</th><td><div name=\"'+itemName+'\" dataFilter=\"'+df+'\" sbmitcontent=\"'
+//					+sc+'\" popdisplay=\"'+pd+'\" inputdisplay=\"'+ind+'\"  disable=\"'+itemDisable+'\" type=\"'+itemType+
+//					'\" rule=\"'+itemRule+'\" dataName=\"'+dn+'\" defValue=\"'+itemVal+'\"></div></td>';
 			}else{
 				var ob = tpl.get("_onBlur")||"";
-				pop_panel_form_item += '<th>'+itemCaption+'</th><td><div name=\"'+itemName+'\"  onBlur=\"'+ob+'\"  format=\"'+ itemFormat+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+itemVal+'\"></div></td>';
+				gtable.push('<div name=\"');
+				gtable.push(itemName);
+				gtable.push('\"  onblur=\"');
+				gtable.push(ob);
+				gtable.push('\"  format=\"');
+				gtable.push(itemFormat);
+				gtable.push('\" disable=\"');
+				gtable.push(itemDisable);
+				gtable.push('\" type=\"');
+				gtable.push(itemType);
+				gtable.push('\" rule=\"');
+				gtable.push(itemRule);
+				gtable.push('\" defValue=\"');
+				gtable.push(itemVal);
+				gtable.push('\"></div></td>');
+//				form_item += '<th>'+itemCaption+'</th><td><div name=\"'+itemName+'\"  onblur=\"'+ob+'\"  format=\"'+ 
+//				itemFormat+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+
+//				itemVal+'\"></div></td>';
 			}
     	 	
     	 	if(f.indexOf(".")==-1){
-    	 		pop_panel_form_item +=  "</tr>";
-	    	 			if(index<sGrid_data_row_div.getElements("div").length){
-	    					pop_panel_form_item += "<tr>"	 
+//    	 		form_item +=  "</tr>";
+    	 		gtable.push("</tr>");
+	    	 			if(index < ellen){
+	    	 				gtable.push("<tr>");
+//	    					form_item += "<tr>"	 
 	    				}
     				}
 	    	 	i++;
 	    	 	
     	}.bind(this)); 
-    	
-    	pop_panel_form_table += pop_panel_form_item +"</table>"; 
-    	pop_panel_form.set("html",pop_panel_form_table)  ;
+    	gtable.push("</table>");
+//    	pop_panel_form_table += form_item +"</table>"; 
+    	pop_panel_form.set("html",gtable.join(""));
 
     	pop_panel_table_sbutton.addEvent('click', function() {
     		if(!$w(formName).validate()) return;
 	    	var rowData = this.formToRow($w(formName).getSubmitData().data);
-			var row=$w(this.options.name).getCheckedRow();
+			var row=$w(gridname).getCheckedRow();
 			var treeDivEl = row.getElement("[type='pulltree']");
 			if(treeDivEl){
 				var treeName=treeDivEl.get("treename"),treedivname=treeDivEl.get("name");
 				rowData.tds[treedivname] = rowData.tds[treeName];
 			}
-			$w(this.options.name).updateRow(row,rowData)   
-			$(pop_panel).destroy();
-			$(pop_mask_div).destroy();
-            pc.widgets.erase(formName);
+			$w(gridname).updateRow(row,rowData);
+			pop_panel.setStyle("display","none");
+//			$(pop_panel).destroy();
+			pop_mask_div.setStyle("display","none");
+//			$(pop_mask_div).destroy();
+//            pc.widgets.erase(formName);
     	}.bind(this));
     	
-		pop_panel_table_cbutton.addEvent('click', function() {	
-			$(pop_panel).destroy();
-			$(pop_mask_div).destroy();
-            pc.widgets.erase(formName);
+		pop_panel_table_cbutton.addEvent('click', function() {
+			pop_panel.setStyle("display","none");
+//			$(pop_panel).destroy();
+			pop_mask_div.setStyle("display","none");
+//			$(pop_mask_div).destroy();
+//            pc.widgets.erase(formName);
     	}.bind(this));
     	
 		pop_panel.addEvent('keydown', function(e) {	
 			if(e.code==27){
-				$(pop_panel).destroy();
-				$(pop_mask_div).destroy();
-                pc.widgets.erase(formName);
+//				$(pop_panel).destroy();
+				pop_panel.setStyle("display","none");
+				pop_mask_div.setStyle("display","none");
+//				$(pop_mask_div).destroy();
+//                pc.widgets.erase(formName);
 			}
 		
     	}.bind(this));
@@ -6348,12 +6437,14 @@ var SwordGrid = new Class({
         var dragObj = new Drag(pop_panel, {
             snap :5,
             limit: {
-                x:[0,$(document.body).getWidth()- pop_panel.getWidth()],
-                y:[0,$(document.body).getHeight()-pop_panel.height-20]
+                x:[0,docbody.getWidth()- pop_panel.getWidth()],
+                y:[0,docbody.getHeight()-pop_panel.height-20]
             },
             handle: pop_panel
             //
         });
+	    }
+	   
     }
 
 });

@@ -892,9 +892,11 @@ var SwordSelect = new Class({
         this.box.set('code', nowCode);
         if(oCode == nowCode)excuteChange = false;
         this.box.store('allDb', alldb);
-        this.box.set('realvalue', this.genarateContent(this.currentElement.retrieve("allDb")));
+//        var curdb = this.currentElement.retrieve("allDb");
+        var genCon = alldb[this.box.get('codeSign')];
+        this.box.set('realvalue', genCon);
         if($chk(this.getBoxParent())){
-            this.getBoxParent().set({'code':this.currentElement.get('value'),'realvalue':this.genarateContent(this.currentElement.retrieve("allDb"))});
+            this.getBoxParent().set({'code':this.currentElement.get('value'),'realvalue':genCon});
             if(excuteChange) {
                 var child = this.getBoxParent().get("child") || this.box.get("child");
                 var space = this.getBoxParent().retrieve("space") || this.getBoxParent().getParent("div.swordfrom_div");
@@ -918,7 +920,7 @@ var SwordSelect = new Class({
                 this.getFunc(this.options.onChange)[0](this.currentElement, opData[this.selectedIndex], this,oCode);
             } else {
                 //延迟加载数据
-                this.getFunc(this.options.onChange)[0](this.currentElement, this.currentElement.retrieve('allDb'), this,oCode);
+                this.getFunc(this.options.onChange)[0](this.currentElement, alldb, this,oCode);
             }
         }
         this.options.onSelect = this.box.get("_onSelect")||this.options.onSelect;

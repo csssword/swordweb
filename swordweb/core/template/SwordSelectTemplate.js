@@ -91,28 +91,30 @@ $extend(SwordSelectTemplate, {
     },
     dataFilter:function(el, loadData) {
         var topCode = el.get("pcode");
+        var psign = el.get("pcodeSign");
         if(this.isMulti(el, loadData) && $defined(el.get("parent"))) {
             var pcode = this.getParentValue(el);
             if($chk(pcode)) {
                 loadData = loadData.filter(function(item) {
-                    return ($type(item) == 'element') ? (item.get('pcode') == pcode) : (item.pcode == pcode);
+                    return ($type(item) == 'element') ? (item.get(psign) == pcode) : (item[psign] == pcode);
                 }, this);
             } else {
                 loadData = [];
             }
         } else if(this.isMulti(el, loadData)) {
-            var b = $defined(topCode) ? [topCode,null,'',undefined] : [null,'',undefined];
+            var b = $defined(topCode) ? [topCode,null,'',undefined,'null'] : [null,'',undefined,'null'];
             loadData = loadData.filter(function(item) {
-                return ($type(item) == 'element') ? b.contains(item.get('pcode')) : b.contains(item.pcode);
+                return ($type(item) == 'element') ? b.contains(item.get(psign)) : b.contains(item[psign]);
             }, this);
         }
         return loadData;
     },
     isMulti:function(el, data) {
+    	var psign = el.get("pcodeSign");
         if(!$defined(data)) {
             return $defined(el.get('child')) || $defined(el.get('parent'));
         }
-        return $defined(el.get('child')) || $defined(el.get('parent')) || (($type(data[0]) == 'element') ? data[0].get('pcode') : $H(data[0]).has('pcode'));
+        return $defined(el.get('child')) || $defined(el.get('parent')) || (($type(data[0]) == 'element') ? data[0].get(psign) : $H(data[0]).has(psign));
     },
     getParentValue:function(el) {
         var pBox = el.getParent("div").getElements("*[name='" + el.get("parent") + "']")[0];
@@ -125,7 +127,7 @@ $extend(SwordSelectTemplate, {
         if(!$defined(content))
             content = el.get('sbmitcontent');
         if(!$defined(content)) {
-            content = "{code}";
+            content = "{"+el.get("codeSign")+"}";
         }
         if($type(obj) == "element") {
             obj = {'code':obj.get("code"),"caption":obj.get("caption")};
@@ -134,7 +136,7 @@ $extend(SwordSelectTemplate, {
     },genarateInputContent:function(el, obj) {
         var content = el.get('inputdisplay');
         if(!$defined(content)){
-        content = "{caption}";
+        	content = "{"+el.get("captionSign")+"}";
         return obj[el.get('captionSign')];
         }else{
         	return this.genarateContent(el,obj, content);
@@ -169,6 +171,9 @@ $extend(SwordSelectTemplate, {
             el.set({'value':this.genarateInputContent(el, obj),'code':d.get('code'),'realvalue':this.genarateContent(el, obj)});
             el.store("allDb", obj);
         } else {
+        	var codesign = el.get("codeSign");
+        	var captionSign = el.get("captionSign");
+        	var pcodeSign = el.get("pcodeSign");
             var data = this.getOptionsData(el,formObj);
             if(!$defined(data))return;
             if($defined(d) || $chk(d)) {
@@ -176,9 +181,9 @@ $extend(SwordSelectTemplate, {
                     if($type(node) == 'element') {
                         node = {caption:node.get('caption'),code:node.get('code')};
                     }
-                    if(node.code == d) {
+                    if(node[codesign] == d) {
                         rv = this.genarateContent(el, node);
-                        el.set({'value':this.genarateInputContent(el, node),'code':node.code,'realvalue':this.genarateContent(el, node)});
+                        el.set({'value':this.genarateInputContent(el, node),'code':node[codesign],'realvalue':rv});
                         el.store("allDb", node);
                     }
                 }, this);
@@ -189,7 +194,7 @@ $extend(SwordSelectTemplate, {
                         node = {caption:node.get('caption'),code:node.get('code')};
                     }
                     rv = this.genarateContent(el, node);
-                    el.set({'value':this.genarateInputContent(el, node),'code':node.code,'realvalue':this.genarateContent(el, node)});
+                    el.set({'value':this.genarateInputContent(el, node),'code':node.code,'realvalue':rv});
                     el.store("allDb", node);
                 }
             }
