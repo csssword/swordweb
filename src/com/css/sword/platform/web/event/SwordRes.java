@@ -75,9 +75,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addForm(java.lang.String,
 	 *      sun.jdbc.rowset.CachedRowSet)
 	 */
-	public void addForm(String widgetName, CachedRowSet crs) {
-		resDataSet.addForm(widgetName, crs);
-	}
+//	public void addForm(String widgetName, CachedRowSet crs) {
+//		resDataSet.addForm(widgetName, crs);
+//	}
 
 	/**
 	 * (non-Javadoc)
@@ -112,10 +112,10 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 *      sun.jdbc.rowset.CachedRowSet,
 	 *      com.css.sword.platform.web.mvc.cachecode.ICacheCodeConfig)
 	 */
-	public void addForm(String widgetName, CachedRowSet crs,
-			ICacheCodeConfig config) {
-		resDataSet.addForm(widgetName, crs, config);
-	}
+//	public void addForm(String widgetName, CachedRowSet crs,
+//			ICacheCodeConfig config) {
+//		resDataSet.addForm(widgetName, crs, config);
+//	}
 
 	/**
 	 * (non-Javadoc)
@@ -123,9 +123,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addMultiSelectWithDataName(java.lang.String,
 	 *      sun.jdbc.rowset.CachedRowSet)
 	 */
-	public void addMultiSelectWithDataName(String widgetName, CachedRowSet crs) {
-		resDataSet.addMultiSelectWithDataName(widgetName, crs);
-	}
+//	public void addMultiSelectWithDataName(String widgetName, CachedRowSet crs) {
+//		resDataSet.addMultiSelectWithDataName(widgetName, crs);
+//	}
 
 	/**
 	 * (non-Javadoc)
@@ -133,9 +133,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addMultiSelectWithName(java.lang.String,
 	 *      sun.jdbc.rowset.CachedRowSet)
 	 */
-	public void addMultiSelectWithName(String widgetName, CachedRowSet crs) {
-		resDataSet.addMultiSelectWithName(widgetName, crs);
-	}
+//	public void addMultiSelectWithName(String widgetName, CachedRowSet crs) {
+//		resDataSet.addMultiSelectWithName(widgetName, crs);
+//	}
 
 	/**
 	 * (non-Javadoc)
@@ -162,9 +162,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addSelectWithDataName(java.lang.String,
 	 *      sun.jdbc.rowset.CachedRowSet)
 	 */
-	public void addSelectWithDataName(String widgetName, CachedRowSet crs) {
-		resDataSet.addSelectWithDataName(widgetName, crs);
-	}
+//	public void addSelectWithDataName(String widgetName, CachedRowSet crs) {
+//		resDataSet.addSelectWithDataName(widgetName, crs);
+//	}
 
 	/**
 	 * (non-Javadoc)
@@ -267,26 +267,26 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		resDataSet.addTable(widgetName, list);
 	}
 
-	public void addTable(String widgetName, CachedRowSet crs, int totalRows,
-			int pageNum, int rowsPerPage, String sortName,
-			PaginationManager.SortFlag sf) {
-
-		PaginationManager.setParams(widgetName, PaginationManager.PAGE_NUMBER,
-				pageNum);
-		PaginationManager.setParams(widgetName, PaginationManager.TOTAL_NUMBER,
-				rowsPerPage);
-		PaginationManager.setTotalRecorder(widgetName, totalRows);
-		PaginationManager.setCommonConfig(widgetName,
-				PaginationManager.getRdoDatas());
-		if (sortName != null)
-			PaginationManager.setParams(widgetName,
-					PaginationManager.SORT_FLAG, sf.toString());
-		if (sf != null)
-			PaginationManager.setParams(widgetName,
-					PaginationManager.SORT_NAME, sortName);
-
-		resDataSet.addTable(widgetName, crs);
-	}
+//	public void addTable(String widgetName, CachedRowSet crs, int totalRows,
+//			int pageNum, int rowsPerPage, String sortName,
+//			PaginationManager.SortFlag sf) {
+//
+//		PaginationManager.setParams(widgetName, PaginationManager.PAGE_NUMBER,
+//				pageNum);
+//		PaginationManager.setParams(widgetName, PaginationManager.TOTAL_NUMBER,
+//				rowsPerPage);
+//		PaginationManager.setTotalRecorder(widgetName, totalRows);
+//		PaginationManager.setCommonConfig(widgetName,
+//				PaginationManager.getRdoDatas());
+//		if (sortName != null)
+//			PaginationManager.setParams(widgetName,
+//					PaginationManager.SORT_FLAG, sf.toString());
+//		if (sf != null)
+//			PaginationManager.setParams(widgetName,
+//					PaginationManager.SORT_NAME, sortName);
+//
+//		resDataSet.addTable(widgetName, crs);
+//	}
 
 	/**
 	 * (non-Javadoc)
@@ -294,9 +294,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addTable(java.lang.String,
 	 *      sun.jdbc.rowset.CachedRowSet)
 	 */
-	public void addTable(String widgetName, CachedRowSet crs) {
-		resDataSet.addTable(widgetName, crs);
-	}
+//	public void addTable(String widgetName, CachedRowSet crs) {
+//		resDataSet.addTable(widgetName, crs);
+//	}
 
 	/**
 	 * (non-Javadoc)
@@ -305,10 +305,10 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 *      sun.jdbc.rowset.CachedRowSet,
 	 *      com.css.sword.platform.web.mvc.cachecode.ICacheCodeConfig)
 	 */
-	public void addTable(String widgetName, CachedRowSet crs,
-			ICacheCodeConfig config) {
-		resDataSet.addTable(widgetName, crs, config);
-	}
+//	public void addTable(String widgetName, CachedRowSet crs,
+//			ICacheCodeConfig config) {
+//		resDataSet.addTable(widgetName, crs, config);
+//	}
 
 	// xg
 
@@ -343,9 +343,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addTree(java.lang.String,
 	 *      sun.jdbc.rowset.CachedRowSet, boolean)
 	 */
-	public void addTree(String widgetName, CachedRowSet crs, boolean loadData) {
-		resDataSet.addTree(widgetName, crs, loadData);
-	}
+//	public void addTree(String widgetName, CachedRowSet crs, boolean loadData) {
+//		resDataSet.addTree(widgetName, crs, loadData);
+//	}
 
 	/**
 	 * (non-Javadoc)
@@ -353,9 +353,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addTree(java.lang.String,
 	 *      sun.jdbc.rowset.CachedRowSet)
 	 */
-	public void addTree(String widgetName, CachedRowSet crs) {
-		resDataSet.addTree(widgetName, crs);
-	}
+//	public void addTree(String widgetName, CachedRowSet crs) {
+//		resDataSet.addTree(widgetName, crs);
+//	}
 
 	/**
 	 * (non-Javadoc)
@@ -410,9 +410,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	 * @see com.css.sword.platform.web.event.IResData#addTable(java.lang.String,
 	 *      sun.jdbc.rowset.CachedRowSet, java.lang.String[])
 	 */
-	public void addTable(String widgetName, CachedRowSet crs, String... config) {
-		resDataSet.addTable(widgetName, crs, config);
-	}
+//	public void addTable(String widgetName, CachedRowSet crs, String... config) {
+//		resDataSet.addTable(widgetName, crs, config);
+//	}
 
 	public void addMessage(Object value) {
 		resDataSet.addRootAttr("message", value);
@@ -426,9 +426,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		resDataSet.addJSTL(name, data);
 	}
 
-	public void addCheckBoxWithDataName(String dataName, CachedRowSet crs) {
-		resDataSet.addCheckBoxWithDataName(dataName, crs);
-	}
+//	public void addCheckBoxWithDataName(String dataName, CachedRowSet crs) {
+//		resDataSet.addCheckBoxWithDataName(dataName, crs);
+//	}
 
 	public void addCheckBoxWithDataName(String dataName, Map<String, String> map) {
 		resDataSet.addCheckBoxWithDataName(dataName, map);
@@ -438,9 +438,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		resDataSet.addCheckBoxWithDataName(dataName, obj);
 	}
 
-	public void addCheckBoxWithWidgetName(String widgetName, CachedRowSet crs) {
-		resDataSet.addCheckBoxWithWidgetName(widgetName, crs);
-	}
+//	public void addCheckBoxWithWidgetName(String widgetName, CachedRowSet crs) {
+//		resDataSet.addCheckBoxWithWidgetName(widgetName, crs);
+//	}
 
 	public void addCheckBoxWithWidgetName(String widgetName,
 			Map<String, Object> map) {
@@ -451,9 +451,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		resDataSet.addCheckBoxWithWidgetName(widgetName, obj);
 	}
 
-	public void addListWithDataName(String dataName, CachedRowSet crs) {
-		resDataSet.addListWithDataName(dataName, crs);
-	}
+//	public void addListWithDataName(String dataName, CachedRowSet crs) {
+//		resDataSet.addListWithDataName(dataName, crs);
+//	}
 
 	public void addListWithDataName(String dataName, Map<String, String> map) {
 		resDataSet.addListWithDataName(dataName, map);
@@ -487,9 +487,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 //		resDataSet.addListWithWidgetName(widgetName, obj);
 //	}
 
-	public void addRadioWithDataName(String dataName, CachedRowSet crs) {
-		resDataSet.addRadioWithDataName(dataName, crs);
-	}
+//	public void addRadioWithDataName(String dataName, CachedRowSet crs) {
+//		resDataSet.addRadioWithDataName(dataName, crs);
+//	}
 
 	public void addRadioWithDataName(String dataName, Map<String, String> map) {
 		resDataSet.addRadioWithDataName(dataName, map);
@@ -499,9 +499,9 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		resDataSet.addRadioWithDataName(dataName, obj);
 	}
 
-	public void addRadioWithWidgetName(String widgetName, CachedRowSet crs) {
-		resDataSet.addRadioWithWidgetName(widgetName, crs);
-	}
+//	public void addRadioWithWidgetName(String widgetName, CachedRowSet crs) {
+//		resDataSet.addRadioWithWidgetName(widgetName, crs);
+//	}
 
 	public void addRadioWithWidgetName(String widgetName,
 			Map<String, Object> map) {
