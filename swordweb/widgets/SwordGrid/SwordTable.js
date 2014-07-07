@@ -206,7 +206,7 @@ var SwordGrid = new Class({
         ,onAfterCreateRow:$empty
         ,onBeforeCreateRow:$empty
         ,onAfterInsertRow:$empty
-        ,valfocus:true//表格焦点移动的时候如果校验不通过是否可以移动到下一元素 true可以移动 false不可以移动
+        ,valfocus:'true' //表格焦点移动的时候如果校验不通过是否可以移动到下一元素 true可以移动 false不可以移动
         ,noNextEvent:null//表格焦点移动没有时调用方法
         /**
          * 在创建完一个元素之后触发；在表格组件的根标签上可以声明此属性        rowData,cellValue,cellEl,itemEl
@@ -4490,7 +4490,7 @@ var SwordGrid = new Class({
     ,addNextFocusEvent:function(srcEl, obj) {
     	srcEl.addEvent('keyup', function(event) {
             var e = Event(event);
-            
+
             if(e.key == 'enter'||e.key== 'left' || e.key== 'up' || e.key== 'right' || e.key== 'down' ) {
             	var rule = srcEl.get('rule');
         		if($chk(rule)){
@@ -4527,7 +4527,7 @@ var SwordGrid = new Class({
             if(flag == false)return;
         }
         var nextEl;
-        if( nextOrder=="right"  || (!$chk(nextOrder) && this.options.nextOrder == 'row') ) {//以行的方向焦点转移，默认的方向
+        if( nextOrder=="right" || nextOrder=="enter"  || (!$chk(nextOrder) && this.options.nextOrder == 'row') ) {//以行的方向焦点转移，默认的方向
             
             nextEl = this.findNextFocusInOneRow(startEl);
             while(!nextEl) {
