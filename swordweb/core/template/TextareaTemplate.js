@@ -7,7 +7,7 @@
  */
 var SwordTextareaTemplate = {
     start:'<table class="swordform_field_wrap" cellspacing="0" cellpadding="0" style="width: 100%;"><tbody><tr><td class="boxtd"><textarea <tpl if="values.getAttribute(\'maxLength\')">maxLength="{maxLength}" </tpl> defValue="{defValue}"  <tpl if="values.get(\'css\')">style="{css}"</tpl>  <tpl if="values.get(\'style\')">style="{style}"</tpl> class="swordform_item_oprate swordform_item_textarea <tpl if="values.get(\'edit\')==\'false\' || values.getAttribute(\'disabled\')">swordform_item_input_disable</tpl>" name="{name}" <tpl if="values.get(\'edit\')==\'false\' || values.getAttribute(\'disabled\')">readonly</tpl> type="textarea" widget="textarea" ',
-    end: '></textarea><tpl if="values.getAttribute(\'maxLength\')"><div style="color: rgb(51, 51, 51);" class="textarea_maxLength_wrap">您还可以输入<span class="textarea_maxLength_count">{maxLength}</span>字</div></tpl></div></td></tr></tbody></table>',
+    end: '></textarea><tpl if="values.getAttribute(\'maxLength\')"><div style="position:relative;"><div style="color: rgb(51, 51, 51);position:absolute;bottom:2px;right:20px" >您还可以输入<span class="textarea_maxLength_count">{maxLength}</span>字</div></div></tpl></div></td></tr></tbody></table>',
     id:' id="{PName}_{name}" ',
     textareadef:{
     	scroll:false,
