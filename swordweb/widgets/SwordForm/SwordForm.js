@@ -1386,16 +1386,19 @@ var SwordForm = new Class({
             names = this.getFieldElNames();
         }
         names.each(function(name, index) {
+        	var el = this.getFieldEl(name);
+        	el.removeClass("invalid");
             var w = this.getWidget(name);
             if($defined(w)) {
-                if($defined(w.disable))w.disable(this.getFieldEl(name));
-                if($type(w) == 'SwordTree' && $defined(w.select.disable))w.select.disable(this.getFieldEl(name));
-                if($chk(w.box) && w.box.type == 'textarea')this.getFieldEl(name).set('disabled', 'true').addClass('swordform_item_input_disable').setStyle('background-color','');
+                if($defined(w.disable))w.disable(el);
+                if($type(w) == 'SwordTree' && $defined(w.select.disable))w.select.disable(el);
+                if($chk(w.box) && w.box.type == 'textarea')el.set('disabled', 'true').addClass('swordform_item_input_disable').setStyle('background-color','');
             } else {
-                this.getFieldEl(name).set('disabled', 'true').addClass('swordform_item_input_disable').setStyle('background-color','');
+                el.set('disabled', 'true').addClass('swordform_item_input_disable').setStyle('background-color','');
             }
         }.bind(this));
     },
+    
     enable:function(names) {
         if($type(names) == 'string')names = [names];
         names = names || [];
