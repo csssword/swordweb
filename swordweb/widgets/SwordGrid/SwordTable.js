@@ -6254,11 +6254,11 @@ var SwordGrid = new Class({
 		    var pop_panel_table_cbutton = new Element("input",{'type':'button','value':'取消','class':'pop_panel_cbutton'}).inject(pop_panel_table);
 		    
 		    pop_mask_div = 	new Element("div", {'class':'pop_mask_div'}).inject(docbody);
-		    pop_mask_div.setStyle("height",docbody.getScrollSize().y);
+		    pop_mask_div.setStyle({"height":docbody.getScrollSize().y,"z-index":1001});
 		    pop_panel =	new Element("div", {'class':'pop_panel'}).inject(docbody);
 		    var w = this.options.openerWidth;
 		    if(w.indexOf("px")<1) w =  w+"px";
-		    pop_panel.setStyle("width",w);
+            pop_panel.setStyles({"width":w,"z-index":1002});
 		    
 			var pop_panel_form = new Element("div", {'sword':'SwordForm','name':formName,'caption':caption,'userdefine':'true','vType':'intime'}).inject(pop_panel);
 			if(caption!=""){
