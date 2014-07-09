@@ -223,7 +223,7 @@ var SwordValidator = new Class({
         ruleArray = rule.split('_');
         if (ruleArray.length > 2) {
             var msg = '请您选择至少' + ruleArray[1].toInt() + '项,最多不超过' + ruleArray[2].toInt() + '项';
-            if (ruleArray[1] == ruleArray[2])msg = "请您至少选择" + ruleArray[0].toInt() + "项";
+            if (ruleArray[1] == ruleArray[2])msg = "请您至少选择" + ruleArray[1].toInt() + "项";
             return {state:(ruleArray[1].toInt() <= els && els <= ruleArray[2].toInt()), msg:msg};
         } else {
             if (ruleArray.length == 2)ruleArray[0] = ruleArray[1];
