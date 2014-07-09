@@ -934,7 +934,7 @@ var SwordForm = new Class({
     },
     nextFocus:function(e) {
         e = Event(e);
-        if(e.key == 'enter') {
+        if(e.key == 'enter' || (e.key == "esc" && $(e.target).type == 'textarea')) {
         	var name = e.target.get("name");
                 if(this.options.valfocus=="false" || !this.options.valfocus){
             		var rule = e.target.get("rule");
@@ -945,6 +945,8 @@ var SwordForm = new Class({
                        	 	return;
                     	}
             		}
+	    		}else{
+	    			
 	    		}
             var tar = null;
             if(this.options.userDefine != "true") {
@@ -975,6 +977,8 @@ var SwordForm = new Class({
                     var idx = this.getFieldElNames().indexOf(name) + 1;
                     while(idx != ops.length && idx != null && tar == null) {
                         tar = ops[idx];
+                        if(['radio','checkbox'].contains(tar.get("type")))
+                        	tar = tar.getElements("input")[0];
                         if(!this.focusable(tar))tar = null;
                         if(idx == ops.length - 1)idx = null; else idx++;
                     }
@@ -990,6 +994,28 @@ var SwordForm = new Class({
 	            }
             }
         }
+        if(e.key == 'left' || e.key == 'right'){
+        	var el=$(e.target);
+    		var divEl=el.getParent(),pEl=divEl.getParent(),cssKey="input";
+    		if(el.get("type") == "checkbox"){
+        		if(e.key == 'left'){
+        			var t=divEl.getPrevious()?divEl.getPrevious().getElement(cssKey):null;
+        			if(t){t.focus();}
+        			else{
+        				t=pEl.getLast().getElement(cssKey);
+        				if(t)t.focus();
+        			}
+        		}
+        		if(e.key == 'right'){
+        			var t=divEl.getNext()?divEl.getNext().getElement(cssKey):null;
+        			if(t){t.focus();}
+        			else{
+        				t=pEl.getFirst().getElement(cssKey);
+        				if(t)t.focus();
+        			}
+        		}
+    		}
+    	}
     },
     isHide:function(el) {
         return el.getHeight() == 0 && el.getWidth() == 0;

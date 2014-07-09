@@ -436,6 +436,10 @@ var Textarea = new Class(
 					this.countSpan.getParent().setStyle('color', 'red');
 				else
 					this.countSpan.getParent().setStyle('color', '#333');
+				if(e.key == 'esc'){
+		        	this.parent.nextFocus(e);
+		        	return;
+		        }
 			},
 			leftUTFString : function(str, len) {
 				if (this.getStringUTFLength(str) <= len) {
@@ -472,11 +476,11 @@ var Textarea = new Class(
 			},
 
 			initEvent : function() {
-			if ($defined(this.options.maxLength)) {
-				this.box.addEvent('blur', this.maxLengthCount.bind(this));
-				this.box.addEvent('change', this.maxLengthCount.bind(this));
-				this.box.addEvent("keyup", this.maxLengthCount.bind(this));
-			}
+				if ($defined(this.options.maxLength)) {
+					this.box.addEvent('blur', this.maxLengthCount.bind(this));
+					this.box.addEvent('change', this.maxLengthCount.bind(this));
+					this.box.addEvent("keyup", this.maxLengthCount.bind(this));
+				}
 		}
 
 		});
