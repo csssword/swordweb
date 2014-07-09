@@ -115,18 +115,12 @@ $extend(SwordTextTemplate, {
 	            		this.getFunc(click)[0](e);
 	            }.bind(formObj));
         	}
-        vobj.addEvent('blur', function(e) {
+        vobj.addEvent('blur', function(e) {debugger;
             var el = e.target;
             var val = el.get('value');
         	el.set('oValue', val);
-                el.set('realvalue', val);
+            el.set('realvalue', val);
         }.bind(formObj));
-        vobj.addEvent((Browser.Engine.trident || Browser.Engine.webkit) ? 'keydown' : 'keypress', function(e){
-        	if(vobj.get("placeholder") == "true" && vobj.get("value") == vobj.get("defvalue")){
-        		vobj.set("value","");
-        		vobj.removeClass("swordform_item_input_placeholder");
-        	}
-        });
     },
     initWidget:function(){
         return null;
