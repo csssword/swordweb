@@ -4489,10 +4489,20 @@ var SwordGrid = new Class({
     ,addNextFocusEvent:function(srcEl, obj) {
     	srcEl.addEvent('keyup', function(event) {
             var e = Event(event);
+            if(e.key == 'esc' && this.options.noNextEvent){
+            	var rule = srcEl.get('rule');
+            	if($chk(rule)){
+        			if(this.options.valfocus == "true" || this.vObj.validate(srcEl)){
+        				this.getFunc(this.options.noNextEvent)[0]();
+        			}
+        		}else{
+        			this.getFunc(this.options.noNextEvent)[0]();
+            	}
+            }
             if(e.key == 'enter'||e.key== 'left' || e.key== 'up' || e.key== 'right' || e.key== 'down' ) {
             	var rule = srcEl.get('rule');
         		if($chk(rule)){
-        			if(this.options.valfocus=="true"&&this.vObj.validate(srcEl)){
+        			if(this.options.valfocus == "true" || this.vObj.validate(srcEl)){
                     	this.nextCell(srcEl, event,obj,e.key);
         			}
         		}else{
@@ -4540,7 +4550,7 @@ var SwordGrid = new Class({
 	                        		nextFunc.delay(50,this, [startEl, e, obj,"insert"]);
 	                        		e.target.blur();
 	                    	}else{
-		                    	if(this.options.noNextEvent)this.getFunc(this.options.noNextEvent)[0]();
+		                    	if(this.options.noNextEvent) this.getFunc(this.options.noNextEvent)[0]();
 	                    	}
 	                         
 	                	}catch(e){
@@ -6227,228 +6237,246 @@ var SwordGrid = new Class({
 	    	pop_mask_div.setStyles({"height":docbody.getScrollSize().y,"display":""});
 	    	pop_panel.setStyle("display","");
 	    	$w(formName).initData(this.objToForm(dataObj,formName));
+	    	var ref = this.options.rowEditFinish;
+			if(ref) this.getFunc(ref)[0]($w(formName));
 	    }else{
-	    var form_item="",itemVal="",itemRule="",itemType="",itemName="",itemCpation="",i = 1,pNode="",itemDisable="",itemFormat="";
-	    var pop_panel_table = new Element("div",{'class':'pop_panel_div'});
-	    var pop_panel_table_sbutton = new Element("input",{'type':'button','value':'确定','class':'pop_panel_sbutton'}).inject(pop_panel_table);
-	    var pop_panel_table_cbutton = new Element("input",{'type':'button','value':'取消','class':'pop_panel_cbutton'}).inject(pop_panel_table);
-	    
-	    pop_mask_div = 	new Element("div", {'class':'pop_mask_div'}).inject(docbody);
-	    pop_mask_div.setStyle("height",docbody.getScrollSize().y);
-	    pop_panel =	new Element("div", {'class':'pop_panel'}).inject(docbody);
-	    var w = this.options.openerWidth;
-	    if(w.indexOf("px")<1) w =  w+"px";
-	    pop_panel.setStyle("width",w);
-	    var onne = this.options.openerNoNextEvent||"";
-	    
-		var pop_panel_form = new Element("div", {'sword':'SwordForm','name':formName,'caption':caption,'userdefine':'true','noNextEvent':onne,'vType':'intime'}).inject(pop_panel);
-		if(caption!=""){
-			pop_panel_form.set("panel","true");
-		}
-		var gtable = [];
-		gtable.push('<table class="tab_form" border="0" cellpadding="0" cellspacing="0"><colgroup><col style="width: 20%"></col><col style="width: 30%"></col><col style="width: 20%"></col><col style="width: 30%"></col></colgroup><tr>');
-//		var pop_panel_form_table=
-		pNode = this.options.pNode; 
-        var ellen = sGrid_data_row_div.getElements("div").length;
-    	sGrid_data_row_div.getElements(".sGrid_data_row_item_div").each(function(item,index){
-    		var f = (i)/2+""; 
-    		var tpl = this.options.pNode.getElements("div[class='sGrid_data_row_item_div']")[index];
-			itemName = tpl.get("name");
-			itemType = tpl.get("type") ||"label";
-			itemCaption = (itemRule=="must" ? '<span class="red">*</span>' : '')  + tpl.get("caption")||"";
-			itemDisable = tpl.get("disable")||"";
-			itemFormat = tpl.get("format")||"";
-			itemRule = item.get("rule")||"";
-			itemNoView = tpl.get("noView")||"";
-			
-			if(!itemName) return;
-			
-			if(itemNoView=="true"||itemType=="checkbox"||itemType=="radio"||itemType=="rowNum"||itemType=="rowNumOnePage") return;
-			if(itemType=="label"||itemType=="a" ||itemType=="select"||itemType=="pulltree"){
-				itemVal = item.get("realvalue")||"";
-			}else{
-				itemVal = item.get("showValue")||"";
+		    var form_item="",itemVal="",itemRule="",itemType="",itemName="",itemCpation="",i = 1,pNode="",itemDisable="",itemFormat="";
+		    var pop_panel_table = new Element("div",{'class':'pop_panel_div'});
+		    var pop_panel_table_sbutton = new Element("input",{'type':'button','value':'确定','class':'pop_panel_sbutton'}).inject(pop_panel_table);
+		    var pop_panel_table_cbutton = new Element("input",{'type':'button','value':'取消','class':'pop_panel_cbutton'}).inject(pop_panel_table);
+		    
+		    pop_mask_div = 	new Element("div", {'class':'pop_mask_div'}).inject(docbody);
+		    pop_mask_div.setStyle("height",docbody.getScrollSize().y);
+		    pop_panel =	new Element("div", {'class':'pop_panel'}).inject(docbody);
+		    var w = this.options.openerWidth;
+		    if(w.indexOf("px")<1) w =  w+"px";
+		    pop_panel.setStyle("width",w);
+		    
+			var pop_panel_form = new Element("div", {'sword':'SwordForm','name':formName,'caption':caption,'userdefine':'true','vType':'intime'}).inject(pop_panel);
+			if(caption!=""){
+				pop_panel_form.set("panel","true");
 			}
-			gtable.push('<th>');
-			gtable.push(itemCaption);
-			gtable.push("</th><td>");
-			if(itemType=="a"){
-				var oc = tpl.get("_onclick")||"";
-//				gtable.push('<th>');
-//				gtable.push(itemCaption);
-				gtable.push('<a href="#a" onclick=\"');
-				gtable.push(oc);
-				gtable.push('\">');
-				gtable.push(itemVal);
-				gtable.push('</a></td>');
-//			 	form_item += '<th>'+itemCaption+'</th><td><a href="#a" onclick=\"'+oc+'\">'+itemVal+'</a></td>';
-			}else if(itemType=="userdefine"){
-//				gtable.push('<th>');
-//				gtable.push(itemCaption);
-//				gtable.push('</th><td>');
-				gtable.push(item.innerHTML);
-				gtable.push('</td>');
-//				form_item += '<th>'+itemCaption+'</th><td>'+item.innerHTML+'</td>';
-			}else if(itemType=="pulltree"){
-//				gtable.push('<th>');
-//				gtable.push(itemCaption);
-				gtable.push('<div name=\"');
-				gtable.push(item.get("treename"));
-				gtable.push('\" disable=\"');
-				gtable.push(itemDisable);
-				gtable.push('\" type=\"');
-				gtable.push(itemType);
-				gtable.push('\" rule=\"');
-				gtable.push(itemRule);
-				gtable.push('\" defValue=\"');
-				gtable.push(item.get("title"));
-				gtable.push('\" defRealvalue=\"');
-				gtable.push(itemVal);
-				gtable.push('\"></div></td>');
-//				form_item += '<th>'+itemCaption+'</th><td><div name=\"'+item.get("treename")
-//				+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+item.get("title")
-//				+'\" defRealvalue=\"'+itemVal+'\"></div></td>';
-			}else if(itemType=="select"){
-				var df =  tpl.get("dataFilter")||"",dn = tpl.get("dataName")||"",sc = tpl.get("sbmitcontent")||"",pd = tpl.get("popdisplay")||"",ind = tpl.get("inputdisplay")||"";
-				if(item.get("code")&&item.get("caption")&&dn==""){
-					itemVal = "code,"+item.get("code")+"|caption,"+item.get("caption");
-				}
+			var gtable = [];
+			gtable.push('<table class="tab_form" border="0" cellpadding="0" cellspacing="0"><colgroup><col style="width: 20%"></col><col style="width: 30%"></col><col style="width: 20%"></col><col style="width: 30%"></col></colgroup><tr>');
+	//		var pop_panel_form_table=
+			pNode = this.options.pNode; 
+	        var ellen = sGrid_data_row_div.getElements("div").length;
+	    	sGrid_data_row_div.getElements(".sGrid_data_row_item_div").each(function(item,index){
+	    		var f = (i)/2+""; 
+	    		var tpl = this.options.pNode.getElements("div[class='sGrid_data_row_item_div']")[index];
+				itemName = tpl.get("name");
+				itemType = tpl.get("type") ||"label";
+				itemRule = item.get("rule")||"";
+				itemCaption = (itemRule=="must" ? '<span class="red">*</span>' : '')  + tpl.get("caption")||"";
+				itemDisable = tpl.get("disable")||"";
+				itemFormat = tpl.get("format")||"";
+				itemNoView = tpl.get("noView")||"";
 				
-				gtable.push('<div name=\"');
-				gtable.push(itemName);
-				gtable.push('\" dataFilter=\"');
-				gtable.push(df);
-				gtable.push('\" sbmitcontent=\"');
-				gtable.push(sc);
-				gtable.push('\" popdisplay=\"');
-				gtable.push(pd);
-				gtable.push('\" inputdisplay=\"');
-				gtable.push(ind);
-				gtable.push('\"  disable=\"');
-				gtable.push(itemDisable);
-				gtable.push('\" type=\"');
-				gtable.push(itemType);
-				gtable.push('\" rule=\"');
-				gtable.push(itemRule);
-				gtable.push('\" dataName=\"');
-				gtable.push(dn);
-				gtable.push('\" pcodesign=\"');
-				gtable.push(item.get("pcodesign"));
-				gtable.push('\" captionsign=\"');
-				gtable.push(item.get("captionsign"));
-				gtable.push('\" codesign=\"');
-				gtable.push(item.get("codesign"));
-				gtable.push('\" child=\"');
-				gtable.push(item.get("child"));
-				gtable.push('\" parent=\"');
-				gtable.push(item.get("parent"));
-				gtable.push('\" defValue=\"');
-				gtable.push(itemVal);
-				gtable.push('\" code=\"');
-				gtable.push(item.get("code"));
-				gtable.push('\"></div></td>');
-//					form_item += '<th>'+itemCaption+'</th><td><div name=\"'+itemName+'\" dataFilter=\"'+df+'\" sbmitcontent=\"'
-//					+sc+'\" popdisplay=\"'+pd+'\" inputdisplay=\"'+ind+'\"  disable=\"'+itemDisable+'\" type=\"'+itemType+
-//					'\" rule=\"'+itemRule+'\" dataName=\"'+dn+'\" defValue=\"'+itemVal+'\"></div></td>';
-			}else{
-				var ob = tpl.get("_onBlur")||"";
-				gtable.push('<div name=\"');
-				gtable.push(itemName);
-				gtable.push('\"  onblur=\"');
-				gtable.push(ob);
-				gtable.push('\"  format=\"');
-				gtable.push(itemFormat);
-				gtable.push('\" disable=\"');
-				gtable.push(itemDisable);
-				gtable.push('\" type=\"');
-				gtable.push(itemType);
-				gtable.push('\" rule=\"');
-				gtable.push(itemRule);
-				gtable.push('\" defValue=\"');
-				gtable.push(itemVal);
-				gtable.push('\"></div></td>');
-//				form_item += '<th>'+itemCaption+'</th><td><div name=\"'+itemName+'\"  onblur=\"'+ob+'\"  format=\"'+ 
-//				itemFormat+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+
-//				itemVal+'\"></div></td>';
-			}
-    	 	
-    	 	if(f.indexOf(".")==-1){
-//    	 		form_item +=  "</tr>";
-    	 		gtable.push("</tr>");
-	    	 			if(index < ellen){
-	    	 				gtable.push("<tr>");
-//	    					form_item += "<tr>"	 
-	    				}
-    				}
-	    	 	i++;
+				if(!itemName) return;
+				
+				if(itemNoView=="true"||itemType=="checkbox"||itemType=="radio"||itemType=="rowNum"||itemType=="rowNumOnePage") return;
+				if(itemType=="label"||itemType=="a" ||itemType=="select"||itemType=="pulltree"){
+					itemVal = item.get("realvalue")||"";
+				}else{
+					itemVal = item.get("showValue")||"";
+				}
+				gtable.push('<th>');
+				gtable.push(itemCaption);
+				gtable.push("</th><td>");
+				if(itemType=="a"){
+					var oc = tpl.get("_onclick")||"";
+	//				gtable.push('<th>');
+	//				gtable.push(itemCaption);
+					gtable.push('<a href="#a" onclick=\"');
+					gtable.push(oc);
+					gtable.push('\">');
+					gtable.push(itemVal);
+					gtable.push('</a></td>');
+	//			 	form_item += '<th>'+itemCaption+'</th><td><a href="#a" onclick=\"'+oc+'\">'+itemVal+'</a></td>';
+				}else if(itemType=="userdefine"){
+	//				gtable.push('<th>');
+	//				gtable.push(itemCaption);
+	//				gtable.push('</th><td>');
+					gtable.push(item.innerHTML);
+					gtable.push('</td>');
+	//				form_item += '<th>'+itemCaption+'</th><td>'+item.innerHTML+'</td>';
+				}else if(itemType=="pulltree"){
+	//				gtable.push('<th>');
+	//				gtable.push(itemCaption);
+					gtable.push('<div name=\"');
+					gtable.push(item.get("treename"));
+					gtable.push('\" disable=\"');
+					gtable.push(itemDisable);
+					gtable.push('\" type=\"');
+					gtable.push(itemType);
+					gtable.push('\" rule=\"');
+					gtable.push(itemRule);
+					gtable.push('\" defValue=\"');
+					gtable.push(item.get("title"));
+					gtable.push('\" defRealvalue=\"');
+					gtable.push(itemVal);
+					gtable.push('\"></div></td>');
+	//				form_item += '<th>'+itemCaption+'</th><td><div name=\"'+item.get("treename")
+	//				+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+item.get("title")
+	//				+'\" defRealvalue=\"'+itemVal+'\"></div></td>';
+				}else if(itemType=="select"){
+					var df =  tpl.get("dataFilter")||"",dn = tpl.get("dataName")||"",sc = tpl.get("sbmitcontent")||"",pd = tpl.get("popdisplay")||"",ind = tpl.get("inputdisplay")||"";
+					if(item.get("code")&&item.get("caption")&&dn==""){
+						itemVal = "code,"+item.get("code")+"|caption,"+item.get("caption");
+					}
+					
+					gtable.push('<div name=\"');
+					gtable.push(itemName);
+					gtable.push('\" dataFilter=\"');
+					gtable.push(df);
+					gtable.push('\" sbmitcontent=\"');
+					gtable.push(sc);
+					gtable.push('\" popdisplay=\"');
+					gtable.push(pd);
+					gtable.push('\" inputdisplay=\"');
+					gtable.push(ind);
+					gtable.push('\"  disable=\"');
+					gtable.push(itemDisable);
+					gtable.push('\" type=\"');
+					gtable.push(itemType);
+					gtable.push('\" rule=\"');
+					gtable.push(itemRule);
+					gtable.push('\" dataName=\"');
+					gtable.push(dn);
+					gtable.push('\" pcodesign=\"');
+					gtable.push(item.get("pcodesign"));
+					gtable.push('\" captionsign=\"');
+					gtable.push(item.get("captionsign"));
+					gtable.push('\" codesign=\"');
+					gtable.push(item.get("codesign"));
+					gtable.push('\" child=\"');
+					gtable.push(item.get("child"));
+					gtable.push('\" parent=\"');
+					gtable.push(item.get("parent"));
+					gtable.push('\" defValue=\"');
+					gtable.push(itemVal);
+					gtable.push('\" code=\"');
+					gtable.push(item.get("code"));
+					gtable.push('\"></div></td>');
+	//					form_item += '<th>'+itemCaption+'</th><td><div name=\"'+itemName+'\" dataFilter=\"'+df+'\" sbmitcontent=\"'
+	//					+sc+'\" popdisplay=\"'+pd+'\" inputdisplay=\"'+ind+'\"  disable=\"'+itemDisable+'\" type=\"'+itemType+
+	//					'\" rule=\"'+itemRule+'\" dataName=\"'+dn+'\" defValue=\"'+itemVal+'\"></div></td>';
+				}else{
+					var ob = tpl.get("_onBlur")||"";
+					gtable.push('<div name=\"');
+					gtable.push(itemName);
+					gtable.push('\"  onblur=\"');
+					gtable.push(ob);
+					gtable.push('\"  format=\"');
+					gtable.push(itemFormat);
+					gtable.push('\" disable=\"');
+					gtable.push(itemDisable);
+					gtable.push('\" type=\"');
+					gtable.push(itemType);
+					gtable.push('\" rule=\"');
+					gtable.push(itemRule);
+					gtable.push('\" defValue=\"');
+					gtable.push(itemVal);
+					gtable.push('\"></div></td>');
+	//				form_item += '<th>'+itemCaption+'</th><td><div name=\"'+itemName+'\"  onblur=\"'+ob+'\"  format=\"'+ 
+	//				itemFormat+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+
+	//				itemVal+'\"></div></td>';
+				}
 	    	 	
-    	}.bind(this)); 
-    	gtable.push("</table>");
-//    	pop_panel_form_table += form_item +"</table>"; 
-    	pop_panel_form.set("html",gtable.join(""));
-
-    	pop_panel_table_sbutton.addEvent('click', function() {
-    		if(!$w(formName).validate()) return;
-	    	var rowData = this.formToRow($w(formName).getSubmitData().data);
-			var row=$w(gridname).getCheckedRow();
-			var treeDivEl = row.getElement("[type='pulltree']");
-			if(treeDivEl){
-				var treeName=treeDivEl.get("treename"),treedivname=treeDivEl.get("name");
-				rowData.tds[treedivname] = rowData.tds[treeName];
-			}
-			$w(gridname).updateRow(row,rowData);
-			pop_panel.setStyle("display","none");
-//			$(pop_panel).destroy();
-			pop_mask_div.setStyle("display","none");
-//			$(pop_mask_div).destroy();
-//            pc.widgets.erase(formName);
-    	}.bind(this));
-    	
-		pop_panel_table_cbutton.addEvent('click', function() {
-			pop_panel.setStyle("display","none");
-//			$(pop_panel).destroy();
-			pop_mask_div.setStyle("display","none");
-//			$(pop_mask_div).destroy();
-//            pc.widgets.erase(formName);
-    	}.bind(this));
-    	
-		pop_panel.addEvent('keydown', function(e) {	
-			if(e.code==27){
-//				$(pop_panel).destroy();
+	    	 	if(f.indexOf(".")==-1){
+	//    	 		form_item +=  "</tr>";
+	    	 		gtable.push("</tr>");
+		    	 			if(index < ellen){
+		    	 				gtable.push("<tr>");
+	//	    					form_item += "<tr>"	 
+		    				}
+	    				}
+		    	 	i++;
+		    	 	
+	    	}.bind(this)); 
+	    	gtable.push("</table>");
+	//    	pop_panel_form_table += form_item +"</table>"; 
+	    	pop_panel_form.set("html",gtable.join(""));
+	
+	    	pop_panel_table_sbutton.addEvent('click', function() {
+	    		this.OpenFormNoNextEvent(formName,gridname,pop_panel);
+	    	}.bind(this));
+	    	
+			pop_panel_table_cbutton.addEvent('click', function() {
 				pop_panel.setStyle("display","none");
+	//			$(pop_panel).destroy();
 				pop_mask_div.setStyle("display","none");
-//				$(pop_mask_div).destroy();
-//                pc.widgets.erase(formName);
-			}
+	//			$(pop_mask_div).destroy();
+	//            pc.widgets.erase(formName);
+	    	}.bind(this));
+	    	
+			pop_panel.addEvent('keydown', function(e) {	
+				if(e.code==27){
+	//				$(pop_panel).destroy();
+					pop_panel.setStyle("display","none");
+					pop_mask_div.setStyle("display","none");
+	//				$(pop_mask_div).destroy();
+	//                pc.widgets.erase(formName);
+				}
+				if(e.key == 'enter' ){
+					var formObj = $w(formName), name = e.target.get("name"), tar = null;
+					var ops = formObj.getFieldEls();
+					var idx = ops.length - 1;
+                    while(idx > 0 && idx != null && tar == null) {
+                        tar = ops[idx];
+                        if(['radio','checkbox'].contains(tar.get("type")))
+                        	tar = tar.getElements("input")[0];
+                        if(!formObj.focusable(tar))tar = null;
+                        idx--;
+                    }
+                    if(tar.get("name") == name){
+                    	if(this.options.openerNoNextEvent){
+                    		this.getFunc(this.options.openerNoNextEvent)[0]();
+                    	}
+                		this.OpenFormNoNextEvent(formName,gridname,pop_panel);
+                    }
+				}
+	    	}.bind(this));
+		    pop_panel_table.inject(pop_panel);
+		    pc.initWidgetParam(pop_panel_form);
+			pc.initEventForForm();
 		
-    	}.bind(this));
-	    pop_panel_table.inject(pop_panel);
-	    pc.initWidgetParam(pop_panel_form);
-		pc.initEventForForm();
+		    var l =  ($((self||window).document.body).getSize().x - pop_panel.getSize().x)/2;
+			var t = ($((self||window).document.body).getSize().y - pop_panel.getSize().y)/3+getScrollTop();
+			pop_panel.setStyles({'left': l,'top':t});
+		
+			var ref = this.options.rowEditFinish;
+			if(ref) this.getFunc(ref)[0]($w(formName));
+			if($('formTooltipDivPNode'))$('formTooltipDivPNode').destroy();
 	
-	    var l =  ($((self||window).document.body).getSize().x - pop_panel.getSize().x)/2;
-		var t = ($((self||window).document.body).getSize().y - pop_panel.getSize().y)/3+getScrollTop();
-		pop_panel.setStyles({'left': l,'top':t});
-	
-		var ref = this.options.rowEditFinish;
-		if(ref) this.getFunc(ref)[0]();
-		if($('formTooltipDivPNode'))$('formTooltipDivPNode').destroy();
-
-        var dragObj = new Drag(pop_panel, {
-            snap :5,
-            limit: {
-                x:[0,docbody.getWidth()- pop_panel.getWidth()],
-                y:[0,docbody.getHeight()-pop_panel.height-20]
-            },
-            handle: pop_panel
-            //
-        });
+	        var dragObj = new Drag(pop_panel, {
+	            snap :5,
+	            limit: {
+	                x:[0,docbody.getWidth()- pop_panel.getWidth()],
+	                y:[0,docbody.getHeight()-pop_panel.height-20]
+	            },
+	            handle: pop_panel
+	            //
+	        });
 	    }
-	   
-    }
-
+    },
+    OpenFormNoNextEvent: function(formName,gridname,pop_panel) {
+    	if(!$w(formName).validate()) return;
+    	var rowData = this.formToRow($w(formName).getSubmitData().data);
+		var row=$w(gridname).getCheckedRow();
+		var treeDivEl = row.getElement("[type='pulltree']");
+		if(treeDivEl){
+			var treeName=treeDivEl.get("treename"),treedivname=treeDivEl.get("name");
+			rowData.tds[treedivname] = rowData.tds[treeName];
+		}
+		$w(gridname).updateRow(row,rowData);
+		pop_panel.setStyle("display","none");
+//			$(pop_panel).destroy();
+		pop_mask_div.setStyle("display","none");
+//			$(pop_mask_div).destroy();
+//            pc.widgets.erase(formName);
+	}
 });
-
 function getScrollTop(){
 	var doctemp=window.document;
 	var scrollTop=0;
