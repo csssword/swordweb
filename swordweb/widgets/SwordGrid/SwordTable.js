@@ -6308,7 +6308,7 @@ var SwordGrid = new Class({
 //				form_item += '<th>'+itemCaption+'</th><td><div name=\"'+item.get("treename")
 //				+'\" disable=\"'+itemDisable+'\" type=\"'+itemType+'\" rule=\"'+itemRule+'\" defValue=\"'+item.get("title")
 //				+'\" defRealvalue=\"'+itemVal+'\"></div></td>';
-			}else if(itemType=="select"){debugger;
+			}else if(itemType=="select"){
 				var df =  tpl.get("dataFilter")||"",dn = tpl.get("dataName")||"",sc = tpl.get("sbmitcontent")||"",pd = tpl.get("popdisplay")||"",ind = tpl.get("inputdisplay")||"";
 				if(item.get("code")&&item.get("caption")&&dn==""){
 					itemVal = "code,"+item.get("code")+"|caption,"+item.get("caption");
