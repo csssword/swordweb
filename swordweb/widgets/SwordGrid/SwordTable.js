@@ -6168,25 +6168,33 @@ var SwordGrid = new Class({
 		var rownum = rownum - 1;
 		if (rownum >= 0 && dlen != 0 && dlen >= rownum) {
 			var ite = childs[rownum]
-					.getElement('div.sGrid_data_row_item_div[name="' + colname
-							+ '"]');
-			var type = ite.get("type");
-			if (type == "radio" || type == "checkbox") {
-				ite.getElement("input[type=" + type + "]").set('checked',true);;
-			} else {
-				var ls = this.eDelegator._listener.get("click");
-				var e = new Event();
-				if (ls) {
-					ls.each(function(l) {
-								if (l['condition']
-										.indexOf(ite.get("eventdele")) > 0) {
-									if (l['args'])
-										l['fn'](e, ite, l['args']);
-									else
-										l['fn'](e, ite);
-								}
-							}, this);
-				}
+			.getElement('div.sGrid_data_row_item_div[name="' + colname
+					+ '"]');
+			if(ite){
+				this.setElFocus(ite);
+			}
+		}
+	},setCurElFocus:function(divEl,colname){
+		var cell = divEl.getElement("div.sGrid_data_row_item_div[name='" + colname + "']");
+		if(cell){
+			this.setElFocus(cell);
+		}
+	},setElFocus:function(el){
+		var type = el.get("type");
+		if (type == "radio" || type == "checkbox") {
+			el.getElement("input[type=" + type + "]").set('checked',true);;
+		} else {
+			var ls = this.eDelegator._listener.get("click");
+			var e = new Event();
+			if (ls) {
+				ls.each(function(l) {
+					if (l['condition'].indexOf(el.get("eventdele")) > 0) {
+						if (l['args'])
+							l['fn'](e, el, l['args']);
+						else
+							l['fn'](e, el);
+					}
+				}, this);
 			}
 		}
 	},formToRow:function(obj){
@@ -6399,7 +6407,7 @@ var SwordGrid = new Class({
 	    	pop_panel_form.set("html",gtable.join(""));
 	
 	    	pop_panel_table_sbutton.addEvent('click', function() {
-	    		this.OpenFormNoNextEvent(formName,gridname,pop_panel);
+	    		this.OpenFormNoNextEvent(formName,gridname,pop_panel,pop_mask_div);
 	    	}.bind(this));
 	    	
 			pop_panel_table_cbutton.addEvent('click', function() {
@@ -6410,7 +6418,7 @@ var SwordGrid = new Class({
 	//            pc.widgets.erase(formName);
 	    	}.bind(this));
 	    	
-			pop_panel.addEvent('keydown', function(e) {	
+			pop_panel.addEvent('keyup', function(e) {	
 				if(e.code==27){
 	//				$(pop_panel).destroy();
 					pop_panel.setStyle("display","none");
@@ -6430,10 +6438,10 @@ var SwordGrid = new Class({
                         idx--;
                     }
                     if(tar.get("name") == name){
-                    	if(this.options.openerNoNextEvent){
-                    		this.getFunc(this.options.openerNoNextEvent)[0]();
-                    	}
-                		this.OpenFormNoNextEvent(formName,gridname,pop_panel);
+                		this.OpenFormNoNextEvent(formName,gridname,pop_panel,pop_mask_div);
+                		if(this.options.openerNoNextEvent){
+                			this.getFunc(this.options.openerNoNextEvent)[0](sGrid_data_row_div);
+                		}
                     }
 				}
 	    	}.bind(this));
@@ -6460,7 +6468,7 @@ var SwordGrid = new Class({
 	        });
 	    }
     },
-    OpenFormNoNextEvent: function(formName,gridname,pop_panel) {
+    OpenFormNoNextEvent: function(formName,gridname,pop_panel,pop_mask_div) {
     	if(!$w(formName).validate()) return;
     	var rowData = this.formToRow($w(formName).getSubmitData().data);
 		var row=$w(gridname).getCheckedRow();
