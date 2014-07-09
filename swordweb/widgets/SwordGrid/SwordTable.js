@@ -6267,7 +6267,7 @@ var SwordGrid = new Class({
 				itemName = tpl.get("name");
 				itemType = tpl.get("type") ||"label";
 				itemRule = item.get("rule")||"";
-				itemCaption = (itemRule=="must" ? '<span class="red">*</span>' : '')  + tpl.get("caption")||"";
+				itemCaption = (itemRule.contains("must") ? '<span class="red">*</span>' : '')  + tpl.get("caption")||"";
 				itemDisable = tpl.get("disable")||"";
 				itemFormat = tpl.get("format")||"";
 				itemNoView = tpl.get("noView")||"";
