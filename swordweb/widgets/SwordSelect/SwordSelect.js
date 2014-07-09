@@ -546,7 +546,7 @@ var SwordSelect = new Class({
 //        this.options.data = loadData = this.box.retrieve("data")?this.box.retrieve("data"):this.box.getParent("table").getNext().getChildren(">div");
         if($chk(gridbz) || this.grid){
         	this.options.data = loadData = this.box.retrieve("data");
-        }else{
+        }else if(this.box.getParent("table").getNext()){
         	this.options.data = loadData = this.box.getParent("table").getNext().getChildren(">div");
         }
         if((!$defined(this.options.data)) || this.options.data.length == 0) {
@@ -782,7 +782,7 @@ var SwordSelect = new Class({
     },
     show: function() {
         if(!$defined(this.box.get('display')) || this.box.get('display') == 'false') {
-        	this.reBuild(this.box.retrieve("data")?this.box.retrieve("data"):this.box.getParent("table").getNext().getChildren(">div"));
+        	this.reBuild();
             this.options.onShow = this.box.get("onShow")||this.box.retrieve("onShow");
             if($defined(this.options.onShow) && $chk(this.options.onShow)) {
                 this.getFunc(this.options.onShow)[0](this.currentElement,this);
@@ -806,7 +806,7 @@ var SwordSelect = new Class({
             if($defined(rule) && rule.contains('must'))this.box.setStyle('background-color','#b5e3df');
         }
     },
-    reBuild: function(data) {
+    reBuild: function() {
         this.selectbox.getElements('div').each(function(li) {
             li.dispose();
         });
@@ -814,7 +814,6 @@ var SwordSelect = new Class({
         this.selectbox.getElements('hr').each(function(li) {
             li.dispose();
         });
-        this.options.data = data;
         var loadData = this.getOptionsData();
         if(!$defined(loadData)) {
             var pcode,tid = this.box.get("tid");
