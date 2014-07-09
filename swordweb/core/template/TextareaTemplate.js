@@ -80,6 +80,7 @@ $extend(SwordTextareaTemplate, {
     	}
     	ta.countSpan=item.getNext()?item.getNext().getElement('span.textarea_maxLength_count'):null;
     	ta.box = item;
+    	ta.parent=formObj;
     	ta.initEvent();
     },
     initWidget:function(name, formObj,item){
