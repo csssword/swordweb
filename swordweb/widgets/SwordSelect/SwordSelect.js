@@ -933,6 +933,10 @@ var SwordSelect = new Class({
         if(e.key == 'tab') return true;
         if(e.key == 'esc') {
             this.hide();
+        	this.execGridOnFinished();
+            if(this.grid && this.grid.options.noNextEvent){
+            	this.getFunc(this.grid.options.noNextEvent)[0]();
+            }
             return true;
         }
         if(e.key == 'enter') {
