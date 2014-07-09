@@ -2,7 +2,6 @@
 	var index = 0;
 	var girdName = null;
 	this.addrow=function(){
-//		debugger;
 		if(girdName){
 			var index = girdName.substring(4);
 			var hj_left = $('lx'+index).getElement('div.hj_left');
