@@ -377,9 +377,9 @@ var SwordSelect = new Class({
                     if($type(node) == 'element') {
                         node = {caption:node.get('caption'),code:node.get('code')};
                     }
-                    if(node.code == d) {
+                    if(node[this.box.get("codeSign")] == d) {
                         rv = this.genarateContent(node);
-                        this.box.set({'value':this.genarateInputContent(node),'code':node.code,'realvalue':this.genarateContent(node)});
+                        this.box.set({'value':this.genarateInputContent(node),'code':node[this.box.get("codeSign")],'realvalue':this.genarateContent(node)});
                         this.box.store("allDb", node);
                     }
                 }, this);
@@ -390,7 +390,7 @@ var SwordSelect = new Class({
                         node = {caption:node.get('caption'),code:node.get('code')};
                     }
                     rv = this.genarateContent(node);
-                    this.box.set({'value':this.genarateInputContent(node),'code':node.code,'realvalue':this.genarateContent(node)});
+                    this.box.set({'value':this.genarateInputContent(node),'code':node[this.box.get("codeSign")],'realvalue':this.genarateContent(node)});
                     this.box.store("allDb", node);
                 }
             }
