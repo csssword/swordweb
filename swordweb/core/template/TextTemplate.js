@@ -115,7 +115,7 @@ $extend(SwordTextTemplate, {
 	            		this.getFunc(click)[0](e);
 	            }.bind(formObj));
         	}
-        vobj.addEvent('blur', function(e) {debugger;
+        vobj.addEvent('blur', function(e) {
             var el = e.target;
             var val = el.get('value');
         	el.set('oValue', val);
