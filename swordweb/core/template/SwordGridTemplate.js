@@ -80,6 +80,7 @@ var SwordGridRender = new Class(
 						setTimeout(arguments.callee, 10);
 					} else {
 						// sometodo
+						self.g.fireEvent('onAfterInitData');
 					}
 				}.bind(this), 10);
 			}

@@ -3807,7 +3807,7 @@ var SwordGrid = new Class({
         this.buildXY();
         this.header().setStyle('top', '0px');
 //        this.getDataDivFxScroll().toTop();
-        this.fireEvent('onAfterInitData');
+//        this.fireEvent('onAfterInitData');
 
         this.doUnmask();    //结束的是 ： delayBuildData 中的 mask方法
     }
@@ -4903,11 +4903,11 @@ var SwordGrid = new Class({
                 return tmp['value'];
             }
         } else {
-            if(this.cache()) {
+//            if(this.cache()) {
                 data = row.retrieve('rowData');
-            } else {
-                data = this.options.data[this.getRealRowNum(cell) - 1];
-            }
+//            } else {
+//                data = this.options.data[this.getRealRowNum(cell) - 1];
+//            }
         }
 
         return data;
