@@ -1558,8 +1558,13 @@ var SwordGrid = new Class({
             }
             el.addClass('sGrid_data_row_item_div');
             el.set('style', el.get('css'));
-            el.setStyle('width', this.getItemX(el))
+            el.setStyle('width', this.getItemX(el));
             el.set('TemplateStyle',el.get('style'));
+            if(type == "select"){
+            	el.set("codeSign", el.get("codeSign") ? el.get("codeSign") : "code");
+            	el.set("captionSign", el.get("captionSign") ? el.get("captionSign") : "caption");
+            	el.set("pcodeSign", el.get("pcodeSign") ? el.get("captionSign") : "pcode");
+            }
         }, this);
         var lastShowItemEl = this.getLastShowItemEl();
         lastShowItemEl.setStyle('border-right', 'none').set('TemplateStyle',lastShowItemEl.get('style'));
@@ -1567,6 +1572,7 @@ var SwordGrid = new Class({
     }
     //根据名字获取元素的描述信息el的数组 。。。，不包括控制台元素。。。 注意。返回的是数组
     ,getItemElByName:function (name) {
+    	debugger;
 //       return this.options.pNode.getChildren(">div:not([console])[name="+name+"]'") ;
         //todo 此种写法，取出了多余的元素，需要重构
         return this.options.pNode.getChildren("div:not([console])[name=" + name + "]'");
