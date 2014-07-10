@@ -197,7 +197,7 @@ SwordTree.Draw = new Class({
         this.options.startLayer = this.options.startLayer < 0 ? 0 : this.options.startLayer;
 
         this.options.extendLayer = this.options.extendLayer < 0 ? 10000 : this.options.extendLayer;
-        if ($chk(this.options.ltid) && this.options.lazyLayer == 0) {
+        if (($chk(this.options.ltid)||$chk(this.options.lctrl)) && this.options.lazyLayer == 0) {
             this.options.lazyLayer = 1;
         }
         this.options.lazyLayer = this.options.lazyLayer < 0 ? 0 : this.options.lazyLayer;
@@ -268,7 +268,7 @@ SwordTree.Draw = new Class({
      * 是否懒树
      */
     ,isLazyTree:function() {
-        return (this.options.lazyLayer > 0 && "jsonAptitude".test(this.options.dataType, 'i') ) || $chk(this.options.ltid)||this.options.cacheLazy == 'true';
+        return (this.options.lazyLayer > 0 && "jsonAptitude".test(this.options.dataType, 'i') ) || $chk(this.options.ltid) || $chk(this.options.lctrl)||this.options.cacheLazy == 'true';
     }
 
     ,createWrapperSpan:function(dom) {
