@@ -400,7 +400,7 @@ var _SwordDF = SwordDataFormat = {
 			}
 		}
 		//如果有其他的尾随字符导致字符串解析不下去了,那么返回0
-		if (i_val != val.length) { return 0; }
+		/*if (i_val != val.length) { return 0; }*///todo此处有问题
 		//对于特殊月份:2月,偶数月的天数进行校验
 		if (month==2) {
 			if ( ( (year%4==0)&&(year%100 != 0) ) || (year%400==0) ) { //测试是否是闰年
