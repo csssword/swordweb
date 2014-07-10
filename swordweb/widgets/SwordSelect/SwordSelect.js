@@ -1176,13 +1176,13 @@ var SwordSelect = new Class({
                     data = {caption:data.get('caption'),code:data.get('code'),pcode:data.get('pcode')};
                 }
                 if($chk(pcode)) {//级联下拉校验 pcode
-                    if(data.pcode == pcode && data.code == dm) {
+                    if(data[node.get("pcodeSign")] == pcode && data[node.get("codeSign")] == dm) {
                         realvalue = this.genarateContent(data);
                         rNode = this.genarateInputContent(data);
                         break;
                     }
                 } else {//单下拉
-                    if(data.code == dm) {
+                    if(data[node.get("codeSign")] == dm) {
                         realvalue = this.genarateContent(data);
                         rNode = this.genarateInputContent(data);
                         break;
