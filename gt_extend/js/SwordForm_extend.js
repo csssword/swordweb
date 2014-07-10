@@ -182,7 +182,7 @@ var SwordForm_plex = new Class({
             var id = me.options.name + '_' + el.get('name');
             me.fieldElHash.push(id);
             me.tempArr.push("<td colspan='{colspan}' style='{style}'>".substitute({colspan:el.getParent("td").get("colspan"),style:el.getParent("td").get("style")}));
-            var tempSelectStr="<table class='swordform_field_wrap' cellspacing='0' cellpadding='0'><tbody><tr><td><input class='swordform_item_oprate swordform_item_input' captionSign='{captionSign}' codesign='{codesign}' pcodeSign='{pcodeSign}' id='{id}' type='text' widget='select' name='{name}' lines='10' lineheight='21' dataname='{dataname}' rule='{rule}'  defValue='{defValue}'  value='{value}' inputdisplay='{inputdisplay}' popdisplay='{popdisplay}' realvalue='{realvalue}' ovalue='{ovalue}' _onchange='{onchange}' dataFilter='{dataFilter}'  vtype='fldiv' style='width: 100%; float: left;' displaycode='{displaycode}' handinput='{handinput}' addallitem='{addallitem}' allitemcode='{allitemcode}'></td><td class='swordselect-selimg' vtype='fldiv' width='17px'><div style='width:17px' ></div></td></tr></tbody></table>"
+            var tempSelectStr="<table class='swordform_field_wrap' cellspacing='0' cellpadding='0'><tbody><tr><td><input class='swordform_item_oprate swordform_item_input' captionSign='{captionSign}' codesign='{codesign}' pcodeSign='{pcodeSign}' id='{id}' type='text' widget='select' name='{name}' lines='10' lineheight='21' dataname='{dataname}' rule='{rule}'  defValue='{defValue}'  value='{value}' inputdisplay='{inputdisplay}' popdisplay='{popdisplay}' realvalue='{realvalue}' ovalue='{ovalue}' _onchange='{onchange}' cacheSelected='{cacheSelected}' dataFilter='{dataFilter}'  vtype='fldiv' style='width: 100%; float: left;' displaycode='{displaycode}' handinput='{handinput}' addallitem='{addallitem}'  allitemcode='{allitemcode}'></td><td class='swordselect-selimg' vtype='fldiv' width='17px'><div style='width:17px' ></div></td></tr></tbody></table>"
             var tempccc=tempSelectStr.substitute({    //替换固定元素字符串的相关属性
                 id:id,               
                name:el.get('name'),
@@ -203,7 +203,8 @@ var SwordForm_plex = new Class({
 		        inputdisplay:el.get('inputdisplay'),
 		        codesign:el.get('codeSign')||'code',
 		        captionSign:el.get('captionSign')||'caption',
-		        pcodeSign:el.get('pcodeSign')||'pcode'
+		        pcodeSign:el.get('pcodeSign')||'pcode',
+		        cacheSelected:el.get('cacheSelected')
             });
             me.tempArr.push(tempccc);
             if($chk(el.innerHTML)){
