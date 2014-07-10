@@ -192,6 +192,7 @@ var SwordGridFields = new Class({
 			,show:""
 			,disable:""
 			,x:""
+			,style:""
 		}
 		,file2:{
 			name:""
