@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 
 import com.css.sword.kernel.platform.SwordSession;
 import com.css.sword.kernel.utils.SwordSessionUtils;
-import com.css.sword.platform.web.mvc.SwordDataSet;
 import com.css.sword.platform.web.session.ISwordSessionDataCreater;
 
 public class SwordSessionDataMH implements ISwordSessionDataCreater {
@@ -21,7 +20,7 @@ public class SwordSessionDataMH implements ISwordSessionDataCreater {
 			swordSession.setUserID(swrydm);
 		}
 		if (swrysfdm != null && swrysfdm.length() > 0) {
-				SwordSessionUtils.putTempDataIntoApplicationContext("swrysfdm",
+				SwordSessionUtils.putTempDataIntoSystemContext("swrysfdm",
 					swrysfdm);
 		}
 		if (swjgdm != null && swjgdm.length() > 0) {
