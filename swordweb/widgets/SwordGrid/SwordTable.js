@@ -1,4 +1,4 @@
-
+﻿
 var SwordGrid = new Class({
 
     Implements:[Events,Options]
@@ -1572,7 +1572,6 @@ var SwordGrid = new Class({
     }
     //根据名字获取元素的描述信息el的数组 。。。，不包括控制台元素。。。 注意。返回的是数组
     ,getItemElByName:function (name) {
-    	debugger;
 //       return this.options.pNode.getChildren(">div:not([console])[name="+name+"]'") ;
         //todo 此种写法，取出了多余的元素，需要重构
         return this.options.pNode.getChildren("div:not([console])[name=" + name + "]'");
