@@ -16,9 +16,13 @@ public class SwordSessionDataMH implements ISwordSessionDataCreater {
 		HttpSession hs = request.getSession();
 		String swrydm = (String) hs.getAttribute("swrydm");
 		String swjgdm = (String) hs.getAttribute("swjgdm");
-
+		String swrysfdm = (String) hs.getAttribute("identify_role");
 		if (swrydm != null && swrydm.length() > 0) {
 			swordSession.setUserID(swrydm);
+		}
+		if (swrysfdm != null && swrysfdm.length() > 0) {
+				SwordSessionUtils.putTempDataIntoApplicationContext("swrysfdm",
+					swrysfdm);
 		}
 		if (swjgdm != null && swjgdm.length() > 0) {
 			swordSession.setOrgID(swjgdm);
