@@ -57,8 +57,9 @@ var PageContainer = new Class({
         swordWidget.initParam(value);
     }
     ,initSwordPageData:function() {
-        if($defined($('SwordPageData'))) {
-            var d = $('SwordPageData').get('data');
+    	var pageEl = document.getElementById("SwordPageData");
+        if($defined(pageEl)) {
+            var d = pageEl.getAttribute("data");
             if($chk(d)) {
                 pc.initData = JSON.decode(d.replace(/&apos;/g, "'"));
             }
@@ -68,7 +69,6 @@ var PageContainer = new Class({
                 pi.initStaticData();
             }
         }
-
         if( pc.initData ){//0507
            pc.initData["getAttr"] = pc.getAttrFunc;
         }
@@ -146,7 +146,7 @@ var PageContainer = new Class({
     ,process:function() {
 //        this.initPublicTag();
         this.initSwordPageData();
-        if(jsR.config.SwordClientCache)this.initSwordCacheData();
+        this.initSwordCacheData();
         this.firePIOnBefore();
         _pcSwordClientPageJumpTiming("12");
         this.initSwordTag();
