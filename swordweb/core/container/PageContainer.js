@@ -24,16 +24,16 @@ var PageContainer = new Class({
         if($defined(node)) {
             swordWidgets = $(node).getElements("div[sword][sword!='PageInit']");
         } else {
-            swordWidgets = $$("div[sword][sword!='PageInit'][type!='pulltree']");
+            swordWidgets = $$("div[sword][sword!='PageInit'][type!='pulltree'][lazy!='true']");
         }
-        var newSwordWidgets = [];
-        swordWidgets.each(function(item, index) {
-            if(item.getAttribute('lazy') != 'true') {
-                newSwordWidgets.include(item);
-                item.set('isload', 'true');
-            }
-        }.bind(this));
-        swordWidgets = newSwordWidgets;
+//        var newSwordWidgets = [];
+//        swordWidgets.each(function(item, index) {
+//            if(item.getAttribute('lazy') != 'true') {
+//                newSwordWidgets.include(item);
+//                item.set('isload', 'true');
+//            }
+//        }.bind(this));
+//        swordWidgets = newSwordWidgets;
         if(this.isEdit()) {
             this.getEditor().start();
         }
@@ -45,6 +45,7 @@ var PageContainer = new Class({
                 this.getEditor().dealEl(value);
             }
             this.initWidgetParam(value);
+            item.set('isload', 'true');
             this.detailed = this.detailed + value.get('name')+ ":" + (new Date().getTime()-begin) + "----";
         }, this);
         this.detailed = this.detailed + "总时间："+ (new Date().getTime()-start);
@@ -114,43 +115,19 @@ var PageContainer = new Class({
             }
         }
     }
-    ,initPublicTag:function() {
-        this.redirect = this.widgetFactory.create("Redirect");
-    }
-    ,initPageDataRedirectFormLast:function() {
-        var param1 = {'dataObj':this.pinitData };
-        var pi = this.getPageInit();
-        $extend(param1, {
-            'onSuccess':this.getFunc(pi.options.onSuccess)[0]
-            ,'onError':this.getFunc(pi.options.onError)[0]
-            ,'onFinish':this.getFunc(pi.options.onFinish)[0]
-        });
-        param.initpage=true;
-        this.loadData(param1);
-    }
-    ,initCoutTag:function() {
-        var couts = $$("*[tag='cout'][name]");
-        couts.each(function(el) {
-            var val = this.getInitData(el.get('name'));
-            if(!$chk(val))return;
-            val = val.value;
-            el.set('text', val);
-        }, this);
-    }
-    ,initPageDataRedirectFormLastBefore:function() {
-        var pData,ppr = parent.pc.redirect;
-        if(ppr.options.items.length == 2) {
-            pData = ppr.getData();
-        } else if(ppr.options.items.length > 2) {
-            var length = ppr.options.items.length;
-            var lastFramePage = ppr.options.items[length - 2].page;
-            var lastFrame = $(parent.document.body).getElement('iframe[ifname=RedirectIframe_' + lastFramePage + ']').contentWindow;
-            pData = lastFrame.pc.redirect.getData();
-        }
-        this.pinitData = pData;
-        this.initData = pData;
-    },
-    swordCacheArray:[]//存储页面缓存的定义
+//    ,initPublicTag:function() {
+//        this.redirect = this.widgetFactory.create("Redirect");
+//    }
+//    ,initCoutTag:function() {
+//        var couts = $$("*[tag='cout'][name]");
+//        couts.each(function(el) {
+//            var val = this.getInitData(el.get('name'));
+//            if(!$chk(val))return;
+//            val = val.value;
+//            el.set('text', val);
+//        }, this);
+//    }
+    ,swordCacheArray:[]//存储页面缓存的定义
     ,
     initSwordCacheData:function(){// 读取页面定义的缓存
         var ct = $('SwordCacheData');
@@ -167,32 +144,15 @@ var PageContainer = new Class({
         }
     }
     ,process:function() {
-        this.initPublicTag();
+//        this.initPublicTag();
         this.initSwordPageData();
         if(jsR.config.SwordClientCache)this.initSwordCacheData();
-        //todo 如果是不同的域,会报拒绝访问的错误，所以加上try{}catch(e){},应该会有更合理的判断方式
-        try {
-            if(parent && parent.jsR && window.frameElement && window.frameElement.name && window.frameElement.name.contains('RedirectIframe_')) {
-                this.initPageDataRedirectFormLastBefore();
-            }
-        } catch(e) {
-        }
         this.firePIOnBefore();
         _pcSwordClientPageJumpTiming("12");
         this.initSwordTag();
         _pcSwordClientPageJumpTiming("13");
         this.firePIOnDataInit();
-        //todo 如果是不同的域,会报拒绝访问的错误，所以加上try{}catch(e){},应该会有更合理的判断方式
-        var flag = false;
-        try {
-        	flag = (parent && parent.jsR && window.frameElement && window.frameElement.name && window.frameElement.name.contains('RedirectIframe_'));
-        } catch(e) {
-        }
-        if(flag) {
-            this.initPageDataRedirectFormLast();
-        } else {
-            this.initPageData();
-        }
+        this.initPageData();
         //给自定义form子类型注册事件
         this.initEventForForm();
         this.firePIOnAfter();
