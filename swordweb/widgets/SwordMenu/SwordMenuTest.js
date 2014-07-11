@@ -319,7 +319,6 @@ var SwordMenu = new Class({
       * @returns null
      */
 	openChildMenu: function(levelDiv,zeroLi,pCode,zeroFlag){
-		//debugger;
 		var tempMenuLevelDiv = new Element('div', {
 			'name': "swordMenuDiv_" + pCode,
 			'pCode': pCode
