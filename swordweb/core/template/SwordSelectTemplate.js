@@ -172,8 +172,6 @@ $extend(SwordSelectTemplate, {
             el.store("allDb", obj);
         } else {
         	var codesign = el.get("codeSign");
-        	var captionSign = el.get("captionSign");
-        	var pcodeSign = el.get("pcodeSign");
             var data = this.getOptionsData(el,formObj);
             if(!$defined(data))return;
             if($defined(d) || $chk(d)) {
