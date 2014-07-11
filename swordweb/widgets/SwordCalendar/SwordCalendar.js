@@ -198,6 +198,8 @@ var SwordCalendar = new Class({
         this.top_r = this.top_l.clone();
         this.top_r.addClass('cd2_top_r');
         this.top_r.inject(this.topDiv);
+        
+        this.top_l.addClass("cd2_top_z");
 
         this.topDivClone = this.topDiv.clone(false, false);
         this.topDivClone.setStyles({'display':'none', 'line-height':'28px', 'text-align':'center', 'font-weight':'bold'});
@@ -221,46 +223,7 @@ var SwordCalendar = new Class({
             var el = $(eve.target);
             el.removeClass('cd2_cell_mouseover');
         }.bind(this));
-        cell.addEvent('click', function (e) {
-            var eve = new Event(e);
-            var el = $(eve.target);
-            var text = el.get('text');
-            if (this.bcContainer2.get('cdtype') == 'month') {
-                if (text.contains('月')) {
-                    // date format
-                    var monthText = text.split('月')[0];
-                    this.testMonthDaysFebruary(this.top_m.get('text'));
-                    var monthMax = this.options.monthDays[monthText - 1];
-                    var oovv = this.top_m.get('text') + '-' + (monthText.length == 1 ? '0' + monthText : monthText);
-                    if (this.options.dateControl == "minDay") {
-                        this.dateInput.set('dataformat', 'yyyy-MM-dd');
-                        this.dateInput.set('value', SwordDataFormat.formatStringToString(oovv + '-01', "yyyy-MM-dd", this.dateInput.get('dataformat')));
-                    } else if (this.options.dateControl == "maxDay") {
-                        this.dateInput.set('dataformat', 'yyyy-MM-dd');
-                        this.dateInput.set('value', SwordDataFormat.formatStringToString(oovv + '-' + monthMax, "yyyy-MM-dd", this.dateInput.get('dataformat')));
-                    } else {
-                        this.dateInput.set('value', SwordDataFormat.formatStringToString(oovv, "yyyy-MM", this.dateInput.get('dataformat')));
-                    }
-                    //this.dateInput.set("realvalue", this.dateInput.value);
-                    this.hideCalendar2(el);
-                } else {
-                    this.monthContent.setStyle('display', '');
-                    this.monthContent.set('show', true);
-                    this.changeTopMidState('pointer');
-                    this.yearContent.setStyle('display', 'none');
-                    this.yearContent.set('show', false);
-                    this.top_m.set('text', text);
-                    if (text == this.dateInput.get('selYear'))
-                        this.monthContent.getElements('div.cd2_cell[text=' + this.dateInput.get('selMonth') + ']').addClass('cd2_cell_selected');
-                    else
-                        this.monthContent.getElements('div.cd2_cell').removeClass('cd2_cell_selected');
-                }
-            } else {
-                this.dateInput.set('value', SwordDataFormat.formatStringToString(text, "yyyy", this.dateInput.get('dataformat')));
-              //  this.dateInput.set("realvalue", this.dateInput.value);
-                this.hideCalendar2(el);
-            }
-        }.bind(this));
+       
         var currentYear = new Date().getFullYear() + '';
         var text = currentYear / 1 - 1;
         for (var i = 0; i < 3; i++) {
@@ -293,29 +256,31 @@ var SwordCalendar = new Class({
         //被克隆对象销毁
         cell.destroy();
         line.destroy();
-
-        //事件处理
-        this.top_l.addEvent('click', function () {
-            if (this.yearContent.get('show') == 'true') {
-                this.yearContent.getElements('div.cd2_cell').each(function (item) {
-                    item.set('text', item.get('text') / 1 - 10);
-                    if (item.get('text') == this.dateInput.get('selYear')) {
-                        item.addClass('cd2_cell_selected');
-                    } else {
-                        item.removeClass('cd2_cell_selected');
-                    }
-                }.bind(this));
-                var textA = this.top_m.get('text').split('-');
-                this.top_m.set('text', (textA[0] / 1 - 10) + "-" + (textA[1] / 1 - 10));
+        
+        this.bcContainer2.addEvent('click', function (e) {
+            var eve = new Event(e);
+            var el = $(eve.target);
+            var text = el.get("text");
+            if (this.bcContainer2.get('cdtype') == 'month') {
+            	if(el.hasClass("cd2_top_z")){ // 向左
+            		this.dealTopL();
+            	}else if(el.hasClass("cd2_top_m")){
+            		this.dealTopM();
+            	}else if(el.hasClass("cd2_top_r")){ // 向右
+            		this.dealTopR();
+            	}else if(el.hasClass("cd2_cell")){ // 年/月單元格
+            		this.dealMonth(e);
+            	}
             } else {
-                this.top_m.set('text', this.top_m.get('text') / 1 - 1);
-                if (this.top_m.get('text') != this.dateInput.get('selYear'))
-                    this.monthContent.getElements('div.cd2_cell').removeClass('cd2_cell_selected');
-                else
-                    this.monthContent.getElements('div.cd2_cell[text=' + this.dateInput.get('selMonth') + ']').addClass('cd2_cell_selected');
+                this.dateInput.set('value', SwordDataFormat.formatStringToString(text, "yyyy", this.dateInput.get('dataformat')));
+              //  this.dateInput.set("realvalue", this.dateInput.value);
+                this.hideCalendar2(el);
             }
-
         }.bind(this));
+        //事件处理
+       /* this.top_l.addEvent('click', function () {
+           
+        }.bind(this));*/
         this.top_l.addEvent('mouseover', function () {
             this.top_l.addClass('cd2_top_l_over');
         }.bind(this));
@@ -332,47 +297,107 @@ var SwordCalendar = new Class({
 
         this.changeTopMidState('pointer');
 
-        this.top_m.addEvent('click', function () {
-            if (this.monthContent.get('show') == 'true') {
-                this.monthContent.setStyle('display', 'none');
-                this.monthContent.set('show', false);
-                this.changeTopMidState('default');
-                this.yearContent.setStyle('display', '');
-                this.yearContent.set('show', true);
-                var text = this.top_m.get('text');
-                text = text.substring(0, 3) + '0';
-                this.yearContent.getElements('div.cd2_cell').each(function (item, index) {
-                    var _text = text / 1 + index - 1 + '';
-                    item.set('text', _text);
-                    if (_text == this.dateInput.get('selYear')) {
-                        item.addClass('cd2_cell_selected');
-                    } else {
-                        item.removeClass('cd2_cell_selected');
-                    }
-                }.bind(this));
-                this.top_m.set('text', text + '-' + (text / 1 + 9));
-            }
-        }.bind(this));
-        this.top_r.addEvent('click', function () {
-            if (this.yearContent.get('show') == 'true') {
-                this.yearContent.getElements('div.cd2_cell').each(function (item) {
-                    item.set('text', item.get('text') / 1 + 10);
-                    if (item.get('text') == this.dateInput.get('selYear')) {
-                        item.addClass('cd2_cell_selected');
-                    } else {
-                        item.removeClass('cd2_cell_selected');
-                    }
-                }.bind(this));
-                var textA = this.top_m.get('text').split('-');
-                this.top_m.set('text', (textA[0] / 1 + 10) + "-" + (textA[1] / 1 + 10));
+        /*this.top_m.addEvent('click', function () {
+        	
+        }.bind(this));*/
+        /*this.top_r.addEvent('click', function () {
+            
+        }.bind(this));*/
+    },
+    dealTopR:function(){
+    	if (this.yearContent.get('show') == 'true') {
+            this.yearContent.getElements('div.cd2_cell').each(function (item) {
+                item.set('text', item.get('text') / 1 + 10);
+                if (item.get('text') == this.dateInput.get('selYear')) {
+                    item.addClass('cd2_cell_selected');
+                } else {
+                    item.removeClass('cd2_cell_selected');
+                }
+            }.bind(this));
+            var textA = this.top_m.get('text').split('-');
+            this.top_m.set('text', (textA[0] / 1 + 10) + "-" + (textA[1] / 1 + 10));
+        } else {
+            this.top_m.set('text', this.top_m.get('text') / 1 + 1);
+            if (this.top_m.get('text') != this.dateInput.get('selYear'))
+                this.monthContent.getElements('div.cd2_cell').removeClass('cd2_cell_selected');
+            else
+                this.monthContent.getElements('div.cd2_cell[text=' + this.dateInput.get('selMonth') + ']').addClass('cd2_cell_selected');
+        }
+    },
+    dealTopL:function(){
+    	 if (this.yearContent.get('show') == 'true') {
+             this.yearContent.getElements('div.cd2_cell').each(function (item) {
+                 item.set('text', item.get('text') / 1 - 10);
+                 if (item.get('text') == this.dateInput.get('selYear')) {
+                     item.addClass('cd2_cell_selected');
+                 } else {
+                     item.removeClass('cd2_cell_selected');
+                 }
+             }.bind(this));
+             var textA = this.top_m.get('text').split('-');
+             this.top_m.set('text', (textA[0] / 1 - 10) + "-" + (textA[1] / 1 - 10));
+         } else {
+             this.top_m.set('text', this.top_m.get('text') / 1 - 1);
+             if (this.top_m.get('text') != this.dateInput.get('selYear'))
+                 this.monthContent.getElements('div.cd2_cell').removeClass('cd2_cell_selected');
+             else
+                 this.monthContent.getElements('div.cd2_cell[text=' + this.dateInput.get('selMonth') + ']').addClass('cd2_cell_selected');
+         }
+    },
+    dealTopM:function(){
+        if (this.monthContent.get('show') == 'true') {
+            this.monthContent.setStyle('display', 'none');
+            this.monthContent.set('show', false);
+            this.changeTopMidState('default');
+            this.yearContent.setStyle('display', '');
+            this.yearContent.set('show', true);
+            var text = this.top_m.get('text');
+            text = text.substring(0, 3) + '0';
+            this.yearContent.getElements('div.cd2_cell').each(function (item, index) {
+                var _text = text / 1 + index - 1 + '';
+                item.set('text', _text);
+                if (_text == this.dateInput.get('selYear')) {
+                    item.addClass('cd2_cell_selected');
+                } else {
+                    item.removeClass('cd2_cell_selected');
+                }
+            }.bind(this));
+            this.top_m.set('text', text + '-' + (text / 1 + 9));
+        }
+    },
+    dealMonth:function(e){
+    	var eve = new Event(e);
+        var el = $(eve.target);
+    	var text = el.get('text');
+    	if (text.contains('月')) {
+            // date format
+            var monthText = text.split('月')[0];
+            this.testMonthDaysFebruary(this.top_m.get('text'));
+            var monthMax = this.options.monthDays[monthText - 1];
+            var oovv = this.top_m.get('text') + '-' + (monthText.length == 1 ? '0' + monthText : monthText);
+            if (this.options.dateControl == "minDay") {
+                this.dateInput.set('dataformat', 'yyyy-MM-dd');
+                this.dateInput.set('value', SwordDataFormat.formatStringToString(oovv + '-01', "yyyy-MM-dd", this.dateInput.get('dataformat')));
+            } else if (this.options.dateControl == "maxDay") {
+                this.dateInput.set('dataformat', 'yyyy-MM-dd');
+                this.dateInput.set('value', SwordDataFormat.formatStringToString(oovv + '-' + monthMax, "yyyy-MM-dd", this.dateInput.get('dataformat')));
             } else {
-                this.top_m.set('text', this.top_m.get('text') / 1 + 1);
-                if (this.top_m.get('text') != this.dateInput.get('selYear'))
-                    this.monthContent.getElements('div.cd2_cell').removeClass('cd2_cell_selected');
-                else
-                    this.monthContent.getElements('div.cd2_cell[text=' + this.dateInput.get('selMonth') + ']').addClass('cd2_cell_selected');
+                this.dateInput.set('value', SwordDataFormat.formatStringToString(oovv, "yyyy-MM", this.dateInput.get('dataformat')));
             }
-        }.bind(this));
+            //this.dateInput.set("realvalue", this.dateInput.value);
+            this.hideCalendar2(el);
+        } else {
+            this.monthContent.setStyle('display', '');
+            this.monthContent.set('show', true);
+            this.changeTopMidState('pointer');
+            this.yearContent.setStyle('display', 'none');
+            this.yearContent.set('show', false);
+            this.top_m.set('text', text);
+            if (text == this.dateInput.get('selYear'))
+                this.monthContent.getElements('div.cd2_cell[text=' + this.dateInput.get('selMonth') + ']').addClass('cd2_cell_selected');
+            else
+                this.monthContent.getElements('div.cd2_cell').removeClass('cd2_cell_selected');
+        }
     },
     changeTopMidState:function (state) {
         if (state == 'pointer') {
