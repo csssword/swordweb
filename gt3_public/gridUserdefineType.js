@@ -42,7 +42,6 @@
 //		$w('save').load = null;
 	};
 	this.addlx=function(){
-		//debugger;
 		girdName = null;
 		var wrap = $('lxwrap');
 		var clickedDiv=wrap.getElement('div.clicked');
