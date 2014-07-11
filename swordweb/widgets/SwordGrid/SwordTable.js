@@ -5093,8 +5093,9 @@ var SwordGrid = new Class({
             var ss =  this.getSwordSort();
             req.sortName = ss.options.sortName;  //排序
             req.sortFlag = ss.options.sortFlag;    //排序
-            if($chk(this.options.ptid))req.tid = this.options.ptid;
-
+            if($chk(this.options.ptid)) {
+            	req.ctrl = this.options.ptid;
+            }
 
             pc.postReq({
                 'req':req
