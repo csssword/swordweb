@@ -440,6 +440,9 @@ var Textarea = new Class(
 		        	this.parent.nextFocus(e);
 		        	return;
 		        }
+				if(e.type == "blur"){
+					this.box.set("realvalue", this.box.get("value"));
+				}
 			},
 			leftUTFString : function(str, len) {
 				if (this.getStringUTFLength(str) <= len) {
