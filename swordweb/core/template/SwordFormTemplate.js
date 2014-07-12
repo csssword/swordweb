@@ -2,77 +2,101 @@
 var SwordForm_Template = {
     //共有属性
     'PUBATTR':' style="{css}" rule="{rule}" bizctrl="{bizctrl}" biztid="{biztid}" name="{name}" msg="{msg}" '
-};
-$extend(SwordForm_Template, {
-    //panel框
-    'panel':'<div align="center" class="swordfrom_wrap_div"><div class="swordform-panel-box"><div class="swordform-panel-tl"></div><div class="swordform-panel-tr"></div><div class="swordform-panel-title" id="{name}_panelTitle" ><div id="{name}_panelTog" class="x-tool" title="收缩"></div>{caption}</div></div></div>',
-    //文本框
-    'text':function(){return SwordTextTemplate.render.apply(SwordTextTemplate,Array.prototype.slice.call(arguments))},
-    //label框
-    'label': function(){return SwordLabelTemplate.render.apply(SwordLabelTemplate,Array.prototype.slice.call(arguments))},
-    //下拉选择框
-    'select':function(){return SwordSelectTemplate.render.apply(SwordSelectTemplate,Array.prototype.slice.call(arguments))},
-    //下拉树
-    'pulltree':function(){return SwordPulltreeTemplate.render.apply(SwordPulltreeTemplate,Array.prototype.slice.call(arguments))},
-    //日期
-    'date':function(){return SwordCalendarTemplate.render.apply(SwordCalendarTemplate,Array.prototype.slice.call(arguments));},
-    //单选框
-    'radio':function(){return SwordRadioCheckboxTemplate.render.apply(SwordRadioCheckboxTemplate,Array.prototype.slice.call(arguments));},
-    //复选框
-    'checkbox':function(){return SwordRadioCheckboxTemplate.render.apply(SwordRadioCheckboxTemplate,Array.prototype.slice.call(arguments));},
-    //普通文件上传
-    'file':function(){return SwordFileTemplate.render.apply(SwordFileTemplate,Array.prototype.slice.call(arguments));},
-    //大文本框
-    'textarea':function(){return SwordTextareaTemplate.render.apply(SwordTextareaTemplate,Array.prototype.slice.call(arguments));},
-    //隐藏框
-//    'hidden':function(){return SwordHiddenTemplate.render.apply(SwordHiddenTemplate,Array.prototype.slice.call(arguments));},
-    //密码框
-    'password':function(){return SwordPasswordTemplate.render.apply(SwordPasswordTemplate,Array.prototype.slice.call(arguments));}
-});
-//模板的扩展方法
-$extend(SwordForm_Template, {
+    ,'panel':'<div class="swordform-panel-box"><div class="swordform-panel-tl"></div><div class="swordform-panel-tr"></div><div class="swordform-panel-title" id="{name}_panelTitle" ><div id="{name}_panelTog" class="x-tool" title="收缩"></div>{caption}</div></div>'
+    ,htmlStrs:[]
+    
     /**
      * 创建FORM结构
      * @param pNode 代表sword="SwordForm"的整个DIV节点(包括子节点)的element对象
      * @param data  FORM的初始化数据//原为初始化数据对象,现修改为formObj
      */
-    render:function (pNode, formObj) {
-        var me = this, len, type, d={}, NAME = pNode.get('name');
-        //获取FORM中所有的item定义
-        formObj.items = pNode.getElements('div[name][type]');
-        len = formObj.items.length;
-        d.PName=NAME;
-        //创建panel
-        if (pNode.get('panel') == "true") {
-            pNode.insertBefore(STemplateEngine.createFragment(STemplateEngine.render(me['panel'], pNode,{'caption':''})), pNode.firstChild);
-        }
-        //循环创建item
-        for (var i=0; i < len; i++) {
-        	var el=formObj.items[i];
-        	formObj.itemsDiv.include(el.clone());
-            type = el.get('type') || 'text';
-            var elName=el.get("name");
-            var id=NAME+"_"+elName;
-            if ($type(me[type]) == 'function') {
-                me[type](el,'SwordForm',d, formObj);
-            }else{
-            	el.set("id",id);
-            }
-            formObj.fieldElHash.set(elName,$(id));
-            if($defined(el.get("rule")) && el.get("rule").contains('must')&&!($(id).disabled || el.get('disable') == 'true'))$(id).setStyle('background-color','#b5e3df');
-         }
-        var hidItems = pNode.getElements('input[name][type="hidden"]');
-        var hidlen = hidItems.length;
-        for (var j =0; j < hidlen; j++) {
-        	var el=hidItems[j];
-        	formObj.itemsDiv.include(el.clone());
-            var elName=el.get("name");
-            var id=NAME+"_"+elName;
-            	el.set("id",id);
-            formObj.fieldElHash.set(elName,$(id));
-         }
+    ,render:function (pNode, formObj) {
+    	this.realRender(pNode,formObj);
     }
-});
+	,realRender:function(pNode,formObj,formData){
+		/*
+		 * 1, 先处理panel="true"
+		 * 2，然后处理内部div(例如div type="hidden")
+		 * 3, 处理table定义.
+		 * 			思路：参照申报大表单处理方式，不停的向一个临时的表单数组中放入html片段.最后完成一个innerhtml的设置.
+		 */
+		pNode=$(pNode),this.formObj=formObj,this.fName=pNode.get("name");
+		var tHStrs=this.htmlStrs;
+		if(pNode.get("panel")=="true"){
+			tHStrs.push(this["panel"].substitute({caption:formObj.options.caption, name:this.fName}));
+		}
+		var tb = pNode.getChildren();
+        tb.each(function(item, index) {
+        	if(item.get("tag")=="div"){
+        		var typeStr=item.get('type');
+        		if(typeStr=='hidden'){
+        			var itemName=item.get("name");
+        			tHStrs.push(this.getItemHtml(typeStr, item, formData[itemName]));
+        		}else{
+        			tHStrs.push(item.outerHTML);
+        		}
+        	}else{
+        		this.buildTable(item,formData);
+        	}
+        }.bind(this));
+        this.render();
+	}
+	,buildTable:function(tableEl,formData){
+		var tem = this.htmlStrs;
+   	 	tem.push("<table class='tab_form' width='{w}' id='{id}' border='0' cellpadding='0' cellspacing='0' style='{style}'>".substitute({w:tableEl.get('width'), id:tableEl.get('id'), style:tableEl.get("style")}));
+        var cg = tableEl.getFirst();
+        if (cg.tagName.toLowerCase() == 'colgroup') {
+            tem.push('<colgroup>');
+            tem.push(cg.innerHTML);
+            tem.push('</colgroup>');
+        }
+        var trs = tableEl.getFirst('tbody').getChildren('tr');
+        tem.push('<tbody>');
+        var tr = trs[0], tds, i, tag, d, type,tdl;
+        while (tr) {
+            var subid = tr.get('id');
+            if($chk(subid)){
+                tem.push("<tr style='{style}' id='{id}'>".substitute({style:tr.get('style'), id: subid}));
+            }else{
+                tem.push("<tr style='{style}'>".substitute({style:tr.get('style')}));
+            }
+            tds = tr.getChildren(),tdl=tds.length;
+            for (i = 0; i < tdl; i++) {
+                tag = tds[i].tagName.toLowerCase();
+                if (tag == 'th') {
+                    tem.push(("<th style='{style}' colspan='{c}' rowspan='{r}' >" + tds[i].innerHTML + "</th>").substitute({c:tds[i].get('colspan'), r:tds[i].get('rowspan'), style:tds[i].get('style')}));
+                } else {
+                    d = tds[i].getFirst();
+                    if (d != null) {
+                    	 if(d.get("tag")!="table"){
+                    		 type = d.get('type'),itemName=d.get("name");
+		                   	 tem.push("<td>");
+		                   	 if(type){
+		                   		tem.push(this.getItemHtml(type, d, formData[itemName]));
+		                   	 }
+		                   	 tem.push(d.outerHTML);
+		                   	 tem.push("</td>");
+                    	 }else{
+                    		 this.buildTable(d,formData);
+                    	 }
+                    }
+                }
+            }
+            tem.push('</tr>');
+            tr = tr.getNext('tr');
+        }
+        tem.push('</tbody></table>');
+	}
+	,render:function () {
+		this.formObj.options.pNode.innerHTML = this.htmlStrs.join('');
+    }
+	/*
+	 * 根据类型,itemEl,和elData返回一段完整的HTML字符串
+	 */
+	,getItemHtml:function(type,itemEl,elData){
+		return pc.formItems[type].render(itemEl,this.formObj,this.fName,elData);
+	}
+};
 
 
 
