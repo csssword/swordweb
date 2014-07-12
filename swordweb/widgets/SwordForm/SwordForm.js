@@ -120,30 +120,21 @@ var SwordForm = new Class({
         this.Vobj = pc.widgetFactory.create("SwordValidator");
         this.options.vType = this.options.vType || "intime";
         this.Vobj.initParam(this.options.vType);
-        this.templateObj={
-        		"checkbox":SwordRadioCheckboxTemplate,
-        		"select":SwordSelectTemplate,
-        		"radio":SwordRadioCheckboxTemplate,
-        		"calendar":SwordCalendarTemplate,
-        		"text":SwordTextTemplate,
-        		"textarea":SwordTextareaTemplate,
-        		"password":SwordPasswordTemplate,
-        		"label":SwordLabelTemplate,
-        		"tree":SwordPulltreeTemplate,
-        		"pulltree":SwordPulltreeTemplate,
-        		"file":SwordFileTemplate
-        	};
         this.createForm();
     },
     createForm:function() {
         this.options.pNode.set({'class':'swordfrom_div','align':'center'});
-        this.wrapDiv = new Element("div", {'align':'center','class':'swordfrom_wrap_div'}).inject(this.options.pNode);
-        if(this.options.topPanel == "true") {
-            var div = new Element("div", {'class':'swordform_panel_top'}).inject(this.wrapDiv);
-            div.set("html", "<div class='l'></div><div class='r'></div>");
-        }
-        if(this.options.userDefine != "true") {
+        if(this.options.userDefine == "true") {
+        	//SwordForm_Template.render(this.options.pNode,this); 此逻辑放到initData的时候处理.
+        	this.setEventDelegator();//注册事件代理对象;
+        	return;
+        } else {
+        	if(this.options.topPanel == "true") {
+                var div = new Element("div", {'class':'swordform_panel_top'}).inject(this.wrapDiv);
+                div.set("html", "<div class='l'></div><div class='r'></div>");
+            }
         	 if(this.options.panel == 'true') {
+        		 this.wrapDiv = new Element("div", {'align':'center','class':'swordfrom_wrap_div'}).inject(this.options.pNode);
                  this.panel = new SwordPanel({pNode:this.wrapDiv,caption:this.options.caption}).initParam();
                  if(this.options.isShowTogdiv == "true") {
                      new Element('div', {
@@ -223,39 +214,78 @@ var SwordForm = new Class({
             this.lazyInitData.each(function(v, k) {
                 this.getWidget(k).initData(v, "ie6");
             }.bind(this));
-        } else {
-        	/*
-            if($defined(this.wrapDiv)) {
-                //自定义并且panel==false，去掉上面的这条线
-                if(this.options.panel == 'false')this.wrapDiv.setStyle('border-style', 'none');
-                this.options.pNode.grab(this.wrapDiv, "top");
+            if(this.options.edit == "false") {
+                this.disable();
             }
-            this.wrapDiv = this.options.pNode;
-            this.items = this.wrapDiv.getElements("div[type][name]");
-            var item,sw;
-            var hiddenDiv = new Element("div", {'styles':{'display':'none'}}).inject(this.wrapDiv);
-            for(var i = 0; i < this.items.length; i++) {
-                item = this.items[i];
-                sw = item.parentNode.getAttribute('sword');
-                if($chk(sw)&&sw!="SwordForm")continue;
-                this.itemsDiv[i] = item.clone();
-                if(item.get('type') == 'hidden' && item.get("yxbj") != 'false') {
-                    this._parseItem(hiddenDiv, item);
-                } else {
-                    var p = item.getParent();
-                    this._parseItem(p, item);
-                    var newNode = p.getLast();
-                    p.insertBefore(newNode, item);
-                    item.setStyle("display", "none");
-                }
-            }*/
-        	//在用户自定义的时候采用模板引擎处理方式渲染
-        	SwordForm_Template.render(this.options.pNode,this);
-        }
-        if(this.options.edit == "false") {
-            this.disable();
         }
     },
+    setEventDelegator : function() {
+		this.eDelegator = new SwordEventDelegator({
+			'container' : this.options.pNode
+		});
+		[".swordform_item_oprate",".dateBtn",".swordselect-selimg",".tree-select-selimg"].each(function(item){
+			this.eDelegator.add('click', this.itemElClick.bind(this),item);
+		}.bind(this));
+		/* onFocusin和click有冲突,onfocusout事件模拟触发事件blur.*/
+		if(Browser.Engine.trident){
+			this.options.pNode.onfocusout = function(e) {
+				e = new Event(e);
+				var tEl=e.target;
+				if (tEl.hasClass("swordform_item_oprate")||$chk(tEl.get("ruleType"))) {
+					this.itemElBlur(e, e.target);
+				}
+			}.bind(this);
+			this.options.pNode.onfocusin = function(e) {
+				e = new Event(e);
+				var tEl=e.target;
+				if (tEl.hasClass("swordform_item_oprate")||$chk(tEl.get("ruleType"))) {
+					this.itemElFocus(e, e.target);
+				}
+			}.bind(this);
+		}
+		this.eDelegator.add('dblclick', this.itemElDblClick.bind(this),
+				'.swordform_item_oprate');
+		this.eDelegator.add('keydown', this.itemElKeydown.bind(this),
+				'.swordform_item_oprate');
+		this.eDelegator.add('keyup', this.itemElKeyup.bind(this),
+		'.swordform_item_oprate');
+	},
+	itemElFocus : function(e, el) {
+		var typeStr=el.get("widget")||el.get("type");
+		pc.formItems[typeStr].runEventFocus(e, el,this);
+	},
+	itemElClick : function(e, el) {
+		var tEl=$(e.target);
+		if(tEl.get("tag")=="td"){
+			el=tEl.getPrevious().getElement("input");
+		}
+		var typeStr=el.get("widget")||el.get("type");
+		if(typeStr)pc.formItems[typeStr].runEventClick(e, el,this);
+	},
+	itemElBlur : function(e, el) {
+		var typeStr=el.get("widget")||el.get("type");
+		if(typeStr)pc.formItems[typeStr].runEventBlur(e, el,this);
+		/*this.getField(el.get("name")).maxLengthCount(e);*/
+		/*$("diveventtest").set("text",$("diveventtest").get("text")+"blur");*/
+		/*先执行校验，然后执行format，最后执行自定义事件.*/
+	},
+	itemElDblClick : function(e, el) {
+		var typeStr=el.get("widget")||el.get("type");
+		pc.formItems[typeStr].runEventDblClick(e, el,this);
+		/*$("diveventtest").set("text",$("diveventtest").get("text")+"dbclick");*/
+		/*执行定义的dbclick事件.*/
+	},
+	itemElKeydown : function(e, el) {
+		var typeStr=el.get("widget")||el.get("type");
+		pc.formItems[typeStr].runEventKeydown(e, el,this);
+		/*this.getField(el.get("name")).maxLengthCount(e);*/
+		/*$("diveventtest").set("text",$("diveventtest").get("text")+"keydown");*/
+		/*除textarea外，执行定义的dbclick事件.*/
+	},
+	itemElKeyup : function(e, el) {
+		var typeStr=el.get("widget")||el.get("type");
+		pc.formItems[typeStr].runEventKeyup(e, el,this);
+	},
     toggleFormDisplay:function(el,state){
     	var temp = this.options.pNode;
     	if(!el)el=temp.getElement("div.x-tool");
@@ -352,7 +382,41 @@ var SwordForm = new Class({
         }.bind(this));
     },
     _itemSwitch:function(name, type, options) {
-        var defineItem = this.options.pNode.getElement("div[name='" + name + "']");
+    	var fName=this.options.name,idStr=fName+"_"+name,idEl=$(idStr),elType=idEl.get("type"),yRule=idEl.get("rule"),xRule,defineItemEl;
+    	if(type=="hidden"||elType=="hidden"){alert("hidden类型不能进行类型转换！");return;}
+    	else{
+    		this.fieldElHash.erase(idStr);
+    		idEl.getParent(".swordform_field_wrap").destroy();
+    		defineItemEl=$$("div[name='"+name+"'][type]")[0];
+    		if(!defineItemEl){return;}
+    		defineItemEl.set("type",type);
+    		if(options){
+    			for(var key in options){
+    				defineItemEl.set(key,options[key]);
+    			}
+    		}xRule=defineItemEl.get("rule");
+    		var htmlStr=SwordForm_Template.getItemHtml(type, defineItemEl, "");
+    		var tdfg=STemplateEngine.createFragment(htmlStr);
+    		tdfg.childNodes[0].inject(defineItemEl,"before");
+    		idEl=$(idStr);
+    		var widget=idEl.get("widget");
+    		this.fieldElHash.set(idStr,idEl);
+    		if(widget){
+    			var tInitW=pc.formItems[widget]?pc.formItems[widget].initWidget:null;
+    			if(tInitW)tInitW(name,idEl,this);
+    		}
+    		//处理span.red
+    		var preEl=defineItemEl.getParent("td").getPrevious();
+    		if(preEl){
+	    		if((yRule&&yRule.indexOf("must")!=-1)&&((!xRule)||xRule.indexOf("must")==-1)){
+	    			var spEl=preEl.getElement(".red");
+	    			if(spEl)spEl.destroy();
+	    		}if(((!yRule||yRule.indexOf("must")==-1)||(!preEl.getElement(".red")))&&(xRule&&xRule.indexOf("must")!=-1)){
+	    			preEl.innerHTML=preEl.innerHTML+"<span style='color:red'>*</span>";
+	    		}
+    		}
+    	}
+       /* var defineItem = this.options.pNode.getElement("div[name='" + name + "']");
         var selDivAttributes = this.itemsDiv.filter(function(item) {
             return item.get('name') == name;
         })[0].attributes;
@@ -462,7 +526,7 @@ var SwordForm = new Class({
 	        }.bind(this));
 		}
         this.allElEvent(elTemp);
-        this.addEventForElType(elTemp);
+        this.addEventForElType(elTemp);*/
     },
     isVal:function() {
         return (this.options.isValidate == 'true') || (this.options.vType == "elafter");
@@ -813,27 +877,35 @@ var SwordForm = new Class({
             }
         }.bind(this));
         new Element('td', {'class':'swordform_btn_right','html':'<i>&nbsp;</i>'}).inject(tr);
-    },
-    initData:function(d,resdata) {
+    }
+    ,renderForm:function(el,data){
+    	SwordForm_Template.realRender(el||this.options.pNode,this,data||{});//html渲染和数据处理一起处理
+    	//todo 临时注册在这里
+    	this.initEventForPanel();
+    	this.fieldElHash.getKeys().each(function(item){
+    		var idEl=$(item),name=idEl.get("name"),widget=idEl.get("widget");
+    		this.fieldElHash.set(item,idEl);
+    		if(widget){
+    			var tInitW=pc.formItems[widget]?pc.formItems[widget].initWidget:null;
+    			if(tInitW)tInitW(name,idEl,this);
+    		}
+    	}.bind(this));
+    }
+    ,initData:function(d) {
     	if(!$chk(d)) {
             return;
         }
-        var opras = this.getFieldEls();
-        if(d.sword == "SwordForm") {
-            opras.each(function(em) {
-            	var elData=d.data[em.get('name')];
-            	if($chk(elData)){
-	            	var widgetStr=em.get('widget')||em.get("type");
-	            	if(widgetStr!="hidden")this.templateObj[widgetStr].initData(em,elData,this,resdata);
-	                else em.set("value",elData.value).set("realvalue",elData.value);
-            	}
-            	this.initFormatVal(em);
-            }.bind(this));
+    	var el=this.options.pNode;
+        if(d.sword == "SwordForm"&&!el.get("isload")) {
+        	this.renderForm(el,d.data);
             this.fireEvent("onFinish", d);
         } else {
-            var wd = this.getWidget(d.name.split(".")[1]);
-            if($defined(wd))
-                wd.initOptionsData(d.data);
+        	this.fieldElHash.getKeys().each(function(item){
+        		var idEl=$(item),name=idEl.get("name"),elData=d.data[name];
+        		if(elData){
+        			this.setValue(name, elData.value);
+        		}
+        	}.bind(this));
         }
     },
     getSubmitData:function() {
@@ -879,27 +951,26 @@ var SwordForm = new Class({
     },
     validate:function(name) {
         var oprates = $chk(name) ? [this.getFieldEl(name)] : this.getFieldEls();
-        var res = true;
-        for(var i = 0; i < oprates.length; i++) {
+        var res = true,ol=oprates.length;
+        for(var i = 0; i < ol; i++) {
             if($defined(oprates[i].get('rule'))) {
                 if(!this.Vobj.validate(oprates[i])) {
                     res=false;
                 }
-                if($defined(oprates[i].get('biztid')) || $defined(oprates[i].get('bizctrl'))) {
+                /*if($defined(oprates[i].get('biztid')) || $defined(oprates[i].get('bizctrl'))) {
                     if(res&&!this.bizValidate(oprates[i])) {
                         res = false;
                     }
-                }
-            } else if($defined(oprates[i].get('biztid')) || $defined(oprates[i].get('bizctrl'))) {
+                }*/
+            } /*else if($defined(oprates[i].get('biztid')) || $defined(oprates[i].get('bizctrl'))) {
                 if(!this.bizValidate(oprates[i])) {
                     res = false;
                 }
-            }
+            }*/
             if(!res){
                 try {
                     if(!$chk(name))oprates[i].focus();
-                    //else  this.getFieldEl(name).focus();
-                    if(oprates[i].get('readonly') && (Browser.Engine.trident4 || Browser.Engine.trident5)) {
+                    if((oprates[i].get('readonly')||item.getAttribute("readonly")) && (Browser.Engine.trident4 || Browser.Engine.trident5)) {
                         $(document.body).scrollTo(0, oprates[i]._getPosition().y - 20);
                     }
                 } catch(e) {
@@ -910,11 +981,7 @@ var SwordForm = new Class({
         return res;
     },
     getField:function(name) {
-        var w = this.getWidget(name);
-        if(w && $type(w) != "SwordSelect") {
-            return this.getWidget(name);
-        }
-        return this.getFieldEl(name);
+            return this.getWidget(name)||this.getFieldEl(name);
     },
     getFieldEl:function(name) {//增加需要调用set
         return this.fieldElHash.get(name);//this.options.pNode.getElement(".swordform_item_oprate[name='" + name + "']");
@@ -927,7 +994,7 @@ var SwordForm = new Class({
         }.bind(this));
     },
     getFieldEls:function() {
-        return $$(this.fieldElHash.getValues());//this.options.pNode.getElements(".swordform_item_oprate");
+        return this.fieldElHash.getValues();//this.options.pNode.getElements(".swordform_item_oprate");
     },
     getFieldElNames:function() {
         return this.fieldElHash.getKeys();//this.options.pNode.getElements(".swordform_item_oprate").get('name');
@@ -1086,7 +1153,67 @@ var SwordForm = new Class({
         }.bind(this));
     }
     ,setValue:function(itemName, value) {
-        var em = this.getFieldEl(itemName);
+    	var idEl=$(this.options.name + '_' + itemName),widgetType=idEl.get("widget")||idEl.get("type");
+    	var nfs=["label","text","date","select","pulltree","radio","checkbox"];
+    	var realvalue=value,showvalue=value;
+    	if(nfs.contains(widgetType)){
+    		var t={radio:null,checkbox:null,pulltree:null,text:"format",label:"format",select:"sbmitcontent",date:"submitDateformat"};
+    		var fKeyS=t[widgetType],fvStr=idEl.get(fKeyS);
+    		if(fKeyS===null){
+    			var values=value.split(","),showvs=[];
+    			if(widgetType=="pulltree"){
+    				var d= pageContainer.getInitData(idEl.get("name")),datas=d?d.data:[],datal=datas.length;
+    				values.each(function(item){
+    					for(var i=0;i<datal;i++){
+    						if(datas[i].code==item){
+    							showvs.push(datas[i].caption);
+    							break;
+    						}
+    					}
+    				});
+    				showvalue=showvs.join(",");
+    			}else{//radio,checkbox
+    				var els=idEl.getElements(".formselect-list-item");
+    				els.each(function(itemEl){
+    					var inputEl=itemEl.removeClass("formselect-selected").getElement("input");
+    					inputEl.set("checked",false);
+    					var curCode=itemEl.get("code");
+    					if(values.contains(curCode)){inputEl.set("checked",true);}
+    				});
+    				return;
+    			}
+    		}else if(fKeyS=="format"){//text,label
+    			if(fvStr)showvalue=sword_fmt.formatText(idEl, value, '', fvStr).value;
+    			if(widgetType=="label"){idEl.set("text",realvalue);}
+    		}else if(fKeyS=="submitDateformat"){//date
+    			if(fvStr)realvalue=SwordDataFormat.formatStringToString(value, idEl.get("dataformat")||"yyyy-MM-dd", fvStr);
+    		}else{//select
+    			var dataname=idEl.get("dataname"),dataObj= pc.getInitDataByDataName(dataname),datasA,sDObj;
+	       		 if(dataObj&&dataObj.data){
+	       			 datasA=dataObj.data;
+	       			 sDObj=datasA.filter(function(item){return item.code==value;})[0];
+	       		 }else{
+	       			 datasA=$$("div[name='"+idEl.get("name")+"'][type]")[0].getChildren(">div");
+	       			 sDObj=datasA.filter(function(item){return item.get("code")==value;})[0];
+	       			 if(sDObj){sDObj={"code":sDObj.get("code"),"caption":sDObj.get("caption")};}
+	       		 }
+	       		 if(sDObj){
+	       			 showvalue=sDObj.caption,code=realvalue=sDObj.code;
+	       			 idEl.set("code",code);
+	       			 var inputd=idEl.get("inputdisplay");
+	       			 if(fvStr){
+	           			 realvalue=fvStr.substitute(sDObj);
+	           		 }
+	           		 if(inputd){
+	           			 showvalue=inputd.substitute(sDObj);
+	           		 }
+	       		 }
+    		}
+    		idEl.set({"realvalue":realvalue,"value":showvalue});
+    	}else{
+    		idEl.set({"realvalue":value,"value":value});//file2 todo
+    	}
+        /*var em = this.getFieldEl(itemName);
         if(!$defined(em))return;
         if(['true','select','tree','radio','checkbox','calendar','textarea'].contains(em.get('widget'))) {
             if(em.get('widget') == 'tree') {
@@ -1172,16 +1299,28 @@ var SwordForm = new Class({
         	}
         }
         //em.set('oValue', value);
-        this.initFormatVal(em);
+        this.initFormatVal(em);*/
     }
     ,getValue:function(name) {
-        var Field = this.getField(name);
+        /*var Field = this.getField(name);
         if(!Field) return "";//为模板模式加的语句
         if($type(Field) != 'element') {
             return Field.getValue(this.getFieldEl(name));
         }
         if(Field.get('tag').toLowerCase() == 'label')return Field.get('realvalue') || Field.get('text');
-        return Field.retrieve("allDb") || Field.get('realvalue') || Field.get('value');
+        return Field.retrieve("allDb") || Field.get('realvalue') || Field.get('value');*/
+    	//@20140710
+    	var idEl=$(this.options.name + '_' + name),widget=idEl.get("widget");
+    	if(widget!="file2"){
+    		if(widget=="radio"||widget=="checkbox"){
+    			var v=[];
+    			idEl.getElements(".formselect-selected").each(function(item){v.push(item.get("code"));});
+    			return v.join(",");
+    		}
+    		return idEl.get("realvalue")||idEl.get("code")||idEl.get("value");
+    	}else{
+    		return "";//todo file2
+    	}
     },
     getTextValue:function(name) {
         return $(this.options.name + '_' + name).value;
@@ -1231,7 +1370,37 @@ var SwordForm = new Class({
         }
     },
     reset : function(ncps, nohidden) {
-        ncps = ncps || [];
+    	ncps = ncps || [],isNH=nohidden===true;
+    	var els=this.getFieldEls();
+    	els.each(function(item){
+    		var type=item.get("type"),name=item.get("name");
+    		if(isNH&&type=="hidden"){
+    			return;
+    		}else{
+    			if(ncps.indexOf(name)==-1){//如果没有找到定义,完全清空.
+    				item.set('value', '');
+                    item.set('realvalue', '');
+                    if(item.get('oValue')){item.set('oValue', '');}
+                    if(item.get('code'))item.set("code", "");
+                    if(type=="label"||type=="textarea"){
+                    	item.set("text","");
+                    }else if(type=="radio"||type=="checkbox"){
+                    	var els=item.getElements(".formselect-list-item");
+        				els.each(function(itemEl){
+        					itemEl.removeClass("formselect-selected").getElement("input").set("checked",false);
+        				});
+                    }
+                    this.Vobj.clearElTip(item);
+    			}else{//找到的项按照defValue重置value
+    				 var defValue = item.get("defValue");
+    	             if(defValue != null){
+	                	this.setValue(name, defValue);
+    	             }
+    	             this.Vobj.clearElTip(item);
+    			}
+    		}
+    	}.bind(this));
+        /*ncps = ncps || [];
         var match = (nohidden) ? ".swordform_item_oprate[type!='hidden']" : ".swordform_item_oprate";
         var itms = this.options.pNode.getElements(match);
         itms.each(function(item) {
@@ -1270,10 +1439,39 @@ var SwordForm = new Class({
                 }
                 this.Vobj.clearElTip(item);
             }
-        }.bind(this));
+        }.bind(this));*/
     }
     ,resetAll : function(ncps, nohidden) {
-        ncps = ncps || [];
+    	ncps = ncps || [],isNH=nohidden===true;
+    	var els=this.getFieldEls();
+    	els.each(function(item){
+    		var type=item.get("type"),name=item.get("name");
+    		if(isNH&&type=="hidden"){
+    			return;
+    		}else{
+    			if(ncps.indexOf(name)==-1){//如果没有找到定义清空,保留defvalue
+    				item.set('value', '');
+                    item.set('realvalue', '');
+                    if(item.get('oValue')){item.set('oValue', '');}
+                    if(item.get('code'))item.set("code", "");
+                    if(type=="label"||type=="textarea"){
+                    	item.set("text","");
+                    }else if(type=="radio"||type=="checkbox"){
+                    	var els=item.getElements(".formselect-list-item");
+        				els.each(function(itemEl){
+        					itemEl.removeClass("formselect-selected").getElement("input").set("checked",false);
+        				});
+                    }
+                    this.Vobj.clearElTip(item);
+                    var defValue = item.get("defValue");
+   	             	if(defValue != null){
+	                	this.setValue(name, defValue);
+   	             	}
+   	             	this.Vobj.clearElTip(item);
+    			}
+    		}
+    	}.bind(this));
+       /* ncps = ncps || [];
         var match = (nohidden) ? ".swordform_item_oprate[type!='hidden']" : ".swordform_item_oprate";
         var itms = this.options.pNode.getElements(match);
         itms.each(function(item) {
@@ -1290,7 +1488,7 @@ var SwordForm = new Class({
                             item.set("code", "");
                             item.set('realvalue', '');
                         }
-                        if(item.get('oValue'))item.set('oValue', '')
+                        if(item.get('oValue'))item.set('oValue', '');
                     }
                 } else {
                     if(item.retrieve('allDb'))item.store('allDb', null);
@@ -1310,7 +1508,7 @@ var SwordForm = new Class({
                 	 this.setValue(item.get("name"), defValue);
                 }
             }
-        }.bind(this));
+        }.bind(this));*/
     }
     ,getSubmitData4Grid:function() {
         var re = {
@@ -1410,18 +1608,24 @@ var SwordForm = new Class({
         //没有参数，默认全部
         if(names.length == 0) {
             names = this.getFieldElNames();
+        }else{
+        	var fName=this.options.name;
+        	names=names.map(function(item){return fName+"_"+item;});
         }
         names.each(function(name, index) {
-        	var el = this.getFieldEl(name);
-        	el.removeClass("invalid");
-            var w = this.getWidget(name);
-            if($defined(w)) {
-                if($defined(w.disable))w.disable(el);
-                if($type(w) == 'SwordTree' && $defined(w.select.disable))w.select.disable(el);
-                if($chk(w.box) && w.box.type == 'textarea')el.set('disabled', 'true').addClass('swordform_item_input_disable').setStyle('background-color','');
-            } else {
-                el.set('disabled', 'true').addClass('swordform_item_input_disable').setStyle('background-color','');
-            }
+        	var el=$(name),nameStr=el.get("name"),widgetType=el.get("widget")||el.get("type"),tsType=["pulltree","file2","radio","checkbox"];
+        	if(tsType.contains(widgetType)){
+        		if(widgetType=="radio"||widgetType=="checkbox"){
+        			el.set("disabled","true").getElements("input").each(function(item){item.set("disabled","true");});
+        		}else if(widgetType=="pulltree"){
+        			var cObj=this.getField(nameStr);
+        			if(cObj.select)cObj.select.disable(el);
+        		}else{
+        			
+        		}
+        	}else{
+            	el.set("disabled","true").addClass('swordform_item_input_disable').setStyle('background-color','')
+        	}    
         }.bind(this));
     },
     
@@ -1431,9 +1635,28 @@ var SwordForm = new Class({
         //没有参数，默认全部
         if(names.length == 0) {
             names = this.getFieldElNames();
+        }else{
+        	var fName=this.options.name;
+        	names=names.map(function(item){return fName+"_"+item;});
         }
         names.each(function(name, index) {
-            var w = this.getWidget(name);
+        	var el=$(name),nameStr=el.get("name"),rule=el.get("rule"),widgetType=el.get("widget")||el.get("type"),tsType=["pulltree","file2","radio","checkbox"];
+        	if(tsType.contains(widgetType)){
+        		if(widgetType=="radio"||widgetType=="checkbox"){
+        			el.erase("disabled").getElements("input").each(function(item){item.erase("disabled","true");});
+        		}else if(widgetType=="pulltree"){
+        			var cObj=this.getField(nameStr);
+        			if(cObj.select)cObj.select.enable(el);
+        		}else{
+        			
+        		}
+        	}else{
+            	el.erase("disabled").removeClass('swordform_item_input_disable');
+            	if(rule&&rule.contains('must')){
+            		el.setStyle('background-color','#b5e3df');
+            	}
+        	}
+           /* var w = this.getWidget(name);
             if($defined(w)) {
                 if($defined(w.enable))w.enable(this.getFieldEl(name));
                 if($type(w) == 'SwordTree' && $defined(w.select.enable))w.select.enable(this.getFieldEl(name));
@@ -1445,7 +1668,7 @@ var SwordForm = new Class({
             	var field = this.getFieldEl(name)
                 field.erase('disabled').removeClass('swordform_item_input_disable');
                 if(!field.get('bizrule')&&$defined(field.get("rule")) && field.get("rule").contains('must'))field.setStyle('background-color','#b5e3df');
-            }
+            }*/
         }.bind(this));
     }
     ,cellTip:function(input, name) {
@@ -1467,6 +1690,15 @@ var SwordForm = new Class({
         if($chk(input.get('tipTitle')))
             this.tooltips.show(name, input, {'flag':'top','className':'warning','autoHidden':false});
     }
+    ,initEventForPanel:function(){
+    	if(this.options.panel == 'true') {
+   		 var tog = this.options.pNode.getElement("div.x-tool");
+   		 tog.addEvent('click', function(e){
+   			 var tar = new Event(e).target;
+                this.toggleFormDisplay(tar);
+	            }.bind(this));
+        }
+    }
     /*
      *此注册事件专供pageContainer组件调用
      *给模板引擎渲染的元素添加事件 
@@ -1476,13 +1708,7 @@ var SwordForm = new Class({
     	 *第一步，给所有元素注册基本事件  focus,blur,validate(rule),format(format,submitformat),
     	 *第二步，根据元素特定类型注册独有事件textarea,file,radio,checkbox,date,select,pulltree 
     	 */
-    	 if(this.options.panel == 'true') {
-    		 var tog = this.options.pNode.getElement("div.x-tool");
-    		 tog.addEvent('click', function(e){
-    			 var tar = new Event(e).target;
-                 this.toggleFormDisplay(tar);
-	            }.bind(this));
-         }
+    	this.initEventForPanel(); 
     	this.addEventForElType();
     	this.addEventForAllEl();
     }
@@ -1538,5 +1764,12 @@ var SwordForm = new Class({
     	if(this.templateObj[widgetStr]){
     		return this.templateObj[widgetStr].initWidget(name,this,el);
     	}
+    }
+    ,setSRang4El:function(el){
+    	var range = el.createTextRange(),vl=el.get("value").length;  
+        range.collapse(true); 
+        range.moveEnd('character', vl); 
+        range.moveStart('character', 0); 
+        range.select();
     }
 });
