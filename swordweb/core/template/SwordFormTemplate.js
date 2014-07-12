@@ -66,20 +66,22 @@ var SwordForm_Template = {
                 if (tag == 'th') {
                     tem.push(("<th style='{style}' colspan='{c}' rowspan='{r}' >" + tds[i].innerHTML + "</th>").substitute({c:tds[i].get('colspan'), r:tds[i].get('rowspan'), style:tds[i].get('style')}));
                 } else {
-                    d = tds[i].getFirst();
-                    if (d != null) {
-                    	 if(d.get("tag")!="table"){
-                    		 type = d.get('type'),itemName=d.get("name");
-		                   	 tem.push("<td>");
-		                   	 if(type){
-		                   		tem.push(this.getItemHtml(type, d, formData[itemName]));
-		                   	 }
-		                   	 tem.push(d.outerHTML);
-		                   	 tem.push("</td>");
-                    	 }else{
-                    		 this.buildTable(d,formData);
-                    	 }
-                    }
+                    var tdEls = tds[i].getChildren();
+                    tdEls.each(function(d){
+                    	if (d != null) {
+	                       	 if(d.get("tag")!="table"){
+	                       		 type = d.get('type'),itemName=d.get("name");
+	   		                   	 tem.push("<td>");
+	   		                   	 if(type){
+	   		                   		tem.push(this.getItemHtml(type, d, formData[itemName]));
+	   		                   	 }
+	   		                   	 tem.push(d.outerHTML);
+	   		                   	 tem.push("</td>");
+	                       	 }else{
+	                       		 this.buildTable(d,formData);
+	                       	 }
+                    	}
+                    }.bind(this));
                 }
             }
             tem.push('</tr>');
@@ -89,6 +91,7 @@ var SwordForm_Template = {
 	}
 	,render:function () {
 		this.formObj.options.pNode.innerHTML = this.htmlStrs.join('');
+		this.htmlStrs.empty();
     }
 	/*
 	 * 根据类型,itemEl,和elData返回一段完整的HTML字符串
