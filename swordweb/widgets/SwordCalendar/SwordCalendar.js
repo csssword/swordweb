@@ -53,7 +53,39 @@ var SwordCalendar = new Class({
     bcContainer2:null,
     monthContent:null,
     yearContent:null,
-    initParam:function (node, parent) {
+    initialize:function(options){
+    	if (!pc.SwordCalendarWindowClick) {
+            window.document.addEvent('click', function (e) {
+                if (this.dateInput.get('show') == 'true') {
+                    var obj = e.target;
+                    var parent = obj.parentNode;
+                    var p_parent = parent.parentNode;
+                    if (obj != this.dateInput
+                        && null != this.dateBtn
+                        && null != this.datepopDiv
+                        && obj != this.dateBtn
+                        && obj != this.ymContainer
+                        && obj != this.ymct
+                        && obj != this.SelHour
+                        && obj != this.SelMinute
+                        && obj != this.SelSecond
+                        && parent != this.ymContainer//options
+                        && parent != this.ymct
+                        && parent != this.SelHour
+                        && parent != this.SelMinute
+                        && parent != this.SelSecond
+                        && parent != this.topDiv
+                        && obj != this.topDiv
+                        && p_parent != this.monthContent
+                        && p_parent != this.yearContent) {
+                        this.hide();
+                    }
+                }
+            }.bind(this));
+            pc.SwordCalendarWindowClick = true;
+        }
+    }
+    ,initParam:function (node, parent) {
         if (!$defined(node.get('dataformat'))) {
             node.setProperty('dataformat', this.defaultdataformat);
         }
@@ -651,9 +683,9 @@ var SwordCalendar = new Class({
     },
     show:function (dateInput) {
         this.dateInput = dateInput;
-        //设置must输入框背景色
-        var rule = dateInput.get('rule');
-        if($defined(rule) && rule.contains('must'))this.dateInput.setStyle('background-color','#b5e3df');
+        //设置must输入框背景色 由模板处理了
+        /*var rule = dateInput.get('rule');
+        if($defined(rule) && rule.contains('must'))this.dateInput.setStyle('background-color','#b5e3df');*/
         $extend(this.options, {autoCtrl:this.dateInput.get('autoCtrl'), isShow:this.dateInput.get('isShow'), toZero:this.dateInput.get('toZero'), name:this.dateInput.get('name'), defaultValue:this.dateInput.get('defaultValue'), dataformat:this.dateInput.get('dataformat'), dateControl:this.dateInput.get("dateControl")});
 
         this.dateInput.set('show', 'true');
