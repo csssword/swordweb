@@ -119,7 +119,10 @@ var SwordGrid = new Class({
          * @property {public string} dragWidth
          */
         ,dragWidth:jsR.config.swordGrid.dragWidth || 'false'
-
+        /**
+         * 复杂表头对应table的id
+         */
+        ,fzbtId:''
         ,headerHeight:jsR.config.swordGrid.headerHeight || 25
 
         ,toolConsole: jsR.config.swordGrid.toolConsole || 'false'
@@ -1699,6 +1702,9 @@ var SwordGrid = new Class({
     }
     ,scrollHeader:function() {
         this.header().setStyle('top', this.scrollDiv.getScrollTop());
+        if($chk(this.fzbtTable)){ // 动态算表头的位置
+        	this.fzbtTable.setStyle('top', this.scrollDiv.getScrollTop());
+        }
         if(this.hjRow) {
         	this.scrollHjRow();
         }
@@ -2320,6 +2326,12 @@ var SwordGrid = new Class({
             //列拖拽功能 结束
         }
 
+        // 复杂表头的表格
+        if($chk(this.options.fzbtId)){
+        	this.fzbtTable = $(this.options.fzbtId).addClass("sGrid_header_div"); //引用正常表头表格的样式，滚动时固定表头
+        	this.fzbtTable.set("style","border-left:0px none;"); //表头的左边框重复，去掉复杂表头table上的左边框
+        	this.fzbtTable.inject(this.options.sGrid_header_div,"before");
+        }
 //       this.header
 
         this.fireEvent('onAfterCreateHeader');
@@ -5390,8 +5402,11 @@ var SwordGrid = new Class({
             var dataHeight = this.itemY() * this.rows() + this.rows();
             if(this.hjRow)dataHeight= this.itemY() * (this.rows()+1) + this.rows();
             //var hh = this.header().getHeight();
-            if(this.options.showHeader == true || this.options.showHeader == 'true')
+            if(this.options.showHeader == true || this.options.showHeader == 'true'){
                 dataHeight += (this.options.headerY == -1 ? this.options.headerHeight + 1 : this.options.headerY / 1);
+            }else if($chk(this.fzbtTable)){ // 加上表头的高度
+            	dataHeight += this.fzbtTable.getHeight() ;
+            }
             var sx = this.options.scrollX.toInt();
             var dx = this.options.dataX.toInt();
             if($type(this.options.scrollX) == 'string' && this.options.scrollX.contains('%')) {
