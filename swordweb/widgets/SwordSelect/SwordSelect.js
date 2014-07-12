@@ -816,7 +816,7 @@ var SwordSelect = new Class({
         });
         var loadData = this.getOptionsData();
         if(!$defined(loadData)) {
-            var pcode,tid = this.box.get("tid");
+            var pcode="",tid = this.box.get("tid");
             if(!$defined(tid) && !$chk(tid) && !$chk(this.box.get("onSubmitBefore")||this.box.retrieve("onSubmitBefore"))) {
                 if(this.exSelectDataFunc) {
                     this.exSelectDataFunc();
