@@ -34,21 +34,21 @@ var PageContainer = new Class({
 //            }
 //        }.bind(this));
 //        swordWidgets = newSwordWidgets;
-        if(this.isEdit()) {
-            this.getEditor().start();
-        }
-        this.detailed = '';
-        var start = new Date().getTime();
+//        if(this.isEdit()) {
+//            this.getEditor().start();
+//        }
+//        this.detailed = '';
+//        var start = new Date().getTime();
         swordWidgets.each(function(value) {
-        	var begin = new Date().getTime();
-            if(this.isEdit()) {
-                this.getEditor().dealEl(value);
-            }
+//        	var begin = new Date().getTime();
+//            if(this.isEdit()) {
+//                this.getEditor().dealEl(value);
+//            }
             this.initWidgetParam(value);
             value.set('isload', 'true');
-            this.detailed = this.detailed + value.get('name')+ ":" + (new Date().getTime()-begin) + "----";
+//            this.detailed = this.detailed + value.get('name')+ ":" + (new Date().getTime()-begin) + "----";
         }, this);
-        this.detailed = this.detailed + "总时间："+ (new Date().getTime()-start);
+//        this.detailed = this.detailed + "总时间："+ (new Date().getTime()-start);
     },
     initWidgetParam:function(value){
     	var swordWidget = this.widgetFactory.create(value);
