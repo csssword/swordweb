@@ -56,8 +56,13 @@ SwordTree.Select = new Class({
     },boxtd:null,imgtd:null,divTable:null
     ,drawSelDiv:function(container) {
         //var div = new Element('div', {'class':this.options.treeStyle.treeSelectWrap});
-    	this.divTable = Sword.utils.createTable(this,true,true).addClass('swordtree_wrap');
-        container.grab(this.divTable);
+    	var gel=container.getElement("table.swordtree_wrap"),isG=!!gel;
+    	if(isG){
+    		this.divTable = container.getElement("table.swordtree_wrap");
+    	}else{
+    		this.divTable = Sword.utils.createTable(this,true,true).addClass('swordtree_wrap');
+    		container.grab(this.divTable);
+        }
         var treeDiv = new Element("div", {'class':this.options.treeStyle.treeSelectListInner});
         treeDiv.set("id", container.get("id"));
         this.listDiv = new Element("div", {'class':this.options.treeStyle.treeSelectList}).inject(document.body);
@@ -81,34 +86,40 @@ SwordTree.Select = new Class({
             this.listDiv.grab(console);
         }
 //        var w = this.options.inputWidth;  //0511
-        this.selBox = new Element('input', {
-            'type' : 'text',
-            'swordType' :'tree',
-            'rule' : this.options.rule,
-            'name' : container.get("name"),
-            'display':"true",
-            'realvalue':"",
-            'widget':"tree",
-            'evnSign':"true",
-            'widgetGetValue':'true',
-            //            'readonly':this.options.selReadOnly=="true",
-            'disabled':(this.options.selReadOnly == "true" || this.options.disable == "true"),
-            'styles':{
-//                'width':w    //0511
-                'cursor':"text"
-            }
-            ,'class':this.options.formSubSign
-        }).inject(this.boxtd);
+        if(isG){
+        	this.selBox = container.getElement("input[id]");
+        }else{
+        	this.selBox =	new Element('input', {
+	            'type' : 'text',
+	            'swordType' :'tree',
+	            'rule' : this.options.rule,
+	            'name' : container.get("name"),
+	            'display':"true",
+	            'realvalue':"",
+	            'widget':"tree",
+	            'evnSign':"true",
+	            'widgetGetValue':'true',
+	            //            'readonly':this.options.selReadOnly=="true",
+	            'disabled':(this.options.selReadOnly == "true" || this.options.disable == "true"),
+	            'styles':{
+	//                'width':w    //0511
+	                'cursor':"text"
+	            }
+	            ,'class':this.options.formSubSign
+	        	}).inject(this.boxtd);
+        }
         //先存下数据
         this.storeTid();
         this.selBox.store('widgetObj',this);//向input存入对象
-
-        this.selDiv=this.imgtd;
-        this.selDiv.addClass(this.options.treeStyle.treeSelectSelimg);
-        /*this.selDiv = new Element('div', {'class':this.options.treeStyle.treeSelectSelimg,
-            'styles':{'float':'left'}
-        }).inject(this.imgtd);*/
-
+        if(isG){
+        	this.selDiv=container.getElement("td.tree-select-selimg");
+        }else{
+        	this.selDiv=this.imgtd;
+        	this.selDiv.addClass(this.options.treeStyle.treeSelectSelimg);
+            /*this.selDiv = new Element('div', {'class':this.options.treeStyle.treeSelectSelimg,
+                'styles':{'float':'left'}
+            }).inject(this.imgtd);*/
+        }
         if (this.options.selReadOnly == "true" || this.options.disable == "true") {
             this.selBox.setStyle("cursor", "default");
         }
