@@ -45,7 +45,7 @@ var PageContainer = new Class({
                 this.getEditor().dealEl(value);
             }
             this.initWidgetParam(value);
-            item.set('isload', 'true');
+            value.set('isload', 'true');
             this.detailed = this.detailed + value.get('name')+ ":" + (new Date().getTime()-begin) + "----";
         }, this);
         this.detailed = this.detailed + "总时间："+ (new Date().getTime()-start);
