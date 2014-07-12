@@ -194,6 +194,10 @@ var SwordGridFields = new Class({
 			,x:""
 			,style:""
 		}
+		,hidden:{
+			name:""
+			,type:"hidden"
+		}
 		,file2:{
 			name:""
 			,caption:""
@@ -226,6 +230,7 @@ var SwordGridFields = new Class({
 			,'pulltree':this._pulltreeHtmlHandler.bind(this)
 			,'userdefine':this._userdefineHtmlHandler.bind(this)
 			,'file2':this._file2HtmlHandler.bind(this)
+			,'hidden':this._hiddenHtmlHandler.bind(this)
 		};
 	
 	}
@@ -331,6 +336,11 @@ var SwordGridFields = new Class({
 
 		if(item.get("show")=="false"){attrs.push("style=\"display:none\"");}
         return '<div datael="true" eventdele="userdefine" class="sGrid_data_row_item_div sGrid_data_row_item_userdefine"  '+attrs.join("")+ ' title="">'+item.innerHTML+'</div>';
+	}
+	,_hiddenHtmlHandler:function(item){
+		var field = this.findFieldOptions('hidden');
+		var attrs = this.copeHtmlOptions(field, item);
+		return '<div datael="true" eventdele="hidden" class="sGrid_data_row_item_div sGrid_data_row_item_hidden"  '+attrs.join("")+ ' title="">'+item.innerHTML+'</div>';
 	}
 	,_file2HtmlHandler:function(item){
 		var field = this.findFieldOptions('file2');

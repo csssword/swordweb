@@ -2124,7 +2124,7 @@ var SwordGrid = new Class({
             var allchk = item.get('allchk');
             this.headhash.set(name, caption);
             var sGrid_header_item_div = this.headerM.clone(false).set({'_for':name,'sortType':item.get('sortType') || ''}).inject(this.header());
-            if(item.get("x")=="0%"){
+            if(item.get("x")=="0%" || type == "hidden"){
             	sGrid_header_item_div.setStyle("display","none");
             }
             if(lastName == name)sGrid_header_item_div.setStyle('border-right', 'none');
