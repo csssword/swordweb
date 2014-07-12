@@ -45,7 +45,7 @@ var SwordForm_Template = {
 		var tem = this.htmlStrs;
    	 	tem.push("<table class='tab_form' width='{w}' id='{id}' border='0' cellpadding='0' cellspacing='0' style='{style}'>".substitute({w:tableEl.get('width'), id:tableEl.get('id'), style:tableEl.get("style")}));
         var cg = tableEl.getFirst();
-        if (cg.tagName.toLowerCase() == 'colgroup') {
+        if (cg&&cg.tagName.toLowerCase() == 'colgroup') {
             tem.push('<colgroup>');
             tem.push(cg.innerHTML);
             tem.push('</colgroup>');
