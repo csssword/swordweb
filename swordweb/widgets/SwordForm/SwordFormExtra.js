@@ -691,7 +691,7 @@ var SwordGroupFields = new Class({
 				if(this.options.disable == "true")return;
                 var tar = $(new Event(e).target);
                 if(this.options.rule){
-                	this.options.validate.tooltips.hide(this.options.name)
+                	this.options.validate.tooltips.hide(this.options.name);
                 	this.options.validate.intimeValidate(tar);
                 }
                 if(['div','span'].contains(tar.get("tag")))return;
