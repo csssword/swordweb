@@ -437,11 +437,12 @@ SwordGrid.implement({
 
         //添加焦点转移事件
         this.addNextFocusEvent(cal.dateInput, cal);
-
+        
         if (Browser.Engine.trident) {//解决火狐下不兼容
                     cal.dateInput.focus();
                     try{
                         cal.dateInput.focus();//todo 为什么要2次才能获得焦点？？？
+                        cal.show(cal.dateInput);
                     }catch(e){
                     }
                 	
