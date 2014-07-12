@@ -1,4 +1,6 @@
-
+.sword_file_upload2{
+	display: inline-block;
+}
 .sword_file_upload2 .up-list {
 	padding: 0;
 	list-style: none;
@@ -21,6 +23,7 @@
 
 .sword_file_upload2 .file {
 	line-height: 2em;
+	cursor: pointer;
 	padding-left: 22px;
 	background: url(images/attach.gif) no-repeat 1px 50%;
 }
