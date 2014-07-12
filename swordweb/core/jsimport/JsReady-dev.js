@@ -3,7 +3,7 @@ jsR.baseWidgets = ['SwordShielding','Base','i18n','WidgetFactory','Utils','Redir
 //jsR.addWidget({name:"Base",prefixPath:"swordweb/base",jsPath:['mootools-1.3.2-all.js','SwordImplement.js','adapter/adapter-1.3.2.js']});
 jsR.addWidget({name:"Base",prefixPath:"swordweb/base",jsPath:['mootools-1.2.1-all.js','SwordImplement.js']});
 jsR.addWidget({name:"i18n",prefixPath:"swordweb/core/i18n",jsPath:['zh-cn.js']});
-jsR.addWidget({name:"Template",prefixPath:"swordweb/core/template",jsPath:['Template.js','FileTemplate.js','SwordGridFields.js','juicerTemplate.js',
+jsR.addWidget({name:"Template",prefixPath:"swordweb/core/template",jsPath:['Template.js','File2Template.js','FileTemplate.js','SwordGridFields.js','juicerTemplate.js',
 'LabelTemplate.js','PasswordTemplate.js','RadioTemplate.js','SwordCalendarTemplate.js','SwordPulltreeTemplate.js','SwordSelectTemplate.js','TextareaTemplate.js','HiddenTemplate.js','TextTemplate.js','SwordFormTemplate.js','SwordGridTemplate.js']});
 jsR.addWidget({name:"SwordEventDelegator",prefixPath:"swordweb/core/event",jsPath:['SwordEventDelegator.js']});
 jsR.addWidget({name:"SwordShielding",prefixPath:"swordweb/widgets/SwordShielding",jsPath:['SwordShielding.js']});
