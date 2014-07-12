@@ -13,6 +13,23 @@ var PageContainer = new Class({
     ,pinitData:null
     ,widgets:new Hash()
     ,studioComm:null
+    ,formItems:{
+		"checkbox":SwordRadioCheckboxTemplate,
+		"select":SwordSelectTemplate,
+		"radio":SwordRadioCheckboxTemplate,
+		"calendar":SwordCalendarTemplate,
+	 "date":SwordCalendarTemplate,
+		"text":SwordTextTemplate,
+		"textarea":SwordTextareaTemplate,
+		"password":SwordPasswordTemplate,
+		"label":SwordLabelTemplate,
+		"tree":SwordPulltreeTemplate,
+		"pulltree":SwordPulltreeTemplate,
+		"file2":SwordFile2Template,
+	    /*"pulllazytree":SwordPulllazytreeTemplate,*/
+		"file":SwordFileTemplate,
+	"hidden":SwordHiddenTemplate
+    }
     ,isEdit:function() {
         return this.edit;
     }
@@ -40,11 +57,15 @@ var PageContainer = new Class({
 //        this.detailed = '';
 //        var start = new Date().getTime();
         swordWidgets.each(function(value) {
+        	var wName=value.get("name");
 //        	var begin = new Date().getTime();
 //            if(this.isEdit()) {
 //                this.getEditor().dealEl(value);
 //            }
             this.initWidgetParam(value);
+            if(value.get("sword")=="SwordForm"&&!pc.getInitData(wName)){
+            	$w(wName).renderForm(value);
+            }
             value.set('isload', 'true');
 //            this.detailed = this.detailed + value.get('name')+ ":" + (new Date().getTime()-begin) + "----";
         }, this);
@@ -154,7 +175,7 @@ var PageContainer = new Class({
         this.firePIOnDataInit();
         this.initPageData();
         //给自定义form子类型注册事件
-        this.initEventForForm();
+        //this.initEventForForm();
         this.firePIOnAfter();
         this.regHotKey();
       
