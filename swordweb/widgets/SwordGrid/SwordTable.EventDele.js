@@ -474,6 +474,9 @@ SwordGrid.implement({
         var tag = obj.get('tag');
         
         var sGrid_data_row_div=this.getRow(obj);
+        if(!sGrid_data_row_div){
+        	return;
+        }
         var dataObj=this.getOneRowData(sGrid_data_row_div);
         
         if(this.options.checkMoudle == 'true') {
