@@ -110,30 +110,35 @@ var PageContainer = new Class({
     	return this.data.filter(function(item){return item["dataname"]==key||item["dataName"]==key;})[0];
     }
     ,initPageData:function() {
-        var pi = this.getPageInit();
-        if($defined($('SwordPageData'))) {
-            if($chk(this.initData)) {
-                var param = {'dataObj':this.initData };
-                if(pi) {
-                    $extend(param, {
-                        'onSuccess':this.getFunc(pi.options.onSuccess)[0]
-                        ,'onError':this.getFunc(pi.options.onError)[0]
-                        ,'onFinish':this.getFunc(pi.options.onFinish)[0]
-                        ,'onAfterLoadData':this.getFunc(pi.options.onAfterLoadData)[0]
-                    });
-                }
+        var intopt = pc.pageInit.options;
+        if($chk(this.initData)) {
+        	var param = {
+				'dataObj' : this.initData,
+				'onSuccess' : this.getFunc(intopt.onSuccess)[0],
+				'onError' : this.getFunc(intopt.onError)[0],
+				'onFinish' : this.getFunc(intopt.onFinish)[0],
+				'onAfterLoadData' : this.getFunc(intopt.onAfterLoadData)[0]
+			};
+//                var param = {'dataObj':this.initData };
+//                if(pi) {
+//                    $extend(param, {
+//                        'onSuccess':this.getFunc(pi.options.onSuccess)[0]
+//                        ,'onError':this.getFunc(pi.options.onError)[0]
+//                        ,'onFinish':this.getFunc(pi.options.onFinish)[0]
+//                        ,'onAfterLoadData':this.getFunc(pi.options.onAfterLoadData)[0]
+//                    });
+//                }
                 param.initpage=true;
                 pc.loadData(param);
-            }
         } else {
-            if(pi) {
-                pi.getInitData({
-                    'onSuccess':this.getFunc(pi.options.onSuccess)[0]
-                    ,'onError':this.getFunc(pi.options.onError)[0]
-                    ,'onFinish':this.getFunc(pi.options.onFinish)[0]
-                    ,'onAfterLoadData':this.getFunc(pi.options.onAfterLoadData)[0]
+//            if(pi) {
+                pc.pageInit.getInitData({
+                    'onSuccess':this.getFunc(intopt.onSuccess)[0]
+                    ,'onError':this.getFunc(intopt.onError)[0]
+                    ,'onFinish':this.getFunc(intopt.onFinish)[0]
+                    ,'onAfterLoadData':this.getFunc(intopt.onAfterLoadData)[0]
                 });
-            }
+//            }
         }
     }
 //    ,initPublicTag:function() {
