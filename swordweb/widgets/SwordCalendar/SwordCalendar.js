@@ -58,6 +58,9 @@ var SwordCalendar = new Class({
             window.document.addEvent('click', function (e) {
                 if (this.dateInput.get('show') == 'true') {
                     var obj = e.target;
+                    if(obj.hasClass("sGrid_data_row_item_date")){//说明点击的是date cellEl
+                    	return;
+                    }
                     var parent = obj.parentNode;
                     var p_parent = parent.parentNode;
                     if (obj != this.dateInput
@@ -2032,7 +2035,7 @@ var SwordCalendar = new Class({
                    this.dateInput.addEvent((Browser.Engine.trident || Browser.Engine.webkit) ? 'keydown' : 'keypress',
                    this.options.autoCtrl == 'true' ? this.hand_Input.bind(this) : this.hand_Input_nctrl.bind(this));
               }
-            if (!this.windowClick) {
+           /* if (!this.windowClick) {
                 window.document.addEvent('click', function (e) {
                     if (this.dateInput.get('show') == 'true') {
                         var obj = e.target;
@@ -2064,7 +2067,7 @@ var SwordCalendar = new Class({
                     }
                 }.bind(this));
                 this.windowClick = true;
-            }
+            }*/
         } else {
             this.dateBtn.addEvent('click', function (e) {
                 var el=$(new Event(e).target);
