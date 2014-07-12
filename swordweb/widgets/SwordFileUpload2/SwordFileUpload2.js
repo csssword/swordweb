@@ -664,8 +664,6 @@ SwordUpload2.Attach = new Class({
 	},
 
 	initialize: function(p,list, selects, options) {
-
-
         if(p){
             this.list = p.getElement(list);
             this.selects =p.getElements(selects);
@@ -987,6 +985,21 @@ function file2OptionsReset(op,item){
         newop[key] = ($chk(v) && $defined(v)) ? v : op[key];
     }
     return newop;
+}
+
+//后台渲染file2对象创建
+function initUp4Template(wrapDiv,item,tempEl,form){
+	 var op=SwordUpload2.Attach.prototype.options;
+	 var newop=file2OptionsReset(op,item);
+	 var up = new SwordUpload2.Attach(wrapDiv,'[name=up-list]', '[name=up-attach]', newop);
+	 up.form=form;
+	 up.con=tempEl ;
+	 var rule=item.get('rule');
+	 if(rule) up.con.set('rule',rule);
+	 var msg = item.get('msg');
+	 if(msg) up.con.set('msg',msg);
+	 up.con.store('upManager',up);
+	 return up;
 }
 
 function initIntimeUp(p,name,item){
