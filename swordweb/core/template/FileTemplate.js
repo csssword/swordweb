@@ -15,16 +15,8 @@ var SwordFileTemplate = {
     	isMulti: 'true',
         maxSize:0 ,
         keepfile:'false'
-    }
-
-};
-$extend(SwordFileTemplate, {
-    /**
-     * @param item 定义的div节点
-     * @param parent 父亲对象是谁
-     * @param data 数据
-     */
-    render:function (item, parent, data) {
+    },
+     render:function (item, parent, data) {
         var me = this, arr, html, node;
         var d = $merge(me.filedef, data);
         if (parent == "SwordForm") {
@@ -73,4 +65,5 @@ $extend(SwordFileTemplate, {
     	formObj.setWidget(name, ta);
         return ta;
     }
-});
+
+};

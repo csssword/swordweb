@@ -6,52 +6,55 @@
  * To change this template use File | Settings | File Templates.
  */
 var SwordPasswordTemplate = {
-    start:'<div class="swordform_field_wrap"><input type="password" style="float:left" placeholder="{placeholder}" class="swordform_item_oprate swordform_item_input"',
-    end: '></div>',
-    id:' id="{PName}_{name}" ',
-    passworddef:{
+    start:'<div class="swordform_field_wrap"><input type="password" id="{id}" name="{name}" style="float:left;{style}" rule="{rule}" msg="{msg}" value="{value}" realvalue="{value}" _onfocus="{onfocus}" defValue="{defValue}" _onclick="{onclick}"  _onblur="{onblur}" class="swordform_item_oprate swordform_item_input"',
+    end:'></div>',
 
-    }
-};
-$extend(SwordPasswordTemplate, {
-    /**
-     * @param item 定义的div节点
-     * @param parent 父亲对象是谁
-     * @param data 数据
-     */
-    render:function (item, parent, data) {
-        var me = this, arr, html, node;
-        if (parent == "SwordForm") {
-            arr = [me.start, SwordForm_Template.PUBATTR,me.id, me.end];
-        } else {
-            arr = [me.start, SwordForm_Template.PUBATTR, me.end];
+    render:function (item,formObj,fName,itemData) {
+    	var name = item.get("name"),id=fName + "_"+name,rule=item.get("rule"),msg=item.get("msg"),style=item.get("style");
+    	var defValue=item.get("defValue"),readonly=item.get("readonly")||item.getAttribute("readonly"),disable=item.get("disable");
+    	var stylestr=style?style:"";
+    	if((rule&&rule.contains('must'))&&disable!="true"){stylestr=stylestr+";background-color:#b5e3df;";}
+    	var t=[this.start.substitute({
+            id: id,
+            style:stylestr,
+            name: name,
+            rule: rule,
+            msg: msg,
+            value:itemData?itemData.value:defValue
+            ,onfocus : item.get("onfocus")
+            ,onblur : item.get("onblur")
+            ,onclick:item.get("onclick")
+        })];
+    	formObj.fieldElHash.set(id,$(id));
+    	if ( disable == 'true') {
+            t[0] = t[0].replace("swordform_item_oprate swordform_item_input", "swordform_item_oprate swordform_item_input swordform_item_input_disable");
+            t.push(' disabled ');
         }
-        html = STemplateEngine.render(arr.join(''), item, data);
-        node = STemplateEngine.createFragment(html);
-        item.parentNode.insertBefore(node, item);
-        return data.PName+"_"+item.get("name");
+    	if (readonly == "true"){t.push(" readonly='readonly' ");}
+    	t.push(this.end);
+    	return t.join("");
     }
 	,initData:function(el,elData,fmtObj){
 		el.set("value",elData.value).set("realvalue",elData.value);
     }
-    /*
-     * 模板元素追加事件
-     */
-    ,addEvent:function(elParent,vobj,formObj){
-    	var objTop = vobj._getPosition().y;
-        vobj.addEvent('focus', function() {
-            vobj.select();
-        	this.showTip(name, vobj);
-        }.bind(formObj));
-        vobj.addEvent('blur', function(e) {
-            var el = e.target;
-            var val = el.get('value');
-        	el.set('oValue', val);
-            el.set('realvalue', val);
-        }.bind(formObj));
+   
+    ,runEventFocus:function(e,el,formObj){
+    	SwordTextTemplate.runEventFocus(e,el,formObj);
     }
-    ,
-    initWidget:function(){
-        return null;
+    ,runEventClick:function(e,el,formObj){
+		//触发原始click之后调用focus逻辑.
+    	SwordTextTemplate.runEventClick(e,el,formObj);
+	}
+    ,runEventBlur:function(e,el,formObj){
+    	SwordTextTemplate.runEventBlur(e,el,formObj);
     }
-});
+    ,runEventDblClick:function(){
+    	return;//不处理
+    }
+    ,runEventKeydown:function(){
+    	//不处理
+    }
+    ,runEventKeyup:function(){
+    	//不处理
+    }
+};

@@ -6,53 +6,73 @@
  * To change this template use File | Settings | File Templates.
  */
 var SwordRadioCheckboxTemplate = {
-    start:'<div class="swordform_field_wrap"><div name="{name}" class="formselect-list swordform_item_oprate" widget="{type}" widgetgetvalue="true" defValue="{defValue}" ruletype="{type}Group" type="{type}" disable="{disable}"',
-    end:'><div class="formselect-list-inner"><tpl for="eldata"><div class="formselect-list-item" code="{code}" caption="{caption}"><input type="{parent.type}" ruletype="{parent.type}Group" name="{parent.name}" rule="{parent.rule}" style="cursor: pointer;" value="{code}"><span title="{caption}">{caption}</span></div></tpl></div></div></div>',
-    attr:' colWidth="{colWidth}" onClickAfter="{onClickAfter}" onClickBefore="{onClickBefore}" ',
-    id:' id="{PName}_{name}" ',
-    radiodef:{
-       col:1,
-       disable:'false'
-    }
-
-};
-$extend(SwordRadioCheckboxTemplate, {
-    /**
-     * @param item 定义的div节点
-     * @param parent 父亲对象是谁
-     * @param data 数据
-     */
-    render:function (item, parent, data) {
-        var me = this, arr, html, node;
-        var d = $merge(me.radiodef, data);
-        if (parent == "SwordForm") {
-            arr = [me.start, SwordForm_Template.PUBATTR,me.attr,me.id, me.end];
-        } else {
-            arr = [me.start, SwordForm_Template.PUBATTR,me.attr, me.end];
-        }
-        var childs = item.getChildren(), cd = pc.getInitData(item.get('dataname') || item.get('name'));
-        if(cd && cd.data){
-        	d['eldata'] = cd.data;
-        }else d['eldata'] =(childs.length > 0) ? childs : null;
-        html = STemplateEngine.render(arr.join(''), item, d);
-        node = STemplateEngine.createFragment(html);
-        item.parentNode.insertBefore(node, item);
-        if($chk(item.get("disable")) && item.get("disable")=="true"){
-        	var innerWrap = $(item.parentNode).getElement(".formselect-list-inner");
-        	this.disable(innerWrap, item.get("name"), item.get("type"));
-        }
-        var id = d.PName+"_"+item.get("name");
-        if(item.get('defValue')){
-        	this.initData($(item.parentNode),"",null,item)
-        }
-        item.setStyle("display","none");
-        return id;
+    start:'<div class="swordform_field_wrap"><div id="{id}" class="formselect-list swordform_item_oprate" style="{style}" widgetGetValue="true" name="{name}" '
+    	+'widget="{type}" type="{type}" onClickAfter="{onClickAfter}" onClickBefore="{onClickBefore}" defValue="{defValue}" msg="{msg}" '
+    	+'ruletype="{type}Group" rule="{rule}" "{disable}">',
+    inner_before:'<div class="formselect-list-inner">',
+    inner_h:'<div class="formselect-list-item" code="{code}" caption="{caption}" style="{colWidth}"><input type="{type}" ruletype="{type}Group" name="{name}" '
+    	+' style="cursor: pointer;" value="{code}" ',
+    inner_e:' /><span title="{caption}"> {caption}</span></div>',
+    end:'</div>',
+    render:function (item, formObj, fName, itemData) {
+    	var tem = [this.start];
+        var name = item.get("name"),id = fName + "_"+name,type = item.get("type"),rule=item.get("rule"),defV=item.get('defValue'),msg=item.get("msg");
+        var readonly = item.get("readonly")||item.getAttribute("readonly"),disable = item.get("disable"),colWidth=item.get("colWidth"),colwStr=colWidth?"width:"+colWidth:"";
+        tem[0]=tem[0].substitute({
+             id : id,
+             name : name,
+             style: item.get("style"),
+             rule: rule,
+             msg: msg,
+             type: type,
+             defValue : defV,
+             onClickAfter : item.get("onClickAfter"),
+             onClickBefore : item.get("onClickBefore"),
+             disable:disable=="true"?"disabled":""
+         });
+        formObj.fieldElHash.set(id,$(id));
+		var value=itemData?itemData.value:(defV||"");
+		if(value){value=value.split(",");}
+        tem.push(this.inner_before);
+        var dataA=pc.getInitData( item.get('name'));
+        var childEls = (dataA?dataA.data:item.getChildren('div'))||item.getChildren('div');
+        childEls.forEach(function(o,i){
+        	var tcode=o.code||o.get("code"),tcaption= o.caption||o.get("caption");
+        	var tHtml=SwordRadioCheckboxTemplate.inner_h.substitute({
+                code : tcode,
+                caption :tcaption,
+                type : type,
+                name : name,
+                colWidth:colwStr
+            });
+        	if(value.contains(tcode)){
+        		tem.push(tHtml.replace("formselect-list-item", "formselect-list-item formselect-selected"));
+    			tem.push(" checked='true' ");
+    		}else{
+    			tem.push(tHtml);
+    		}
+        	if (disable == "true") {
+    			tem.push(" disabled ");
+    		}
+    		if (readonly == "true") {
+    			tem.push(" readonly='readonly' ");
+    		}
+    		tem.push(SwordRadioCheckboxTemplate.inner_e.substitute({
+                caption :tcaption
+            }));
+        });
+        tem.push(this.end);//inner结束
+        tem.push(this.end);
+        tem.push(this.end);
+        return tem.join("");
     },
     initData:function (el, d,formObj,item) {
     	var innerWrap;
-    	if($defined(el)){
-    		innerWrap=el;
-    	}else innerWrap=formObj.getWidget(el.get("name")).innerWrap;
+    	if($defined(item)){
+    		innerWrap=item;
+    	}else{
+            innerWrap=formObj.getWidget(el.get("name")).innerWrap;
+        }
     	var dv = innerWrap.get("defValue");
     	if(d == "" && $defined(dv)){
     		d=dv;
@@ -77,37 +97,63 @@ $extend(SwordRadioCheckboxTemplate, {
             }, this);
         }
     }
-    ,reset:function(el) {
-        el.getElements("div.formselect-list-item").each(function(row) {
-            if(row.getElement("input"))row.getElement("input").set("checked", false);
-            row.removeClass("formselect-selected");
-        });
-    }
-    /*
-     * 模板元素追加事件
-     */
-    ,addEvent:function(elParent,item,formObj){
-    	var elName=item.get('name');
-//    	var el=formObj.options.pNode.getElement("div[name="+elName+"]");
-//    	var ta = new SwordGroupFields(el);
-//    	formObj.setWidget(elName, ta);
-    	var ta = formObj.getWidget(elName);
-    	if(!ta){
-    		ta = this.initWidget(elName, formObj, item)
-    	}
-    	ta.wrap=item;
-    	ta.options.validate = formObj.Vobj;
-    	ta.initEvent();
-    },
-    initWidget:function(name, formObj, item){
-    	var el=formObj.options.pNode.getElement("div[name="+name+"]");
+    ,initWidget:function(name, item, formObj){
+    	var el=$$("div[name="+name+"]")[0];
     	var ta = new SwordGroupFields(el);
     	ta.innerWrap=item;
+    	ta.wrap=item;
+    	ta.options.validate = formObj.Vobj;
     	formObj.setWidget(name, ta);
         return ta;
-    },
-	disable : function(innerWrap, name, type) {
-    	innerWrap.getElements('input[name=' + name
-				+ '][type=' + type + ']').set('disabled', true);
+    }
+    ,runEventFocus:function(e,el,formObj){
+    	return;//不处理
+    }
+    ,runEventClick:function(e,el,formObj){
+    	var name=el.get("name"),rule=el.get("rule"),cObj=formObj.getField(name);
+    	var tEl=$(e.target),liEl=tEl.hasClass("formselect-list-item")?tEl:tEl.getParent(".formselect-list-item"),input=liEl.getElement("input");
+    	var code=liEl.get("code"),caption=liEl.get("caption"),onBefore=el.get("onClickBefore"),onAfter=el.get("onClickAfter");
+    	if(rule){
+    		cObj.options.validate.tooltips.hide(name);
+    		cObj.options.validate.intimeValidate(el);
+        }
+    	if($defined(onBefore))
+        	cObj.getFunc(onBefore)[0](code, caption, liEl,formObj);
+        if(input.get('type') == 'checkbox') {
+            if(input.get("checked")) {
+                if(tEl != input) {
+                    if(!$chk(input.get('disabled')))input.set("checked", false);
+                    liEl.removeClass('formselect-selected');
+                }
+                else  liEl.addClass('formselect-selected');
+            }
+            else {
+                if(tEl != input) {
+                    if(!$chk(input.get('disabled')))input.set("checked", true);
+                    liEl.addClass('formselect-selected');
+                }
+                else  liEl.removeClass('formselect-selected');
+            }
+        } else {
+            if(!$chk(input.get('disabled'))) {
+            	cObj.reset();
+            	liEl.addClass('formselect-selected');
+                input.set("checked", true);
+            }
+        }
+        if($defined(onAfter))
+        	cObj.getFunc(onAfter)[0](code, caption, liEl,formObj);
 	}
-});
+    ,runEventBlur:function(e,el,formObj){
+    	return;//不处理
+    }
+    ,runEventDblClick:function(e,el,formObj){
+    	return;//不处理
+    }
+    ,runEventKeydown:function(e,el,formObj){
+    	return;//不处理
+    }
+    ,runEventKeyup:function(e,el,formObj){
+    	return;//不处理
+    }
+};

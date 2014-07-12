@@ -217,7 +217,6 @@ var SwordGridRender = new Class(
 				var value = rowData['tds'][name];
 				if (value)
 					value = value.value;
-				var cal = this.g.getCalendar();
 				var showValue = "";
 				if ($chk(value)) {
 					showValue = value;
@@ -228,8 +227,8 @@ var SwordGridRender = new Class(
 							dataformat);
 				}
 				if ($chk(showValue)) {
-					dataformat = dataformat || cal.defaultdataformat;
-					submitDateformat = submitDateformat || cal.submitDateformat;
+					dataformat = dataformat || SwordCalendar.defaultdataformat;
+					submitDateformat = submitDateformat || SwordCalendar.submitDateformat;
 					if (showValue.split(".").length == 2) {
 						showValue = showValue.split(".")[0];
 					}

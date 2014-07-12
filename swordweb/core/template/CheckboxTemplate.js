@@ -15,16 +15,9 @@ var SwordCheckboxTemplate = {
     attr:' colWidth="{colWidth}" onClickAfter="{onClickAfter}" onClickBefore="{onClickBefore}" ',
     id:' id="{PName}_{name}" ' ,
     checkboxdef:{
-	disable:'false'
-    }
-};
-$extend(SwordCheckboxTemplate, {
-    /**
-     * @param item 定义的div节点
-     * @param parent 父亲对象是谁
-     * @param data 数据
-     */
-    render:function (item, parent, data) {
+	    disable:'false'
+    },
+    render:function (item, parent, data) {//item,itemData, formObj
         var me = this, arr, html, node;
         var d = $merge(me.checkboxdef, data);
         if (parent == "SwordForm") {
@@ -72,9 +65,6 @@ $extend(SwordCheckboxTemplate, {
         }
     }
     ,
-//	getChildrenEl : function(name,type) {
-//		return ;
-//	},
 	disable : function(innerWrap, name, type) {
     	innerWrap.getElements('input[name=' + name
 				+ '][type=' + type + ']').set('disabled', true);
@@ -107,4 +97,4 @@ $extend(SwordCheckboxTemplate, {
     	formObj.setWidget(name, ta);
         return ta;
     }
-});
+};
