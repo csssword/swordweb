@@ -51,11 +51,11 @@ var SwordSelectTemplate = {
     		 var d= pc.getInitDataByDataName(dataname)||pageContainer.getInitData(name),datasA;
     		 if(d&&d.data){
     			 datasA=d.data;
-    			 sDObj=datasA.filter(function(item){return item.code==sValue;})[0];
+    			 sDObj=datasA.filter(function(item){return item[codeSign]==sValue;})[0];
     		 }else{
     			 datasA=item.getChildren(">div");
-    			 sDObj=datasA.filter(function(item){return item.get("code")==sValue;})[0];
-    			 if(sDObj){sDObj={"code":sDObj.get("code"),"caption":sDObj.get("caption")};}
+    			 sDObj=datasA.filter(function(item){return item.get(codeSign)==sValue;})[0];
+    			 if(sDObj){sDObj={};sDObj[codeSign]=sDObj.get(codeSign);sDObj[captionSign]=sDObj.get(captionSign);}
     		 }
     		 if(sValue&&sDObj){
     			 showvalue=sDObj.caption;
