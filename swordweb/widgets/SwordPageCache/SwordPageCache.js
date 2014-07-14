@@ -221,7 +221,8 @@ var SwordPageCache = new Class({
 	            	
 	            	data = $w(widgetName).getAllGridData();
 	            }
-	            dataContainer.push(data);
+	            if($chk(data))
+	            	dataContainer.push(data);
     		}
         });
         swordPageData = {"data" : dataContainer};
