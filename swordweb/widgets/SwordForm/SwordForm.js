@@ -285,6 +285,7 @@ var SwordForm = new Class({
 	itemElKeyup : function(e, el) {
 		var typeStr=el.get("widget")||el.get("type");
 		pc.formItems[typeStr].runEventKeyup(e, el,this);
+		this.nextFocus(e);
 	},
     toggleFormDisplay:function(el,state){
     	var temp = this.options.pNode;
@@ -1001,21 +1002,19 @@ var SwordForm = new Class({
         return this.fieldElHash.getKeys();//this.options.pNode.getElements(".swordform_item_oprate").get('name');
     },
     nextFocus:function(e) {
-        e = Event(e);
-        if(e.key == 'enter' || (e.key == "esc" && $(e.target).type == 'textarea')) {
+        e = Event(e);var tType=$(e.target).type;
+        if((e.key == 'enter'&& tType!= 'textarea') || (e.key == "esc" && tType == 'textarea')) {
         	var name = e.target.get("name");
-                if(this.options.valfocus=="false" || !this.options.valfocus){
-            		var rule = e.target.get("rule");
-		    		if($chk(rule)){
-                    	var tag = this.validate(name);
-                    	if(!tag){
-                    		(function(){e.target.focus();}).delay(1);
-                       	 	return;
-                    	}
-            		}
-	    		}else{
-	    			
-	    		}
+            if(this.options.valfocus=="false"){
+        		var rule = e.target.get("rule");
+	    		if($chk(rule)){
+                	var tag = this.validate(name);
+                	if(!tag){
+                		(function(){e.target.focus();}).delay(1);
+                   	 	return;
+                	}
+        		}
+    		}
             var tar = null;
             if(this.options.userDefine != "true") {
                 var idx = e.target.getParent(".swordform_item_div").getAttribute("idx").toInt() + 1;
@@ -1032,7 +1031,7 @@ var SwordForm = new Class({
                     }
                 }
             } else {
-                var nfidx = this.fieldElOrderHash.keyOf(this.getFieldEl(name)) / 1;//自定义表单焦点转移的定义
+               /* var nfidx = this.fieldElOrderHash.keyOf(this.getFieldEl(name)) / 1;//自定义表单焦点转移的定义
                 var size = this.fieldElOrderHash.getKeys().length;
                 if(nfidx && nfidx != size) {
                     while(nfidx != null && tar == null) {
@@ -1040,17 +1039,18 @@ var SwordForm = new Class({
                         if(!this.focusable(tar))tar = null;
                         if(nfidx == size - 1)nfidx = null; else nfidx++;
                     }
-                } else {
-                    var ops = this.getFieldEls();
-                    var idx = this.getFieldElNames().indexOf(name) + 1;
-                    while(idx != ops.length && idx != null && tar == null) {
+                } else {*/
+            		var id=this.options.name+"_"+name;
+                    var ops = this.getFieldEls(),opsl=ops.length;
+                    var idx = this.getFieldElNames().indexOf(id) + 1;
+                    while(idx != opsl&& idx != null && tar == null) {
                         tar = ops[idx];
                         if(['radio','checkbox'].contains(tar.get("type")))
                         	tar = tar.getElements("input")[0];
                         if(!this.focusable(tar))tar = null;
                         if(idx == ops.length - 1)idx = null; else idx++;
                     }
-                }
+               /* }*/
             }
             if($defined(tar)) {
             	(function(){tar.focus();tar.focus();}).delay(1);
