@@ -5876,7 +5876,15 @@ var SwordGrid = new Class({
     }
 
     ,reset:function() {
-        this.initData({trs:[]});
+        this.options.data.empty();
+    	this.options.sGrid_data_div.empty();
+    	this.removeAllError(); // 清空所有错误状态
+    	this.cachePages = []; 
+    	
+        this.options.totalRows = 0;
+        this.options.initTotalRows = 0;
+    	this.options.pageNum = 1;
+    	this.refreshConsole();
     }
 
     ,readonlyDiv:null
