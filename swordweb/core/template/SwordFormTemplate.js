@@ -90,7 +90,7 @@ var SwordForm_Template = {
         tem.push('</tbody></table>');
 	}
 	,render:function () {
-		this.formObj.options.pNode.innerHTML = this.htmlStrs.join('');
+		this.formObj.options.pNode.set("isRender","true").innerHTML = this.htmlStrs.join('');
 		this.htmlStrs.empty();
     }
 	/*
