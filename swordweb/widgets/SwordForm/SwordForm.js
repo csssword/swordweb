@@ -1161,18 +1161,56 @@ var SwordForm = new Class({
     		var t={radio:null,checkbox:null,pulltree:null,text:"format",label:"format",select:"sbmitcontent",date:"submitDateformat"};
     		var fKeyS=t[widgetType],fvStr=idEl.get(fKeyS);
     		if(fKeyS===null){
-    			var values=value.split(","),showvs=[];
+    			var values=value?value.split(","):[];
     			if(widgetType=="pulltree"){
-    				var d= pageContainer.getInitData(idEl.get("name")),datas=d?d.data:[],datal=datas.length;
-    				values.each(function(item){
-    					for(var i=0;i<datal;i++){
-    						if(datas[i].code==item){
-    							showvs.push(datas[i].caption);
-    							break;
+    				var checkPath="",codePath="",code="";
+    				if(value){
+    					if (value.contains("code") && value.contains("caption")) {
+    						if (value.contains('checkPath') || value.contains(";")) {
+    							var varray = value.split(";");
+    							var codeArray="",capArray="",checkArray="";
+    							varray.each(function(v, index) {
+    									var vs = v.split('|');
+    									if (index != 0) {
+    										codeArray = codeArray + vs[1].split(':')[1]+ ",";
+    										capArray = capArray + vs[0].split(':')[1]+ ",";
+    										checkArray = checkArray+ vs[2].split(':')[1] + "|";
+    									} else {
+    										codeArray = vs[1].split(':')[1] + ",";
+    										capArray = vs[0].split(':')[1] + ",";
+    										checkArray = vs[2].split(':')[1] + "|";
+    									}
+    							});
+    							showvalue= codeArray.substring(0, codeArray.length - 1);
+    							realvalue= capArray.substring(0,capArray.length - 1);
+    							checkPath= checkArray.substring(0,checkArray.length - 1);
+    						} else {
+    							var vs = value.split('|');
+    							if (value.contains('codePath')) {
+    								codePath=vs[2].substring('codePath,'.length);
+    							}
+    							showvalue= vs[1].split(',')[1];
+    							realvalue= vs[0].split(',')[1];
     						}
+    					} else {
+    						var vs = value.split(',');
+    						var Captionvalue = [];
+    						var initData =pageContainer.getInitData(itemName);
+    						if ($chk(initData)) {
+    							vs.each(function(v) {
+    								initData.data.each(function(el) {
+    									if ((el.code || el.CODE) == v) {
+    										Captionvalue.include((el.caption || el.CAPTION));
+    									}
+    								});
+    							});
+    						}
+    						realvalue = vs.join(",");
+    						showvalue = Captionvalue.join(",");
     					}
-    				});
-    				showvalue=showvs.join(",");
+    					code=realvalue;
+    					idEl.set({"code":code,"checkPath":checkPath,"codePath":codePath});
+    				}
     			}else{//radio,checkbox
     				var els=idEl.getElements(".formselect-list-item");
     				els.each(function(itemEl){
