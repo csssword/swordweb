@@ -1189,14 +1189,15 @@ var SwordForm = new Class({
     		}else if(fKeyS=="submitDateformat"){//date
     			if(fvStr)realvalue=SwordDataFormat.formatStringToString(value, idEl.get("dataformat")||"yyyy-MM-dd", fvStr);
     		}else{//select
-    			var dataname=idEl.get("dataname"),dataObj= pc.getInitDataByDataName(dataname),datasA,sDObj;
+    			var dataname=idEl.get("dataname"),codeSign=idEl.get("codeSign")||'code',captionSign=idEl.get("captionSign")||'caption',
+    			dataObj= pc.getInitDataByDataName(dataname),datasA,sDObj;
 	       		 if(dataObj&&dataObj.data){
 	       			 datasA=dataObj.data;
-	       			 sDObj=datasA.filter(function(item){return item.code==value;})[0];
+	       			 sDObj=datasA.filter(function(item){return item[codeSign]==value;})[0];
 	       		 }else{
 	       			 datasA=$$("div[name='"+idEl.get("name")+"'][type]")[0].getChildren(">div");
-	       			 sDObj=datasA.filter(function(item){return item.get("code")==value;})[0];
-	       			 if(sDObj){sDObj={"code":sDObj.get("code"),"caption":sDObj.get("caption")};}
+	       			 sDObj=datasA.filter(function(item){return item.get(codeSign)==value;})[0];
+	       			 if(sDObj){sDObj={};sDObj[codeSign]=sDObj.get(codeSign);sDObj[captionSign]=sDObj.get(captionSign);}
 	       		 }
 	       		 if(sDObj){
 	       			 showvalue=sDObj.caption,code=realvalue=sDObj.code;
