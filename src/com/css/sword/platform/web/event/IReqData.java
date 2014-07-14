@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 
+import com.css.sword.kernel.base.persistence.FenYePageParam.PageQueryValueObject;
 import com.css.sword.platform.core.event.IRequestEvent;
 import com.css.sword.platform.web.mvc.SwordDataSet;
 
@@ -405,4 +406,6 @@ public interface IReqData extends IRequestEvent {
 //	public List<?> getNonStatusTable(String widgetName);
 	
 	public Object getBizParam(String key);
+
+	public PageQueryValueObject getPageQueryValueObject();
 }

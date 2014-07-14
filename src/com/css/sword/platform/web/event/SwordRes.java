@@ -10,8 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import sun.jdbc.rowset.CachedRowSet;
-
+import com.css.sword.kernel.base.exception.SwordBaseCheckedException;
 import com.css.sword.kernel.base.persistence.FenYePageParam;
 import com.css.sword.platform.comm.pool.ThreadLocalManager;
 import com.css.sword.platform.core.event.CSSBaseResponseEvent;
@@ -19,7 +18,7 @@ import com.css.sword.platform.persistence.pagination.PaginationManager;
 import com.css.sword.platform.web.comm.CommParas;
 import com.css.sword.platform.web.context.ContextAPI;
 import com.css.sword.platform.web.mvc.SwordDataSet;
-import com.css.sword.platform.web.mvc.cachecode.ICacheCodeConfig;
+import com.css.sword.utils.SwordTypeUtils;
 
 /**
  * 用户Request接口DTO<br>
@@ -202,8 +201,11 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		resDataSet.addTableMap(widgetName, list);
 	}
 
-	public void addTableMap(String widgetName, List<Map<String, Object>> list,
-			Object p) {
+	public void addTableBeanMap(String widgetName, List<?> beanList, Object p) throws SwordBaseCheckedException {
+		List<Map<String, Object>> beanMapList = SwordTypeUtils.beanListToMapList(beanList, true, true, false);
+		addTableMap(widgetName, beanMapList, p);
+	}
+	public void addTableMap(String widgetName, List<Map<String, Object>> list, Object p) {
 		if (p != null) {
 			FenYePageParam fp = (FenYePageParam) p;
 			PaginationManager.setParams(widgetName,
@@ -337,6 +339,23 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		}
 //		resDataSet.addTable(widgetName, objList);
 	}
+	public void addTable(String widgetName, List<?> objList, FenYePageParam fy) {
+		if(objList != null && objList.size() >0){
+			Object obj = objList.get(0);
+			if (obj instanceof Map){
+				List<Map<String, Object>> objMapList = (List<Map<String, Object>>)objList;
+				resDataSet.addTableMap(widgetName, objMapList);
+			}else
+				resDataSet.addTable(widgetName, objList);
+			
+		}else{
+			List<Map<String, Object>> objMapList = new ArrayList<Map<String, Object>>();
+			resDataSet.addTableMap(widgetName, objMapList);
+		}
+		
+//		this.addTableMap(widgetName, (List<Map<String, Object>>) objList, fy);
+	}
+	
 
 	/**
 	 * (non-Javadoc)

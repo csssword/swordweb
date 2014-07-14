@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 
+import com.css.sword.kernel.base.persistence.FenYePageParam;
+import com.css.sword.kernel.base.persistence.SQLParam;
+import com.css.sword.kernel.base.persistence.FenYePageParam.PageQueryValueObject;
 import com.css.sword.platform.comm.log.LogFactory;
 import com.css.sword.platform.comm.log.LogWritter;
 import com.css.sword.platform.core.event.CSSBaseRequestEvent;
@@ -424,5 +427,34 @@ public class SwordReq extends CSSBaseRequestEvent implements
 
 	public void setAttr(String name, Object obj) {
 		reqDataSet.setAttr(name, obj);
+	}
+
+	@Override
+	public PageQueryValueObject getPageQueryValueObject() {
+		FenYePageParam currFenYeInfo = this.getCurrFenYeInfo();
+		PageQueryValueObject pvo = new PageQueryValueObject();
+		pvo.setFenyePageParam(currFenYeInfo);
+		return pvo;
+	}
+	private FenYePageParam getCurrFenYeInfo() {
+		Integer pageNum = (Integer) this.getAttr("pageNum");
+		Integer rows = (Integer) this.getAttr("rows");
+		String sortName = (String) this.getAttr("sortName");
+		String sortFlag = (String) this.getAttr("sortFlag");
+		
+		FenYePageParam currFenYeInfo = new FenYePageParam();
+		SQLParam sp = new SQLParam(0);
+		if(pageNum != null) {
+			currFenYeInfo.initNextQuery(sp);
+		}
+		if(pageNum != null) {
+			currFenYeInfo.setPageNum(pageNum);
+		}
+		if(rows != null) {
+			currFenYeInfo.setRowCount(rows);
+		}
+		currFenYeInfo.setSortName(sortName);
+		currFenYeInfo.setSortFlag(sortFlag);
+		return currFenYeInfo;
 	}
 }
