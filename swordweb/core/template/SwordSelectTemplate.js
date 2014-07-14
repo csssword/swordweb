@@ -8,7 +8,7 @@ var SwordSelectTemplate = {
     'end2':	'width="17px" vtype="fldiv"><div style="width:17px;"></div></td></tr></tbody></table>',
     // 日期属性
     'attr':'id="{id}" name="{name}" rule="{rule}"  msg="{msg}" realvalue="{realvalue}" code="{code}" ' +
-    		'sbmitcontent="{sbmitcontent}" _onChange="{onChange}"' +
+    		'sbmitcontent="{sbmitcontent}" codeSign="{codeSign}" captionSign="{captionSign}" pcodeSign="{pcodeSign}" _onChange="{onChange}"' +
     		' _onSelect="{onSelect}" onShow="{onShow}" onHide="{onHide}"' +
     		' onSubmitBefore="{onSubmitBefore}" value="{value}" parent="{parent}"' +
     		' lines="{lines}" lineheight="{height}" dataname="{dataname}"' +
@@ -16,11 +16,12 @@ var SwordSelectTemplate = {
     		'dataFilter="{dataFilter}" style="float: left;" popWidth="{popWidth}"' +
     		' displayCode="{displayCode}" inputdisplay="{inputdisplay}" popdisplay="{popdisplay}" ' +
     		'handInput="{handInput}" addAllItem="{addAllItem}" allItemCode="{allItemCode}" allItemCap="{allItemCap}"',
-    
     render:function (item, formObj, fName, itemData) {
     	var tem = [this.pre],sbmitcontent=item.get("sbmitcontent"),realvalue="",showvalue="",code="",inputdisplay=item.get("inputdisplay");
     	 var name = item.get("name"),id = fName + "_"+name,dataname=item.get("dataname")||item.get("dataName"),
-    	 defv=item.get("defValue"),defi=item.get("defIndex"),readonly=item.get("readonly")||item.getAttribute("readonly"),disable = item.get("disable"),rule = item.get("rule");
+    	 defv=item.get("defValue"),defi=item.get("defIndex"),readonly=item.get("readonly")||item.getAttribute("readonly"),
+    	 disable = item.get("disable"),rule = item.get("rule"),codeSign=item.get("codeSign")||'code',
+    	 captionSign=item.get("captionSign")||'caption',pcodeSign=item.get("pcodeSign")||'pcode';
     	 formObj.fieldElHash.set(id,$(id));
     	 if(readonly=="true"){
     	 	tem.push('readonly="true" ');
@@ -85,6 +86,9 @@ var SwordSelectTemplate = {
                 value:showvalue,//todo
                 realvalue:realvalue,
                 code:code,
+                codeSign:codeSign,
+                captionSign:captionSign,
+                pcodeSign:pcodeSign,
                 parent:item.get("parent"),
                 lines:item.get("lines")||10,
                 height:item.get("height")||21,
@@ -128,7 +132,7 @@ var SwordSelectTemplate = {
         if(!$defined(content))
             content = el.get('sbmitcontent');
         if(!$defined(content)) {
-            content = "{code}";
+            content = "{"+el.get("codeSign")+"}";
         }
         if($type(obj) == "element") {
             obj = {'code':obj.get("code"),"caption":obj.get("caption")};
@@ -136,8 +140,12 @@ var SwordSelectTemplate = {
         return content.substitute(obj);
     },genarateInputContent:function(el, obj) {
         var content = el.get('inputdisplay');
-        if(!$defined(content))content = "{caption}";
-        return this.genarateContent(el,obj, content);
+        if(!$defined(content)){
+        	content = "{"+el.get("captionSign")+"}";
+        return obj[el.get('captionSign')];
+        }else{
+        	return this.genarateContent(el,obj, content);
+        }
     },
     initData:function (el, d, formObj) {
     	var idx="";
