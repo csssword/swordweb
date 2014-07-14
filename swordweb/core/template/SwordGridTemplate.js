@@ -18,6 +18,7 @@ var SwordGridRender = new Class(
 
 			,options : {
 				gridObj : null// 容器
+				,gName:null
 			}
 		   ,formats : new Hash() ///format与juicer解析冲突，每列的format放在该对象中方便获取
 
@@ -25,8 +26,10 @@ var SwordGridRender = new Class(
 				this.setOptions(options);
 				if (!this.options.gridObj)throw new Error("SwordGridRender 初始化必须要传入 gridObj");
 				this.g = this.options.gridObj;
+				this.options.gName = this.options.gridObj.options.name;
 				this.fieldRender = new SwordGridFields({
-					'gridObj' : this.options.gridObj
+					'gridObj' : this.options.gridObj,
+					'gName': this.options.gName
 				});
 				this._showDataHandlers = {// 定义特殊数据处理器
 					'checkbox' : this._checkbox_radioDataHandler.bind(this),
@@ -104,19 +107,22 @@ var SwordGridRender = new Class(
 			,_createRow : function(datas, items) {
 				var cellsDom = this.fieldRender.render(items,this.formats);
 				var self = this;
-				juicer.register('pageNum', function(rowData) {
+				var gname = this.options.gName;
+				juicer.register(gname+'pageNum', function(rowData) {
 					return self.g.pageNum();
 				}); // 注册自定义函数
-				juicer.register('dataHandler', function() {
+				juicer.register(gname+'dataHandler', function() {
 					// var args = Array.prototype.slice.call(arguments,2);若需要分割参数
 					return self._findDataHandler(arguments[1]).apply(this,arguments);
 				}); // 注册自定义函数
 				var h = [];
 				if (this.g.options.type != 'tree') {// 树形表格将不使用此逻辑
-					var row_shuang = [ SwordGrid_OTemplate['row_shuang'],
-					                   cellsDom, SwordGrid_OTemplate['div_end'] ].join("");
-					var row_dan = [ SwordGrid_OTemplate['row_dan'], cellsDom,
-							SwordGrid_OTemplate['div_end'] ].join("");
+//					var row_shuang = [ SwordGrid_OTemplate['row_shuang'],
+//					                   cellsDom, SwordGrid_OTemplate['div_end'] ].join("");
+//					var row_dan = [ SwordGrid_OTemplate['row_dan'], cellsDom,
+//							SwordGrid_OTemplate['div_end'] ].join("");
+					var row_shuang = ['<div status="${status}" class="sGrid_data_row_div  sGrid_data_row_div_shuang   " row="true"  pageNum="${_|',gname,'pageNum}">',cellsDom,'</div>'].join("");
+					var row_dan = [ '<div status="${status}" class="sGrid_data_row_div  sGrid_data_row_div_dan   " row="true"  pageNum="${_|',gname,'pageNum}">', cellsDom,'</div>'].join("");
 					datas.each(function(rowData, i) { // IE9以上 数组没有字符串拼接快
 						
 						if (i % 2 == 0) { // 偶数行
@@ -126,7 +132,8 @@ var SwordGridRender = new Class(
 						}
 					}, this);
 				} else {
-					var row_tree = [ SwordGrid_OTemplate['row_tree'],cellsDom, SwordGrid_OTemplate['div_end'] ].join("");
+//					var row_tree = [ SwordGrid_OTemplate['row_tree'],cellsDom, SwordGrid_OTemplate['div_end'] ].join("");
+					var row_tree = ['<div status="${status}" class="sGrid_data_row_div " row="true"  pageNum="${_|',gname,'pageNum}">',cellsDom, '</div>' ].join("");
 					datas.each(function(rowData, i) { // IE9以上 数组没有字符串拼接快
 						h.push(juicer(row_tree, rowData));
 					}, this);

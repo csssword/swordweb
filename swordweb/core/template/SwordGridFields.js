@@ -11,6 +11,7 @@ var SwordGridFields = new Class({
 		
 	,options:{
 		gridObj:null//容器
+		,gName:null
 	}
 	,Fields:{
 		////各类型对外提供属性
@@ -263,33 +264,33 @@ var SwordGridFields = new Class({
 		///可添加其他属性，可以是其他属性判断后添加的
 		
 		//可在字符串添加内部属性 或全局属性
-        return ' <div datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_a " '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
+        return ' <div datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_a " '+attrs.join("")+'  $${_|'+this.options.gName+'dataHandler,"'+field.type+'","'+field.name+'"}';
 	}
 	,_labelHtmlHandler:function(item){
 		var field = this.findFieldOptions('label');
 		var attrs = this.copeHtmlOptions(field,item);
-        return ' <div datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_label " '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
+        return ' <div datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_label " '+attrs.join("")+'  $${_|'+this.options.gName+'dataHandler,"'+field.type+'","'+field.name+'"}';
 	}
 	,_textHtmlHandler:function(item){
 		var field = this.findFieldOptions('text');
 		var attrs = this.copeHtmlOptions(field,item);
-        return '<div eventdele="text" datael="true"  class="sGrid_data_row_item_div sGrid_data_row_item_text "  '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
+        return '<div eventdele="text" datael="true"  class="sGrid_data_row_item_div sGrid_data_row_item_text "  '+attrs.join("")+'  $${_|'+this.options.gName+'dataHandler,"'+field.type+'","'+field.name+'"}';
 	}
 	,_passwordHtmlHandler:function(item){
 		var field = this.findFieldOptions('password');
 		var attrs = this.copeHtmlOptions(field,item);
-        return '<div eventdele="text" datael="true"  class="sGrid_data_row_item_div sGrid_data_row_item_password "  '+attrs.join("")+'  $${_|dataHandler,"'+field.type+'","'+field.name+'"}';
+        return '<div eventdele="text" datael="true"  class="sGrid_data_row_item_div sGrid_data_row_item_password "  '+attrs.join("")+'  $${_|'+this.options.gName+'dataHandler,"'+field.type+'","'+field.name+'"}';
 	
 	}
 	,_rowNumHtmlHandler:function(item){
 		var field = this.findFieldOptions('rowNum');
 		var attrs = this.copeHtmlOptions(field,item);
-        return '<div  datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_rowNum "  "'+attrs.join("")+'  $${_|dataHandler,"'+field.type+'"} ></div>';
+        return '<div  datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_rowNum "  "'+attrs.join("")+'  $${_|'+this.options.gName+'dataHandler,"'+field.type+'"} ></div>';
 	}
 	,_rowNumOnePageHtmlHandler:function(item){
 		var field = this.findFieldOptions('rowNumOnePage');
 		var attrs = this.copeHtmlOptions(field,item);
-        return '<div  datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_rowNumOnePage "  "'+attrs.join("")+'  $${_|dataHandler,"'+field.type+'"} ></div>';
+        return '<div  datael="true" class="sGrid_data_row_item_div sGrid_data_row_item_rowNumOnePage "  "'+attrs.join("")+'  $${_|'+this.options.gName+'dataHandler,"'+field.type+'"} ></div>';
 	}
 	,_checkboxHtmlHandler:function(item){
 		var field = this.findFieldOptions('checkbox');
@@ -299,22 +300,22 @@ var SwordGridFields = new Class({
 			disabled = "disabled";
 		}
 		if(item.get('type') == 'radio'){
-	        return '<div eventdele="checkbox" datael="true"  class="sGrid_data_row_item_div "'+attrs.join("")+ ' ><input type="'+field.type+'" name="'+field.name+'"  '+disabled+'   class="sGrid_data_row_item_checkbox"  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+userClicked+'","'+checkAllFlag+'"}';
+	        return '<div eventdele="checkbox" datael="true"  class="sGrid_data_row_item_div "'+attrs.join("")+ ' ><input type="'+field.type+'" name="'+field.name+'"  '+disabled+'   class="sGrid_data_row_item_checkbox"  $${_|'+this.options.gName+'dataHandler,"'+field.type+'","'+field.name+'","'+userClicked+'","'+checkAllFlag+'"}';
 		}else{
 			var userClicked = item.get('userClicked')||"";
 	    	var checkAllFlag = item.get('checkAllFlag')||"";
-	        return '<div eventdele="checkbox" datael="true"  class="sGrid_data_row_item_div "'+attrs.join("")+ ' ><input type="'+field.type+'" name="'+field.name+'"  '+disabled+'   class="sGrid_data_row_item_checkbox"  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+userClicked+'","'+checkAllFlag+'"}';
+	        return '<div eventdele="checkbox" datael="true"  class="sGrid_data_row_item_div "'+attrs.join("")+ ' ><input type="'+field.type+'" name="'+field.name+'"  '+disabled+'   class="sGrid_data_row_item_checkbox"  $${_|'+this.options.gName+'dataHandler,"'+field.type+'","'+field.name+'","'+userClicked+'","'+checkAllFlag+'"}';
 		}
 	}
 	,_dateHtmlHandler:function(item){
 		var field = this.findFieldOptions('date');
 		var attrs = this.copeHtmlOptions(field,item);
-        return '<div datael="true"  eventdele="date" class="sGrid_data_row_item_div sGrid_data_row_item_date   "'+attrs.join("")+  '  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+field.dataformat+'","'+field.defValue+'","'+field.showCurDate+'","'+field.submitDateformat+'"}';
+        return '<div datael="true"  eventdele="date" class="sGrid_data_row_item_div sGrid_data_row_item_date   "'+attrs.join("")+  '  $${_|'+this.options.gName+'dataHandler,"'+field.type+'","'+field.name+'","'+field.dataformat+'","'+field.defValue+'","'+field.showCurDate+'","'+field.submitDateformat+'"}';
 	}
 	,_selectHtmlHandler:function(item){
 		var field = this.findFieldOptions('select');
 		var attrs = this.copeHtmlOptions(field,item);
-        return '<div datael="true" eventdele="select" class="sGrid_data_row_item_div sGrid_data_row_item_select  "'+attrs.join("")+ '  $${_|dataHandler,"'+field.type+'","'+field.defValue+'","'+field.defIndex+'","'+field.parent+'","'+field.name+'","'+field.dataName+'"}';
+        return '<div datael="true" eventdele="select" class="sGrid_data_row_item_div sGrid_data_row_item_select  "'+attrs.join("")+ '  $${_|'+this.options.gName+'dataHandler,"'+field.type+'","'+field.defValue+'","'+field.defIndex+'","'+field.parent+'","'+field.name+'","'+field.dataName+'"}';
 	}
 	,_pulltreeHtmlHandler:function(item){
 		var field = this.findFieldOptions('pulltree');
@@ -326,7 +327,7 @@ var SwordGridFields = new Class({
 			}
 		}
 		///可添加其他属性，可以是其他属性判断后添加的
-        return '<div datael="true" eventdele="pulltree" select="true" class="sGrid_data_row_item_div sGrid_data_row_item_pulltree"  '+attrs.join("")+ '  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+field.treeName+'","'+field.checkbox+'"}';
+        return '<div datael="true" eventdele="pulltree" select="true" class="sGrid_data_row_item_div sGrid_data_row_item_pulltree"  '+attrs.join("")+ '  $${_|'+this.options.gName+'dataHandler,"'+field.type+'","'+field.name+'","'+field.treeName+'","'+field.checkbox+'"}';
 	}
 	,_userdefineHtmlHandler:function(item){
 		var field = this.findFieldOptions('userdefine');
@@ -345,7 +346,7 @@ var SwordGridFields = new Class({
 	,_file2HtmlHandler:function(item){
 		var field = this.findFieldOptions('file2');
 		var attrs = this.copeHtmlOptions(field,item);
-	    return '<div datael="true" eventdele="file2" class="sGrid_data_row_item_div sGrid_data_row_item_file2  "'+attrs.join("")+ '  $${_|dataHandler,"'+field.type+'","'+field.name+'","'+field.dataName+'","'+field.addCaption+'"}';
+	    return '<div datael="true" eventdele="file2" class="sGrid_data_row_item_div sGrid_data_row_item_file2  "'+attrs.join("")+ '  $${_|'+this.options.gName+'dataHandler,"'+field.type+'","'+field.name+'","'+field.dataName+'","'+field.addCaption+'"}';
 	}
 	,findFieldOptions:function (type) {
 		var field = this.Fields[type];
