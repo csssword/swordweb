@@ -63,8 +63,10 @@ var PageContainer = new Class({
 //                this.getEditor().dealEl(value);
 //            }
             this.initWidgetParam(value);
-            if(value.get("sword")=="SwordForm"&&!pc.getInitData(wName)&&value.get("userdefine")=="true"){
-            	$w(wName).renderForm(value);
+            if(value.get("userdefine")=="true"){
+	            if(!pc.getInitData(wName)){
+	            	$w(wName).renderForm(value);
+	            }
             }
             value.set('isload', 'true');
 //            this.detailed = this.detailed + value.get('name')+ ":" + (new Date().getTime()-begin) + "----";
