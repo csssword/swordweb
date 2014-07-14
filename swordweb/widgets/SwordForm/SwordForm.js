@@ -896,7 +896,7 @@ var SwordForm = new Class({
             return;
         }
     	var el=this.options.pNode;
-        if(d.sword == "SwordForm"&&!el.get("isload")) {
+        if(d.sword == "SwordForm"&&!el.get("isRender")&&el.get("userdefine")=="true") {
         	this.renderForm(el,d.data);
             this.fireEvent("onFinish", d);
         } else {
