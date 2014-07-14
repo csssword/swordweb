@@ -133,9 +133,9 @@ var SwordForm = new Class({
                 var div = new Element("div", {'class':'swordform_panel_top'}).inject(this.wrapDiv);
                 div.set("html", "<div class='l'></div><div class='r'></div>");
             }
+        	this.wrapDiv = new Element("div", {'align':'center','class':'swordfrom_wrap_div'}).inject(this.options.pNode);
         	 if(this.options.panel == 'true') {
-        		 this.wrapDiv = new Element("div", {'align':'center','class':'swordfrom_wrap_div'}).inject(this.options.pNode);
-                 this.panel = new SwordPanel({pNode:this.wrapDiv,caption:this.options.caption}).initParam();
+        		 this.panel = new SwordPanel({pNode:this.wrapDiv,caption:this.options.caption}).initParam();
                  if(this.options.isShowTogdiv == "true") {
                      new Element('div', {
                          'class':'x-tool',
@@ -210,7 +210,7 @@ var SwordForm = new Class({
             this.getFieldEls().filter(
                     function(el) {
                         return (el.get("tag").toLowerCase() != "textarea");
-                    }).addEvent('keyup', this.nextFocus.bind(this));
+                    }).each(function(item){item.addEvent('keyup', this.nextFocus.bind(this));}.bind(this));
             this.lazyInitData.each(function(v, k) {
                 this.getWidget(k).initData(v, "ie6");
             }.bind(this));
