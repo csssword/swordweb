@@ -4526,7 +4526,7 @@ var SwordGrid = new Class({
                     this.nextCell(srcEl, event,obj);
             	}
             }
-            if(obj)obj.hide();
+           /* if(obj)obj.hide();*/
         }.bind(this));
     }
     //加一个参数，为了解决GIRD中连续日期列，不触发hide时间，不执行校验及事件的BUG
