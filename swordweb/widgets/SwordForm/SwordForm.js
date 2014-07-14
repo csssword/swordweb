@@ -984,7 +984,8 @@ var SwordForm = new Class({
             return this.getWidget(name)||this.getFieldEl(name);
     },
     getFieldEl:function(name) {//增加需要调用set
-        return this.fieldElHash.get(name);//this.options.pNode.getElement(".swordform_item_oprate[name='" + name + "']");
+    	var id=this.options.name+"_"+name;
+        return this.fieldElHash.get(id)||this.fieldElHash.getValues().filter(function(item){ return item.get("name")==name;})[0];
     },
     destroyFieldEl:function(name) {//从form中删掉某个元素，必须调用此接口
         if(!$defined(name))this.fieldElHash.empty();
