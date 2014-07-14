@@ -1,14 +1,11 @@
 package com.css.sword.platform.web.event;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import sun.jdbc.rowset.CachedRowSet;
+import javax.sql.rowset.CachedRowSet;
 
 import com.css.sword.platform.core.event.IResponseEvent;
-import com.css.sword.platform.persistence.pagination.PaginationManager;
-import com.css.sword.platform.web.mvc.cachecode.ICacheCodeConfig;
 
 /**
  * ResponseEvent用户接口DTO <br>
@@ -312,6 +309,15 @@ public interface IResData extends IResponseEvent {
 	 *            树的数据
 	 */
 	public void addTree(String widgetName, List<?> treeDatas);
+
+	/**
+	 * 将数据集转化成SwordTree可解析的数据
+	 * @param widgetName
+	 * @param treeDatas
+	 * @param codeSign	主键标识
+	 * @param pCodeSign	父键标识
+	 */
+	public void addTree(String widgetName, List<?> treeDatas,String codeSign,String pCodeSign);
 
 	/**
 	 * 获得ResData的Json数据。用作前台组件解析。

@@ -1,5 +1,17 @@
 package com.css.sword.platform.web.event;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import sun.jdbc.rowset.CachedRowSet;
+
 import com.css.sword.kernel.base.persistence.FenYePageParam;
 import com.css.sword.platform.comm.pool.ThreadLocalManager;
 import com.css.sword.platform.core.event.CSSBaseResponseEvent;
@@ -8,17 +20,6 @@ import com.css.sword.platform.web.comm.CommParas;
 import com.css.sword.platform.web.context.ContextAPI;
 import com.css.sword.platform.web.mvc.SwordDataSet;
 import com.css.sword.platform.web.mvc.cachecode.ICacheCodeConfig;
-import sun.jdbc.rowset.CachedRowSet;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * 用户Request接口DTO<br>
@@ -542,5 +543,11 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		if (_locale == null)
 			_locale = Locale.getDefault();
 		return _locale;
+	}
+
+	@Override
+	public void addTree(String widgetName, List<?> treeDatas, String codeSign,
+			String pCodeSign) {
+		resDataSet.addTree(widgetName, treeDatas,codeSign,pCodeSign);
 	}
 }

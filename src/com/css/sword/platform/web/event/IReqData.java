@@ -10,9 +10,6 @@ import org.apache.commons.fileupload.FileUploadException;
 
 import com.css.sword.platform.core.event.IRequestEvent;
 import com.css.sword.platform.web.mvc.SwordDataSet;
-import com.css.sword.platform.web.mvc.beans.FormBean;
-import com.css.sword.platform.web.mvc.beans.TableBean;
-import com.css.sword.platform.web.mvc.beans.TreeBean;
 
 /**
  * RequestEvent用户接口DTO <br>

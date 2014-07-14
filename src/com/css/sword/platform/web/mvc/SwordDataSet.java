@@ -20,6 +20,8 @@ import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+
 import sun.jdbc.rowset.CachedRowSet;
 
 import com.css.sword.kernel.utils.SwordCacheUtils;
@@ -1555,31 +1557,44 @@ public class SwordDataSet implements Serializable {
 //        addSelect(viewData, obj, "SwordList");
 //    }
 
-    public void addTree(String widgetName, CachedRowSet crs) {
-        Map<String, Object> viewData = new HashMap<String, Object>();
-        viewData.put("name", widgetName);
-        buildTreeType(viewData, "SwordTree", widgetName, crs);
-    }
-
     public void addTree(String widgetName, CachedRowSet crs, boolean loadData) {
-        Map<String, Object> viewData = new HashMap<String, Object>();
-        if(loadData) {
-            viewData.put("loaddata", "widget");
-        }
-        viewData.put("name", widgetName);
-        buildTreeType(viewData, "SwordTree", widgetName, crs);
-    }
+		Map<String, Object> viewData = new HashMap<String, Object>();
+		if (loadData) {
+			viewData.put("loaddata", "widget");
+		}
+		viewData.put("name", widgetName);
+		buildTreeType(viewData, "SwordTree", widgetName, crs);
+	}
 
-    public void addTree(String widgetName, List<?> treeDatas) {
-        TreeBean tb = new TreeBean();
-        Map<String, Object> viewData = new HashMap<String, Object>();
-        if(treeDatas != null && treeDatas.size() >0){
+	public void addTree(String widgetName, List<?> treeDatas) {
+		this.addTree(widgetName, treeDatas, null, null);
+	}
+
+	/**
+	 * 将数据集转化成SwordTree可解析的数据
+	 * 
+	 * @param widgetName
+	 * @param treeDatas
+	 * @param codeSign
+	 *            主键标识
+	 * @param pCodeSign
+	 *            父键标识
+	 */
+	public void addTree(String widgetName, List<?> treeDatas, String codeSign,
+			String pCodeSign) {
+		TreeBean tb = new TreeBean();
+		Map<String, Object> viewData = new HashMap<String, Object>();
+		List<Map<String, Object>> objMapList = null;
+
+		if (treeDatas != null && treeDatas.size() > 0) {
 			Object obj = treeDatas.get(0);
-			if (obj instanceof Map){
-				List<Map<String, Object>> objMapList = (List<Map<String, Object>>)treeDatas;
-				tb.setDataList(objMapList);
-			}else{
+			if (obj instanceof Map) {
+				objMapList = (List<Map<String, Object>>) treeDatas;
+
+			} else {
 				try {
+					objMapList = new ArrayList<Map<String, Object>>(
+							treeDatas.size());
 					for (int i = 0; i < treeDatas.size(); i++) {
 						Object treeobj = treeDatas.get(i);
 						Field[] fields = build.getAllFields(treeobj);
@@ -1587,35 +1602,45 @@ public class SwordDataSet implements Serializable {
 						for (int j = 0; j < fields.length; j++) {
 							String fieldName = fields[j].getName();
 							String fieldGetterName = getGetterName(fieldName);
-							Method getterMethod = build.getMethod(fieldGetterName, treeobj);
+							Method getterMethod = build.getMethod(
+									fieldGetterName, treeobj);
 							if (getterMethod != null) {
-								Object value = getterMethod
-										.invoke(treeobj, new Object[] {});
+								Object value = getterMethod.invoke(treeobj,
+										new Object[] {});
 								dataMap.put(fieldName, value);
 							}
 						}
-						tb.add(dataMap);
+						// tb.add(dataMap);
+						objMapList.add(dataMap);
 					}
-				} catch (SecurityException e) {
-					throw new RuntimeException(e);
-				} catch (IllegalArgumentException e) {
-					throw new RuntimeException(e);
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(e);
-				} catch (InvocationTargetException e) {
+				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
 			}
-		}else{
-			List<Map<String, Object>> objMapList = new ArrayList<Map<String, Object>>();
-			tb.setDataList(objMapList);
+		} else {
+			objMapList = new ArrayList<Map<String, Object>>();
 		}
-        viewData.put("sword", "SwordTree");
-        viewData.put("name", widgetName);
-        tb.setViewData(viewData);
-        resData.setObjectBean(tb);
-        resData = DataBuilder.treeBeanToJson(resData);
-    }
+		if(StringUtils.isNotBlank(codeSign) && StringUtils.isNotBlank(pCodeSign)){
+			List<Map<String, Object>> jsonList = new ArrayList<Map<String, Object>>();
+			
+			createTreeList(objMapList, jsonList, codeSign, pCodeSign);
+			
+			tb.setDataList(jsonList);
+			viewData.put("dataType", "json");
+		}else{
+			tb.setDataList(objMapList);
+			viewData.put("dataType", "jsonAptitude");
+		}
+		
+		
+		viewData.put("sword", "SwordTree");
+		viewData.put("name", widgetName);
+		// by zb,后端设置树的数据构造类型，不用前端指定
+		
+		tb.setViewData(viewData);
+		resData.setObjectBean(tb);
+		resData = DataBuilder.treeBeanToJson(resData);
+	}
 
     public void addMultiSelectWithName(String widgetName, CachedRowSet crs) {
         Map<String, Object> viewData = new HashMap<String, Object>();
@@ -1945,4 +1970,70 @@ public class SwordDataSet implements Serializable {
         chartsMap.put("sword", "SwordChart");
         resData.addJsonDatas(chartsMap);
     }
+    
+
+	
+	
+	/**
+	 * by zb
+	 * 比较高效的算法，摒弃传统递归的超低效算法，笔记本环境，10w条记录组装为无限层次树结构，240ms 左右
+	 * @param treeList
+	 * @param jsonList
+	 * @param codeSign
+	 * @param pCodeSign
+	 */
+	private static void createTreeList(List<Map<String, Object>> treeList, List<Map<String, Object>> jsonList,String codeSign,String pCodeSign){
+    	
+    	if(StringUtils.isNotBlank(codeSign) && StringUtils.isNotBlank(pCodeSign) 
+    			&& treeList!=null && treeList.size()>0 ){
+    		
+    		int i=0,l=treeList.size();
+    		for(;i<l;i++){
+    			Map<String, Object> currentMap = treeList.get(i);
+    			String codeValue = String.valueOf(currentMap.get(codeSign));
+    			String pCodeValue = String.valueOf(currentMap.get(pCodeSign));
+    			
+    			Object isChild = currentMap.get("_isChild");
+    			if(isChild!=null){
+    				currentMap.remove("_isChild");
+    				continue;
+    			}
+    			
+    			boolean isParent = false;
+    			for(int k=i;k<l;k++){
+    				Map<String, Object> childMap = treeList.get(k);
+    				String childCodeValue =  String.valueOf(childMap.get(codeSign));
+        			String childPCodeValue = String.valueOf(childMap.get(pCodeSign));
+        			
+        			if(codeValue!=null && codeValue.equals(childPCodeValue)){  //孩子
+        				@SuppressWarnings("unchecked")
+						List<Map<String,Object>> list = (List<Map<String,Object>>)currentMap.get("children");
+        				if(list==null){
+        					list = new ArrayList<Map<String,Object>>();
+        					currentMap.put("children", list);
+        				}
+        				childMap.put("_isChild", true);
+        				list.add(childMap);
+        				
+        			}else if(pCodeValue!=null && pCodeValue.equals(childCodeValue)){ //父亲
+        				@SuppressWarnings("unchecked")
+						List<Map<String,Object>> list = (List<Map<String,Object>>)childMap.get("children");
+        				if(list==null){
+        					list = new ArrayList<Map<String,Object>>();
+        					childMap.put("children", list);
+        				}
+        				list.add(currentMap);
+        				isParent = true;
+        			}
+    			}
+    			if(!isParent){  //第一层
+    				
+    				jsonList.add(currentMap);
+    			}
+    			
+    		}
+			
+    	}
+    }
+
 }
