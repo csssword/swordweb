@@ -553,9 +553,8 @@ var SwordSelect = new Class({
             var dataname = this.box.get("dataname");
             var d = ($defined(dataname)) ? pageContainer.getInitDataByDataName(dataname) : pageContainer.getInitData(this.box.get("name"));
             if(!$defined(d)) {
-                return;
-            }
-            loadData = this.options.data = d.data;
+                loadData = null;
+            }else {loadData = this.options.data = d.data;}
         }
         if(!$defined(bz) && this.options.data.length > 0) {
             loadData = this.dataFilter(this.options.data);
