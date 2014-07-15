@@ -71,6 +71,9 @@ var SwordGridRender = new Class(
 					if(row.get("status")=="deleting"||row.get("status")=="delete"){
 						row.addClass('sGrid_data_row_delete_div');
 					 }
+					if(!row.retrieve('rowData')){ // insertRow时需要存数据
+						self._storeRowData(row, datas[timeNum]);
+					}
 					self._addRowFucs(row, datas[timeNum]);
 					self._renderCellAfter(datas[timeNum], row, timeNum + 1, items);
 					self.g.fireEvent("onAfterCreateRow", [ datas[timeNum], row,
