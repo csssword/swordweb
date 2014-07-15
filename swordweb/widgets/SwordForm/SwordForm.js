@@ -880,7 +880,7 @@ var SwordForm = new Class({
         new Element('td', {'class':'swordform_btn_right','html':'<i>&nbsp;</i>'}).inject(tr);
     }
     ,renderForm:function(el,data){
-    	SwordForm_Template.realRender(el||this.options.pNode,this,data||{});//html渲染和数据处理一起处理
+    	SwordForm_Template.realRender(el||this.options.pNode,this,(data||{}).data);//html渲染和数据处理一起处理
     	//todo 临时注册在这里
     	this.initEventForPanel();
     	this.fieldElHash.getKeys().each(function(item){
@@ -891,23 +891,18 @@ var SwordForm = new Class({
     			if(tInitW)tInitW(name,idEl,this);
     		}
     	}.bind(this));
+    	this.fireEvent("onFinish", data);
     }
     ,initData:function(d) {
-    	if(!$chk(d)) {
+    	if(!$chk(d)||!d.data) {
             return;
         }
-    	var el=this.options.pNode;
-        if(d.sword == "SwordForm"&&!el.get("isRender")&&el.get("userdefine")=="true") {
-        	this.renderForm(el,d.data);
-            this.fireEvent("onFinish", d);
-        } else {
-        	this.fieldElHash.getKeys().each(function(item){
-        		var idEl=$(item),name=idEl.get("name"),elData=d.data[name];
-        		if(elData){
-        			this.setValue(name, elData.value);
-        		}
-        	}.bind(this));
-        }
+    	this.fieldElHash.getKeys().each(function(item){
+    		var idEl=$(item),name=idEl.get("name"),elData=d.data[name];
+    		if(elData){
+    			this.setValue(name, elData.value);
+    		}
+    	}.bind(this));
     },
     getSubmitData:function() {
         var re = {

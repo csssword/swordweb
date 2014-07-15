@@ -56,9 +56,7 @@ var PageContainer = new Class({
 //            }
             this.initWidgetParam(value);
             if(value.get("userdefine")=="true"){
-	            if(!pc.getInitData(wName)){
-	            	$w(wName).renderForm(value);
-	            }
+            	$w(wName).renderForm(value,pc.getInitData(wName));
             }
             value.set('isload', 'true');
 //            this.detailed = this.detailed + value.get('name')+ ":" + (new Date().getTime()-begin) + "----";
@@ -428,7 +426,9 @@ var PageContainer = new Class({
                     var name = widgetName.split('.');
                     pageContainer.getWidget4loaddata(name[0]).initData(widgetData);
                 } else {
-                    pageContainer.getWidget4loaddata(widgetName).initData(widgetData,dataObj);
+                	var widgetObj=pageContainer.getWidget4loaddata(widgetName),isUD=widgetObj.options?widgetObj.options.userDefine:"";
+                	if(param.initpage==true&&isUD == "true"){return;}
+                	widgetObj.initData(widgetData,dataObj);
                 }
             }
         }, this);
