@@ -3973,6 +3973,7 @@ var SwordGrid = new Class({
 
     ,createRow:function(rowNum, dataObj, items, status, row) {
     	 if(!row) row=this._getRender().renderRow(dataObj, items,status);
+    	 row.store('rowData',dataObj);
          return row;
 
     }
@@ -5876,7 +5877,9 @@ var SwordGrid = new Class({
     }
 
     ,reset:function() {
-        this.options.data.empty();
+    	if(this.options.data){
+    		this.options.data.empty();
+    	}
     	this.options.sGrid_data_div.empty();
     	this.removeAllError(); // 清空所有错误状态
     	this.cachePages = []; 
