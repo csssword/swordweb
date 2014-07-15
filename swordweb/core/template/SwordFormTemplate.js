@@ -71,7 +71,7 @@ var SwordForm_Template = {
                     	if (d != null) {
 	                       	 if(d.get("tag")!="table"){
 	                       		 type = d.get('type'),itemName=d.get("name");
-	   		                   	 tem.push("<td>");
+	   		                   	 tem.push(("<td style='{style}' colspan='{c}' rowspan='{r}' >").substitute({c:tds[i].get('colspan'), r:tds[i].get('rowspan'), style:tds[i].get('style')}));
 	   		                   	 if(type){
 	   		                   		tem.push(this.getItemHtml(type, d, formData[itemName]));
 	   		                   	 }
