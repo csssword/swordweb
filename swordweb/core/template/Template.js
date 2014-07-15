@@ -131,32 +131,32 @@ var STemplateEngine = (function () {
             return returnElement ? el.getFirst() : null;
         },
         createFragment:function (html) {
-            var div = document.createElement("div"),
+            var div = document.createElement("div");/*,
                 fragment = document.createDocumentFragment(),
                 i = 0,
-                length, childNodes;
+                length, childNodes;*/
             div.innerHTML = html;
-            childNodes = div.childNodes;
+            /*childNodes = div.childNodes;
             length = childNodes.length;
             for (; i < length; i++) {
-                fragment.appendChild(childNodes[i].cloneNode(true));
-            }
-            return fragment;
+                fragment.appendChild(childNodes[i]);
+            }*/
+            return div;
         },
         createFragmentForGrid:function(html,datas){
-        	var div = document.createElement("div"),
+        	var div = document.createElement("div"),i = 0;/*,
 	            fragment = document.createDocumentFragment(),
 	            i = 0,
-	            length, childNodes;
+	            length, childNodes;*/
 	        div.innerHTML = html;
 	        childNodes = div.childNodes;
 	        length = childNodes.length;
 	        for (; i < length; i++) {
-	            fragment.appendChild(childNodes[i].cloneNode(true));
-	            var row = $$(fragment.childNodes)[i];
-	            row.store("rowData",datas[i]);
+	           /* fragment.appendChild(childNodes[i]);
+	            var row = $$(fragment.childNodes)[i];*/
+	        	$(childNodes[i]).store("rowData",datas[i]);
 	        }
-	        return fragment;
+	        return div;
         },
         formatResolve:function(el,yEl){
         	yEl.get("format")?el.set("format",yEl.get("format")):null;
