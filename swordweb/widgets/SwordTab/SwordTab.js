@@ -235,7 +235,7 @@ var SwordTab = new Class({
                        
                     }).addClass("tabs_div");
                     if($(item).getAttribute('isload') != 'true') {
-                        var swordWidgets = $(item).getElements("div[sword][sword!='PageInit'][type!='pulltree'][isload!='true']");
+                        /*var swordWidgets = $(item).getElements("div[sword][sword!='PageInit'][type!='pulltree'][isload!='true']");
                         swordWidgets.each(function(value) {
                             if(pc.isEdit()) {
                                 pc.getEditor().addEl(value);
@@ -250,7 +250,7 @@ var SwordTab = new Class({
                                 this.tabSwordWiget[this.options.tabSelectedIndex][0] = value.get('name');
                             } else {
                             }
-                        }, this);
+                        }, this);*/
                         $(item).set('isload', 'true');
                     }
                 }
