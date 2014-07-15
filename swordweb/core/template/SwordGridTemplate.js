@@ -45,7 +45,7 @@ var SwordGridRender = new Class(
 			,render : function(datas, items) {
 				if (!items)items = this.options.items;
 				var rows = this._createRow(datas, items);
-				var rowsFragment = STemplateEngine.createFragment(rows);
+				var rowsFragment = STemplateEngine.createFragmentForGrid(rows,datas);
 				this._renderAfter($$(rowsFragment.childNodes), datas, items);
 				return rowsFragment;
 			}
@@ -71,11 +71,8 @@ var SwordGridRender = new Class(
 					if(row.get("status")=="deleting"||row.get("status")=="delete"){
 						row.addClass('sGrid_data_row_delete_div');
 					 }
-					if (!row.retrieve('rowData')) {
-						self._renderRowAfter(row, datas[timeNum]);
-						self._renderCellAfter(datas[timeNum], row, timeNum + 1,
-								items);
-					}
+					self._addRowFucs(row, datas[timeNum]);
+					self._renderCellAfter(datas[timeNum], row, timeNum + 1, items);
 					self.g.fireEvent("onAfterCreateRow", [ datas[timeNum], row,
 							self.g ]);
 					timeNum = timeNum + 1;
@@ -87,9 +84,14 @@ var SwordGridRender = new Class(
 					}
 				}.bind(this), 10);
 			}
-
 			,_renderRowAfter : function(row, rowData) {
+				this._storeRowData(row, rowData);
+				this._addRowFucs(row, rowData);
+			}
+			,_storeRowData:function(row, rowData){
 				row.store('rowData', rowData);// 注册行数据
+			}
+			,_addRowFucs : function(row, rowData){
 				this.g.addRowApi(row); // 添加行接口
 				rowData.getValue = this._getValue;
 			}

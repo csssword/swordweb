@@ -143,6 +143,21 @@ var STemplateEngine = (function () {
             }
             return fragment;
         },
+        createFragmentForGrid:function(html,datas){
+        	var div = document.createElement("div"),
+	            fragment = document.createDocumentFragment(),
+	            i = 0,
+	            length, childNodes;
+	        div.innerHTML = html;
+	        childNodes = div.childNodes;
+	        length = childNodes.length;
+	        for (; i < length; i++) {
+	            fragment.appendChild(childNodes[i].cloneNode(true));
+	            var row = $$(fragment.childNodes)[i];
+	            row.store("rowData",datas[i]);
+	        }
+	        return fragment;
+        },
         formatResolve:function(el,yEl){
         	yEl.get("format")?el.set("format",yEl.get("format")):null;
         	yEl.get("submitformat")?el.set("submitformat",yEl.get("submitformat")):null;
