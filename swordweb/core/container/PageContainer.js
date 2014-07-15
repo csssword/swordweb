@@ -18,7 +18,7 @@ var PageContainer = new Class({
 		"select":SwordSelectTemplate,
 		"radio":SwordRadioCheckboxTemplate,
 		"calendar":SwordCalendarTemplate,
-	 "date":SwordCalendarTemplate,
+	    "date":SwordCalendarTemplate,
 		"text":SwordTextTemplate,
 		"textarea":SwordTextareaTemplate,
 		"password":SwordPasswordTemplate,
@@ -28,13 +28,13 @@ var PageContainer = new Class({
 		"file2":SwordFile2Template,
 	    /*"pulllazytree":SwordPulllazytreeTemplate,*/
 		"file":SwordFileTemplate,
-	"hidden":SwordHiddenTemplate
+	    "hidden":SwordHiddenTemplate
     }
     ,isEdit:function() {
         return this.edit;
     }
-    ,initialize: function(edit) {
-        this.edit = edit;
+    ,initialize: function() {
+//        this.edit = edit;
     }
     ,initSwordTag :function(node) {
         var swordWidgets = [];
@@ -43,14 +43,6 @@ var PageContainer = new Class({
         } else {
             swordWidgets = $$("div[sword][sword!='PageInit'][type!='pulltree'][lazy!='true']");
         }
-//        var newSwordWidgets = [];
-//        swordWidgets.each(function(item, index) {
-//            if(item.getAttribute('lazy') != 'true') {
-//                newSwordWidgets.include(item);
-//                item.set('isload', 'true');
-//            }
-//        }.bind(this));
-//        swordWidgets = newSwordWidgets;
 //        if(this.isEdit()) {
 //            this.getEditor().start();
 //        }
@@ -87,15 +79,12 @@ var PageContainer = new Class({
                 pc.initData = JSON.decode(d.replace(/&apos;/g, "'"));
             }
         } else {
-            var pi = this.getPageInit();
-            if(pi) {
-                pi.initStaticData();
-            }
+           pc.pageInit.initStaticData();
         }
         if( pc.initData ){//0507
            pc.initData["getAttr"] = pc.getAttrFunc;
         }
-        _pcSwordClientPageJumpTiming("11");
+//        _pcSwordClientPageJumpTiming("11");
     }
     ,getAttrFunc:function(key) {
         for(var i = 0; i < (this.data || []).length; i++) {
@@ -121,128 +110,62 @@ var PageContainer = new Class({
 				'onFinish' : this.getFunc(intopt.onFinish)[0],
 				'onAfterLoadData' : this.getFunc(intopt.onAfterLoadData)[0]
 			};
-//                var param = {'dataObj':this.initData };
-//                if(pi) {
-//                    $extend(param, {
-//                        'onSuccess':this.getFunc(pi.options.onSuccess)[0]
-//                        ,'onError':this.getFunc(pi.options.onError)[0]
-//                        ,'onFinish':this.getFunc(pi.options.onFinish)[0]
-//                        ,'onAfterLoadData':this.getFunc(pi.options.onAfterLoadData)[0]
-//                    });
-//                }
                 param.initpage=true;
                 pc.loadData(param);
         } else {
-//            if(pi) {
                 pc.pageInit.getInitData({
                     'onSuccess':this.getFunc(intopt.onSuccess)[0]
                     ,'onError':this.getFunc(intopt.onError)[0]
                     ,'onFinish':this.getFunc(intopt.onFinish)[0]
                     ,'onAfterLoadData':this.getFunc(intopt.onAfterLoadData)[0]
                 });
-//            }
         }
     }
-//    ,initPublicTag:function() {
-//        this.redirect = this.widgetFactory.create("Redirect");
-//    }
-//    ,initCoutTag:function() {
-//        var couts = $$("*[tag='cout'][name]");
-//        couts.each(function(el) {
-//            var val = this.getInitData(el.get('name'));
-//            if(!$chk(val))return;
-//            val = val.value;
-//            el.set('text', val);
-//        }, this);
-//    }
     ,swordCacheArray:[]//存储页面缓存的定义
     ,
     initSwordCacheData:function(){// 读取页面定义的缓存
-        var ct = $('SwordCacheData');
+        var ct = document.getElementById('SwordCacheData');
         var querystr = null;
         if($defined(ct)){//由于历史原因，下拉树和下拉列表分开定义
-            querystr = ct.get('queryTree');
+            querystr = ct.getAttribute('queryTree');
             if(querystr){
                 this.swordCacheArray.combine(JSON.decode(querystr));
             }
-            querystr = ct.get('query');
+            querystr = ct.getAttribute('query');
             if(querystr){
                 this.swordCacheArray.combine(JSON.decode(querystr));
             }
         }
     }
     ,process:function() {
-//        this.initPublicTag();
+    	this.getPageInit();
         this.initSwordPageData();
         this.initSwordCacheData();
         this.firePIOnBefore();
-        _pcSwordClientPageJumpTiming("12");
+//        _pcSwordClientPageJumpTiming("12");
         this.initSwordTag();
-        _pcSwordClientPageJumpTiming("13");
+//        _pcSwordClientPageJumpTiming("13");
         this.firePIOnDataInit();
         this.initPageData();
-        //给自定义form子类型注册事件
-        //this.initEventForForm();
-        this.firePIOnAfter();
         this.regHotKey();
-      
-    }
-    ,initEventForForm:function(){
-    	this.widgets.each(function(value){
-    		if(value.options.sword=="SwordForm"&&value.options.userDefine=="true"){
-    			value.initEventForTemplate();
-    		}
-    	});
+        this.firePIOnAfter();
     }
     ,firePIOnDataInit:function() {
-        var pi = this.getPageInit();
-        if(pi) {
-            pi.fireEvent('onDataInit',pc.initData);
-        }
+          pc.pageInit.fireEvent('onDataInit',pc.initData);
     }
     ,firePIOnAfter:function() {
-        var pi = this.getPageInit();
-        if(pi) {
-            pi.fireEvent('onAfter',pc.initData);
-        }
-
+        pc.pageInit.fireEvent('onAfter', pc.initData);
         var afters = jsR.config.onAfter;
-        if ($type(afters) == 'array') {
-            afters.each(function(ev) {
-                try {
-                    eval(ev.replace('()', ''));
-                } catch(e) {
-                    //  alert('出错说明没有定义这个方法');
-                    return;//出错说明没有定义这个方法。。。
-                }
-                var f = pi.getFunc(ev)[0];
-                f();
-            });
-        }
-
+		afters.each(function(ev) {
+			pc.pageInit.getFunc(ev)[0]();
+		});
     }
     ,firePIOnBefore:function() {
-        var pi = this.getPageInit();
-        if(pi) {
-
-            var befores = jsR.config.onBefore;
-            if($type(befores) == 'array') {
-                befores.each(function(ev) {
-                    try {
-                        eval(ev.replace('()', ''));
-                    } catch(e) {
-                        //                        alert('出错说明没有定义这个方法');
-                        return;//出错说明没有定义这个方法。。。
-                    }
-                    var f = pi.getFunc(ev)[0];
-                    f();
-                });
-            }
-
-
-            pi.fireEvent('onBefore',pc.initData);
-
-        }
+    	var befores = jsR.config.onBefore;
+		befores.each(function(ev) {
+			pc.pageInit.getFunc(ev)[0]();
+		 });
+		pc.pageInit.fireEvent('onBefore', pc.initData);
     }
     ,setWidget:function(key, widget) {
         this.widgets.set(key, widget);
@@ -279,14 +202,14 @@ var PageContainer = new Class({
         if(!$defined(this.validate))this.validate = this.widgetFactory.create("SwordValidator");
         return this.validate;
     }
-    ,getEditor:function() {
-        if(!$defined(this.editor))this.editor = this.widgetFactory.create("Editor");
-        return this.editor;
-    }
-    ,getValidateCode:function() {
-        if(!$defined(this.validateCode))this.validateCode = this.widgetFactory.create("SwordValidateCode");
-        return this.validateCode;
-    }
+//    ,getEditor:function() {
+//        if(!$defined(this.editor))this.editor = this.widgetFactory.create("Editor");
+//        return this.editor;
+//    }
+//    ,getValidateCode:function() {
+//        if(!$defined(this.validateCode))this.validateCode = this.widgetFactory.create("SwordValidateCode");
+//        return this.validateCode;
+//    }
     ,getPageInit:function() {
         if(!$defined(this.pageInit)) {
             var pageInits = $$("div[sword='PageInit']");
@@ -338,9 +261,7 @@ var PageContainer = new Class({
             url: 'ajax.sword'
         });
         myRequest.onSuccess = function(responseText) {
-//            logger.debug('返回数据=' + responseText, 'pc');
             if(!$chk(responseText)) {
-//                logger.debug('没有返回数据', 'pc');
                 return;
             }
             var jsonObj = JSON.decode(responseText);
@@ -356,23 +277,23 @@ var PageContainer = new Class({
     },
     showEx:function(param,dataObj){
     	if (param['errMes']!=false) {
-
             if(dataObj['ajaxErrorPage']) {
                 if(!dataObj['exceptionMes'])dataObj['exceptionMes']='';
                 var popupParam = JSON.decode(dataObj['ajaxErrorPopupParam'].replace(/&apos;/g, "'")) || {titleName:'出错了！',width: 412,height:450};
                 var doctemp=window.document;
-                if($type(window.document.body) == 'element' && $(window.document.body).getHeight() == 0 && $(window.document.body).getWidth() == 0)doctemp=parent.window.document;
+                var docbody = doctemp.body;
+                if($type(docbody) == 'element' && $(docbody).getHeight() == 0 && $(docbody).getWidth() == 0)doctemp=parent.window.document;
                 var scrollTop=0;
-                if (doctemp.body && doctemp.body.scrollTop)
+                if (docbody && docbody.scrollTop)
                 {
-                	scrollTop=doctemp.body.scrollTop;
+                	scrollTop=docbody.scrollTop;
                 }else if (doctemp.documentElement && doctemp.documentElement.scrollTop)
                 {
                 	scrollTop=doctemp.documentElement.scrollTop;
                 }
                 popupParam['top'] = popupParam.top + scrollTop;
                 var win = window;
-                if($type(window.document.body) == 'element' && $(window.document.body).getHeight() == 0 && $(window.document.body).getWidth() == 0)win=parent.window;
+                if($type(docbody) == 'element' && $(docbody).getHeight() == 0 && $(docbody).getWidth() == 0)win=parent.window;
                 popupParam['param'] = {'win':win,'data':dataObj};
                 swordAlertIframe(jsR.rootPath + 'sword?ctrl=SwordPage_redirect&pagename=' + dataObj['ajaxErrorPage'], popupParam,null);
             }
@@ -382,7 +303,6 @@ var PageContainer = new Class({
                     + '  <br><font color="blue" >错误信息</font> : ' + dataObj['exceptionMes']
                     + '<br><font color="blue" >调试信息</font> : ' + dataObj['debugMes']);
             }
-
         }
         pc.getMask().unmask();
     }
@@ -418,14 +338,7 @@ var PageContainer = new Class({
         
             var resMsg = dataObj['message'];
             if($defined(resMsg)) {
-                if(resMsg == "SWORD_TIME_OUT") {
-                    _TIMEOUT();
-                } else {
-                    //var len = resMsg.length;
-                    //var height = Math.ceil(len / 14) * 16;
-                    //h = height + 'px';
-                    swordAlert(resMsg);
-                }
+                swordAlert(resMsg);
             }
             if($defined(onSuccess)) {
                 onSuccess(dataObj);
@@ -836,9 +749,6 @@ var PageContainer = new Class({
             }
         }, this);
     }
-    ,alert:function(mes) {
-        swordAlert(mes);
-    }
     ,alertError:function(mes) {
         swordAlertWrong(mes, {'width':380,'height':200});
     }
@@ -1007,54 +917,41 @@ var PageContainer = new Class({
 });
 
 var pageContainer,pc;
-function swordGetEdit() {
-    var location = "" + window.location;
-    var edit = (location.indexOf("edit=true") != -1);
-    if(edit) {
-        return edit;
-    }
-    var imObj = document.getElementsByTagName("script")[0];
-    if(imObj.src.lastIndexOf("Sword.js") < 0) {
-//        logger.warn('没有找到sword.js节点，无法初始化编辑模式。。请保证sword.js是页面的第一个js结点');
-        return false;
-    } else {
-        return imObj.getAttribute('edit') == 'true';
-    }
-}
+//function swordGetEdit() {
+//    var location = "" + window.location;
+//    var edit = (location.indexOf("edit=true") != -1);
+//    if(edit) {
+//        return edit;
+//    }
+//    var imObj = document.getElementsByTagName("script")[0];
+//    if(imObj.src.lastIndexOf("Sword.js") < 0) {
+////        logger.warn('没有找到sword.js节点，无法初始化编辑模式。。请保证sword.js是页面的第一个js结点');
+//        return false;
+//    } else {
+//        return imObj.getAttribute('edit') == 'true';
+//    }
+//}
 function $init_Gt(){
-	if(window.top.setClientMonitorValue&&window.top.SwordClientTiming)jsR.config.SwordClientTiming = true;
-    var edit = swordGetEdit();
-    if(Browser.Engine.webkit){
-    	try{
-    		window.box = this.parent[this.name];
-    	}catch(e){
-    		
-    	}
-    }
     pc = pageContainer = new PageContainer(edit);
-    pc.getSelect(); //为了初始化全局click事件
+//    pc.getSelect(); //为了初始化全局click事件
     pc.getMask();
     pc.process();
     MaskDialog.hide();
-    _pcSwordClientPageJumpTiming("15");
+//    _pcSwordClientPageJumpTiming("15");
 }
-function initSwordPage() {
-	 $init_Gt();
-}
-
 function unloadSword() {
     $$('iframe').set('src', '');
 }
 if(Browser.Engine.trident) {
-    window.attachEvent("onload", initSwordPage);
+    window.attachEvent("onload", $init_Gt);
 } else {
-	window.addEvent('domready', initSwordPage);
+	window.addEvent('domready', $init_Gt);
 }
-function _TIMEOUT() {
-    if(window.top._SOWRDTIMEOUT) {
-        window.top._SOWRDTIMEOUT();
-    }
-}
+//function _TIMEOUT() {
+//    if(window.top._SOWRDTIMEOUT) {
+//        window.top._SOWRDTIMEOUT();
+//    }
+//}
 
 //客户端计时，type  31 AJAX结束 32 自定义初始化方法执行完  33 加载完后台返回数据  
 function _pcSwordClientAJAXTiming(type,url,sessionID,_tid,_ctrl){
@@ -1159,7 +1056,6 @@ function  _pcSwordClientPageJumpTiming(type){
 		}
 		pc.pageJumpTiming = eDate;
 		window.top.setClientMonitorValue(type,sDate,eDate,sName,sessionID,gndm,rUUID,hs);
-		
 }
 }
 
