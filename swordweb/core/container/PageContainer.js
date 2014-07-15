@@ -912,8 +912,6 @@ var PageContainer = new Class({
 			
 			return url;
 	 }	
-    	
-    	
 });
 
 var pageContainer,pc;
@@ -932,7 +930,7 @@ var pageContainer,pc;
 //    }
 //}
 function $init_Gt(){
-    pc = pageContainer = new PageContainer(edit);
+    pc = pageContainer = new PageContainer();
 //    pc.getSelect(); //为了初始化全局click事件
     pc.getMask();
     pc.process();
