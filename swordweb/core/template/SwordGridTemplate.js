@@ -113,7 +113,7 @@ var SwordGridRender = new Class(
 				var cellsDom = this.fieldRender.render(items,this.formats);
 				var self = this;
 				var gname = this.options.gName;
-				juicer.register(gname+'pageNum', function(rowData) {
+				juicer.register(gname+'pageNum', function() {
 					return self.g.pageNum();
 				}); // 注册自定义函数
 				juicer.register(gname+'dataHandler', function() {
