@@ -36,9 +36,14 @@ var SwordSelectTemplate = {
     	 /*
     	  * 数据处理
     	  */
-    	 var sValue=itemData?(itemData.value||""):(defv||""),sDObj;
+    	 var sValue=itemData?(itemData.value||""):(defv||""),sDObj={};
     	 if(sValue.contains("code")&&sValue.contains("caption")){
-    		 sDObj=JSON.decode(sValue);
+    		 if($type(sValue) == "string") sValue = sValue.toHash();
+	         if($type(sValue)=='hash'){
+	        	 sValue.each(function(v, k) {
+	        		 sDObj[k] = v;
+	            }, this);
+	         }
     		 showvalue=sDObj.caption;
 			 code=realvalue=sDObj.code;
     		 if(sbmitcontent){
