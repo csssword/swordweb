@@ -880,7 +880,7 @@ var SwordForm = new Class({
         new Element('td', {'class':'swordform_btn_right','html':'<i>&nbsp;</i>'}).inject(tr);
     }
     ,renderForm:function(el,data){
-    	SwordForm_Template.realRender(el||this.options.pNode,this,(data||{}).data);//html渲染和数据处理一起处理
+    	SwordForm_Template.realRender(el||this.options.pNode,this,(data||{"data":{}}).data);//html渲染和数据处理一起处理
     	//todo 临时注册在这里
     	this.initEventForPanel();
     	this.fieldElHash.getKeys().each(function(item){
