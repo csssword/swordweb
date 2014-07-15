@@ -241,11 +241,27 @@ var SwordSelectTemplate = {
         return selectObj;
     }
     ,runEventFocus:function(e, el, formObj){
-    	//触发原始focus事件,然后调用show逻辑
     	var name=el.get("name"),cObj=formObj.getField(name);
-    	cObj.box=el;
-    	cObj.selDiv=el.getParent("tr").getElement(".swordselect-selimg");
-    	cObj.show();
+    	cObj.grid = null;
+    	if($defined(el)) {
+            if(cObj.box == el) {
+            	cObj.rebuild = false;
+            } else {
+                if(cObj.box.get("display") == 'true') {
+                	cObj.hide();
+                    if(!el.hasClass('sGrid_data_row_item_select')) {
+                    	cObj.execGridOnFinished();
+                    }
+                    cObj.box.set('display', 'false');
+                }
+                cObj.box = el;
+            	cObj.selDiv = el.getParent("tr").getElement(".swordselect-selimg");
+            	cObj.rebuild = true;
+            }
+        }
+    	if(cObj.box.get("display")!='true'){
+    		cObj.show();
+    	}
     }
     ,runEventClick:function(e, el, formObj){
 		//触发原始click之后调用focus逻辑.
