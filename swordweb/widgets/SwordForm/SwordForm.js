@@ -750,7 +750,7 @@ var SwordForm = new Class({
                     this.validate($(tar).get('name'));
                 }.bind(this));
             if(item.get('nfidx'))this.fieldElOrderHash.set(item.get('nfidx') / 1, vobj);//自定义表单焦点转移的定义
-            if(vobj.hasClass('swordform_item_oprate'))this.fieldElHash.set(item.get('name'), vobj);
+            if(vobj.hasClass('swordform_item_oprate'))this.fieldElHash.set(this.options.name+"_"+item.get('name'), vobj);
             //must 输入框颜色为#b5e3df
             if(!bizrule&&$defined(item.get("rule")) && item.get("rule").contains('must')&&!(vobj.disabled || item.get('disable') == 'true'))this.getFieldEl(name).setStyle('background-color','#b5e3df');
             if(['text','textarea'].contains(tag) && (vobj.disabled || item.get('disable') == 'true')) this.disable(name);
