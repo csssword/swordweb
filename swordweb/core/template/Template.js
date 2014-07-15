@@ -149,8 +149,8 @@ var STemplateEngine = (function () {
 	            i = 0,
 	            length, childNodes;*/
 	        div.innerHTML = html;
-	        childNodes = div.childNodes;
-	        length = childNodes.length;
+	        var childNodes = div.childNodes;
+	        var length = childNodes.length;
 	        for (; i < length; i++) {
 	           /* fragment.appendChild(childNodes[i]);
 	            var row = $$(fragment.childNodes)[i];*/
