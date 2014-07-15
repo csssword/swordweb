@@ -55,7 +55,11 @@ var SwordGridRender = new Class(
 				var row = new Element('div', {
 					'html' : h
 				}).getFirst();
-				if(status=="insert"){row.set("status",status);}
+				if(status=="insert"){
+					row.set("status",status);
+					this._renderRowAfter(row, rowData);
+					this._renderCellAfter(rowData, row, items);
+				}
 				this._renderAfter([ row ], [ rowData ], items);
 
 				return row;
@@ -71,11 +75,8 @@ var SwordGridRender = new Class(
 					if(row.get("status")=="deleting"||row.get("status")=="delete"){
 						row.addClass('sGrid_data_row_delete_div');
 					 }
-					if(!row.retrieve('rowData')){ // insertRow时需要存数据
-						self._storeRowData(row, datas[timeNum]);
-					}
-					self._addRowFucs(row, datas[timeNum]);
-					self._renderCellAfter(datas[timeNum], row, timeNum + 1, items);
+					self._addRowFuncs(row, datas[timeNum]);
+					self._renderCellAfter(datas[timeNum], row, items);
 					self.g.fireEvent("onAfterCreateRow", [ datas[timeNum], row,
 							self.g ]);
 					timeNum = timeNum + 1;
@@ -89,12 +90,12 @@ var SwordGridRender = new Class(
 			}
 			,_renderRowAfter : function(row, rowData) {
 				this._storeRowData(row, rowData);
-				this._addRowFucs(row, rowData);
+				this._addRowFuncs(row, rowData);
 			}
 			,_storeRowData:function(row, rowData){
 				row.store('rowData', rowData);// 注册行数据
 			}
-			,_addRowFucs : function(row, rowData){
+			,_addRowFuncs : function(row, rowData){
 				this.g.addRowApi(row); // 添加行接口
 				rowData.getValue = this._getValue;
 			}

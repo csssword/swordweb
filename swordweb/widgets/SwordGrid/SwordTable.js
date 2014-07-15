@@ -1251,7 +1251,6 @@ var SwordGrid = new Class({
                 } else if(['top','bottom'].contains(where)) {
                     row.inject(this.dataDiv(), where);
                     where == 'top' ? this.getDataDivFxScroll().toTop() : this.getDataDivFxScroll().toBottom();
-                    ;
                 }
             } else {
                 row.inject(this.dataDiv());
@@ -3915,7 +3914,7 @@ var SwordGrid = new Class({
         //注册根据名字获得cell div 的方法
         sGrid_data_row_div.getCell = function(name) {
             return this.getFirst('div.sGrid_data_row_item_div[name=' + name + ']');
-        }
+        };
 
         sGrid_data_row_div.update = function(data) {//使用行来更新数据
             this.updateRow(sGrid_data_row_div, data);
@@ -3973,7 +3972,6 @@ var SwordGrid = new Class({
 
     ,createRow:function(rowNum, dataObj, items, status, row) {
     	 if(!row) row=this._getRender().renderRow(dataObj, items,status);
-    	 row.store('rowData',dataObj);
          return row;
 
     }
