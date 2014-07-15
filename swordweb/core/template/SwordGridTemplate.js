@@ -57,8 +57,6 @@ var SwordGridRender = new Class(
 				}).getFirst();
 				if(status=="insert"){
 					row.set("status",status);
-					this._renderRowAfter(row, rowData);
-					this._renderCellAfter(rowData, row, items);
 				}
 				this._renderAfter([ row ], [ rowData ], items);
 
@@ -67,9 +65,10 @@ var SwordGridRender = new Class(
 
 			,_renderAfter : function(rows, datas, items) {
 				var self = this;
-				var timeNum = 0;
+				var timeNum = 0,vartime=10;
 				var len = datas.length;
-				if(len<=0)return;
+				if(len==0)return;
+				if(len<11){vartime=0;}
 				setTimeout(function() {
 					var row = rows[timeNum];
 					if(row.get("status")=="deleting"||row.get("status")=="delete"){
@@ -86,7 +85,7 @@ var SwordGridRender = new Class(
 						// sometodo
 						self.g.fireEvent('onAfterInitData');
 					}
-				}.bind(this), 10);
+				}.bind(this), vartime);
 			}
 			,_renderRowAfter : function(row, rowData) {
 				this._storeRowData(row, rowData);
@@ -195,7 +194,7 @@ var SwordGridRender = new Class(
 				}
 				var check;
 				if (this.g.isCP() && userClicked == 'true') {// cache+前台分页+用户点击过表头checkbox
-					checkAllFlag == 'true' ? check = true : check = false;
+					checkAllFlag == 'true' ? check = "checked" : check = "";
 				} else if (html == '1') {
 					check = "checked";
 				} else {
