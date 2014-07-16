@@ -201,9 +201,20 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		resDataSet.addTableMap(widgetName, list);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void addTableBeanMap(String widgetName, List<?> beanList, Object p) throws SwordBaseCheckedException {
-		List<Map<String, Object>> beanMapList = SwordTypeUtils.beanListToMapList(beanList, true, true,false);
-		addTableMap(widgetName, beanMapList, p);
+		if(beanList != null && !beanList.isEmpty()) {
+			Object obj = beanList.get(0);
+			if(obj instanceof Map) {
+				this.addTableMap(widgetName, (List<Map<String, Object>>) beanList, p);
+			} else {
+				List<Map<String, Object>> beanMapList = SwordTypeUtils.beanListToMapList(beanList, true, false, false);
+				this.addTableMap(widgetName, beanMapList, p);
+			}
+		} else {
+			List<Map<String, Object>> mapList = new ArrayList<Map<String,Object>>(0);
+			this.addTableMap(widgetName, mapList, p);
+		}
 	}
 	public void addTableMap(String widgetName, List<Map<String, Object>> list, Object p) {
 		if (p != null) {
@@ -339,21 +350,8 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 		}
 //		resDataSet.addTable(widgetName, objList);
 	}
-	public void addTable(String widgetName, List<?> objList, FenYePageParam fy) {
-		if(objList != null && objList.size() >0){
-			Object obj = objList.get(0);
-			if (obj instanceof Map){
-				List<Map<String, Object>> objMapList = (List<Map<String, Object>>)objList;
-				resDataSet.addTableMap(widgetName, objMapList);
-			}else
-				resDataSet.addTable(widgetName, objList);
-			
-		}else{
-			List<Map<String, Object>> objMapList = new ArrayList<Map<String, Object>>();
-			resDataSet.addTableMap(widgetName, objMapList);
-		}
-		
-//		this.addTableMap(widgetName, (List<Map<String, Object>>) objList, fy);
+	public void addTable(String widgetName, List<?> objList, FenYePageParam fy) throws SwordBaseCheckedException {
+		this.addTableBeanMap(widgetName, objList, fy);
 	}
 	
 

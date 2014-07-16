@@ -3,8 +3,9 @@ package com.css.sword.platform.web.event;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.rowset.CachedRowSet;
 
+import com.css.sword.kernel.base.exception.SwordBaseCheckedException;
+import com.css.sword.kernel.base.persistence.FenYePageParam;
 import com.css.sword.platform.core.event.IResponseEvent;
 
 /**
@@ -92,6 +93,7 @@ public interface IResData extends IResponseEvent {
 //	public void addTable(String widgetName, List<?> objList, String... config);
 	
 	public void addTable(String widgetName, List<?> objList);
+	public void addTable(String widgetName, List<?> objList, FenYePageParam fy) throws SwordBaseCheckedException;
 	
 	
 	
