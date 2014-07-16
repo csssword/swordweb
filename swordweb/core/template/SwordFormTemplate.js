@@ -43,7 +43,7 @@ var SwordForm_Template = {
 	}
 	,buildTable:function(tableEl,formData){
 		var tem = this.htmlStrs;
-   	 	tem.push("<table class='tab_form' width='{w}' id='{id}' border='0' cellpadding='0' cellspacing='0' style='{style}'>".substitute({w:tableEl.get('width'), id:tableEl.get('id'), style:tableEl.get("style")}));
+   	 	tem.push("<table class='{c}' width='{w}' id='{id}' border='0' cellpadding='0' cellspacing='0' style='{style}'>".substitute({c:tableEl.get("class")||"tab_form",w:tableEl.get('width'), id:tableEl.get('id'), style:tableEl.get("style")}));
         var cg = tableEl.getFirst();
         if (cg&&cg.tagName.toLowerCase() == 'colgroup') {
             tem.push('<colgroup>');
@@ -52,7 +52,7 @@ var SwordForm_Template = {
         }
         var trs = tableEl.getFirst('tbody').getChildren('tr');
         tem.push('<tbody>');
-        var tr = trs[0], tds, i, tag, d, type,tdl;
+        var tr = trs[0], tds, i, tag, type,tdl;
         while (tr) {
             var subid = tr.get('id');
             if($chk(subid)){
@@ -62,24 +62,26 @@ var SwordForm_Template = {
             }
             tds = tr.getChildren(),tdl=tds.length;
             for (i = 0; i < tdl; i++) {
-                tag = tds[i].tagName.toLowerCase();
+            	var ttds=tds[i],cols=ttds.get('colspan'),rows=ttds.get('rowspan'),style=ttds.get('style');
+                tag = ttds.tagName.toLowerCase();
                 if (tag == 'th') {
-                    tem.push(("<th style='{style}' colspan='{c}' rowspan='{r}' >" + tds[i].innerHTML + "</th>").substitute({c:tds[i].get('colspan'), r:tds[i].get('rowspan'), style:tds[i].get('style')}));
+                    tem.push(("<th style='{style}' colspan='{c}' rowspan='{r}' >" + ttds.innerHTML + "</th>").substitute({c:cols, r:rows, style:style}));
                 } else {
-                    var tdEls = tds[i].getChildren();
+                    var tdEls = ttds.getChildren();
                     tdEls.each(function(d){
                     	if (d != null) {
-	                       	 if(d.get("tag")!="table"){
-	                       		 type = d.get('type'),itemName=d.get("name");
-	   		                   	 tem.push(("<td style='{style}' colspan='{c}' rowspan='{r}' >").substitute({c:tds[i].get('colspan'), r:tds[i].get('rowspan'), style:tds[i].get('style')}));
+                    		var dtag=d.get("tag");
+                    		type = d.get('type'),itemName=d.get("name");
+                    		tem.push(("<td style='{style}' colspan='{c}' rowspan='{r}' >").substitute({c:cols, r:rows, style:style}));
+	                       	 if(dtag!="table"){
 	   		                   	 if(type){
 	   		                   		tem.push(this.getItemHtml(type, d, formData[itemName]));
 	   		                   	 }
 	   		                   	 tem.push(d.outerHTML);
-	   		                   	 tem.push("</td>");
 	                       	 }else{
 	                       		 this.buildTable(d,formData);
 	                       	 }
+	                       	tem.push("</td>");
                     	}
                     }.bind(this));
                 }
