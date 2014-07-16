@@ -397,8 +397,9 @@ var SwordForm = new Class({
     			}
     		}xRule=defineItemEl.get("rule");
     		var htmlStr=SwordForm_Template.getItemHtml(type, defineItemEl, "");
-    		var tdfg=STemplateEngine.createFragment(htmlStr);
-    		tdfg.childNodes[0].inject(defineItemEl,"before");
+    		var div = document.createElement("div");
+    		div.innerHTML = htmlStr;
+    		div.getChildren()[0].inject(defineItemEl,"before");
     		idEl=$(idStr);
     		var widget=idEl.get("widget");
     		this.fieldElHash.set(idStr,idEl);
