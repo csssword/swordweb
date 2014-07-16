@@ -1,5 +1,4 @@
 package com.css.sword.platform.web.event;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.css.sword.kernel.base.exception.SwordBaseCheckedException;
+
 import com.css.sword.kernel.base.persistence.FenYePageParam;
 import com.css.sword.platform.comm.pool.ThreadLocalManager;
 import com.css.sword.platform.core.event.CSSBaseResponseEvent;
@@ -202,7 +202,7 @@ public class SwordRes extends CSSBaseResponseEvent implements IResData {
 	}
 
 	public void addTableBeanMap(String widgetName, List<?> beanList, Object p) throws SwordBaseCheckedException {
-		List<Map<String, Object>> beanMapList = SwordTypeUtils.beanListToMapList(beanList, true, true, false);
+		List<Map<String, Object>> beanMapList = SwordTypeUtils.beanListToMapList(beanList, true, true,false);
 		addTableMap(widgetName, beanMapList, p);
 	}
 	public void addTableMap(String widgetName, List<Map<String, Object>> list, Object p) {
