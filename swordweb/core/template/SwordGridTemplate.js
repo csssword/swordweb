@@ -246,8 +246,6 @@ var SwordGridRender = new Class(
 					}
 					showValue = SwordDataFormat.formatStringToString(showValue,
 							dataformat,dataformat);
-					value = SwordDataFormat.formatStringToString(showValue,
-							dataformat,submitDateformat);
 					return 'title="' + showValue + '" realvalue="' + value
 							+ '" showValue="' + showValue + '">' + showValue
 							+ '</div>';
