@@ -54,6 +54,9 @@ var PageContainer = new Class({
 //            if(this.isEdit()) {
 //                this.getEditor().dealEl(value);
 //            }
+        	if(value.get("sword")=="SwordSubmit"){
+        		value=$$("div[name="+wName+"][sword='SwordSubmit']")[0];
+        	}
             this.initWidgetParam(value);
             if(value.get("userdefine")=="true"){
             	$w(wName).renderForm(value,pc.getInitData(wName));
