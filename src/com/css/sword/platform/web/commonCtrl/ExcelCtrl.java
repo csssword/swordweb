@@ -52,7 +52,7 @@ public class ExcelCtrl extends BaseDomainCtrl {
                                     
 
         java.io.ByteArrayOutputStream os = new ByteArrayOutputStream();
-        e.getWorkbook().write(os);
+        e.write(os);
         java.io.ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
 
 //        if(true)throw  new Exception("666677777");
