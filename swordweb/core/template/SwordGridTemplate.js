@@ -46,7 +46,6 @@ var SwordGridRender = new Class(
 				if (!items)items = this.options.items;
 				var rows = this._createRow(datas, items);
 				var rowsFragment = STemplateEngine.createFragmentForGrid(rows,datas);
-				this.g.options.sGrid_data_div = rowsFragment;
 				this._renderAfter($$(rowsFragment.childNodes), datas, items);
 				return rowsFragment;
 			}
