@@ -239,13 +239,15 @@ var SwordGridRender = new Class(
 							dataformat);
 				}
 				if ($chk(showValue)) {
-					dataformat = dataformat || SwordCalendar.defaultdataformat;
-					submitDateformat = submitDateformat || SwordCalendar.submitDateformat;
+					dataformat = dataformat || SwordCalendar.prototype.defaultdataformat;
+					submitDateformat = submitDateformat || SwordCalendar.prototype.submitDateformat;
 					if (showValue.split(".").length == 2) {
 						showValue = showValue.split(".")[0];
 					}
 					showValue = SwordDataFormat.formatStringToString(showValue,
-							submitDateformat, dataformat);
+							dataformat,dataformat);
+					value = SwordDataFormat.formatStringToString(showValue,
+							dataformat,submitDateformat);
 					return 'title="' + showValue + '" realvalue="' + value
 							+ '" showValue="' + showValue + '">' + showValue
 							+ '</div>';
