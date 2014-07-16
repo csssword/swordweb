@@ -59,7 +59,7 @@ var SwordSelectTemplate = {
     			 sDObj=datasA.filter(function(item){return item[codeSign]==sValue;})[0];
     		 }else{
     			 datasA=item.getChildren(">div");
-    			 sDObj=datasA.filter(function(item){return item.get(codeSign)==value;})[0];
+    			 sDObj=datasA.filter(function(item){return item.get(codeSign)==sValue;})[0];
        			 var tObj=null;
        			 if(sDObj){
        				tObj={};tObj[codeSign]=sDObj.get(codeSign);
