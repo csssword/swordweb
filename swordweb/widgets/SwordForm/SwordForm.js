@@ -1230,7 +1230,12 @@ var SwordForm = new Class({
 	       		 }else{
 	       			 datasA=$$("div[name='"+idEl.get("name")+"'][type]")[0].getChildren(">div");
 	       			 sDObj=datasA.filter(function(item){return item.get(codeSign)==value;})[0];
-	       			 if(sDObj){sDObj={};sDObj[codeSign]=sDObj.get(codeSign);sDObj[captionSign]=sDObj.get(captionSign);}
+	       			 var tObj=null;
+	       			 if(sDObj){
+	       				tObj={};tObj[codeSign]=sDObj.get(codeSign);
+	       				tObj[captionSign]=sDObj.get(captionSign);
+	       				sDObj=tObj;
+	       			 }
 	       		 }
 	       		 if(sDObj){
 	       			 showvalue=sDObj.caption,code=realvalue=sDObj.code;
