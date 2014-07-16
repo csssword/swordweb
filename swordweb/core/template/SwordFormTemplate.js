@@ -62,17 +62,17 @@ var SwordForm_Template = {
             }
             tds = tr.getChildren(),tdl=tds.length;
             for (i = 0; i < tdl; i++) {
-            	var ttds=tds[i],cols=ttds.get('colspan'),rows=ttds.get('rowspan'),style=ttds.get('style');
+            	var ttds=tds[i],cols=ttds.get('colspan'),rows=ttds.get('rowspan'),style=ttds.get('style'),id=ttds.get('id');
                 tag = ttds.tagName.toLowerCase();
                 if (tag == 'th') {
-                    tem.push(("<th style='{style}' colspan='{c}' rowspan='{r}' >" + ttds.innerHTML + "</th>").substitute({c:cols, r:rows, style:style}));
+                    tem.push(("<th id='{id}' style='{style}' colspan='{c}' rowspan='{r}' >" + ttds.innerHTML + "</th>").substitute({c:cols, r:rows, style:style, id:id}));
                 } else {
                     var tdEls = ttds.getChildren();
                     tdEls.each(function(d){
                     	if (d != null) {
                     		var dtag=d.get("tag");
                     		type = d.get('type'),itemName=d.get("name");
-                    		tem.push(("<td style='{style}' colspan='{c}' rowspan='{r}' >").substitute({c:cols, r:rows, style:style}));
+                    		tem.push(("<td id='{id}' style='{style}' colspan='{c}' rowspan='{r}' >").substitute({c:cols, r:rows, style:style, id:id}));
 	                       	 if(dtag!="table"){
 	   		                   	 if(type){
 	   		                   		tem.push(this.getItemHtml(type, d, formData[itemName]));
