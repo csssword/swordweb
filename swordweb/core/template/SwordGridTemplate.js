@@ -46,6 +46,7 @@ var SwordGridRender = new Class(
 				if (!items)items = this.options.items;
 				var rows = this._createRow(datas, items);
 				var rowsFragment = STemplateEngine.createFragmentForGrid(rows,datas);
+				this.g.options.sGrid_data_div = rowsFragment;
 				this._renderAfter($$(rowsFragment.childNodes), datas, items);
 				return rowsFragment;
 			}
@@ -57,6 +58,7 @@ var SwordGridRender = new Class(
 				}).getFirst();
 				if(status=="insert"){
 					row.set("status",status);
+					row.store('rowData', rowData);// 注册行数据
 				}
 				this._renderAfter([ row ], [ rowData ], items);
 
@@ -129,7 +131,6 @@ var SwordGridRender = new Class(
 					var row_shuang = ['<div status="${status}" class="sGrid_data_row_div  sGrid_data_row_div_shuang   " row="true"  pageNum="${_|',gname,'pageNum}">',cellsDom,'</div>'].join("");
 					var row_dan = [ '<div status="${status}" class="sGrid_data_row_div  sGrid_data_row_div_dan   " row="true"  pageNum="${_|',gname,'pageNum}">', cellsDom,'</div>'].join("");
 					datas.each(function(rowData, i) { // IE9以上 数组没有字符串拼接快
-						
 						if (i % 2 == 0) { // 偶数行
 							h.push(juicer(row_shuang, rowData));
 						} else {// 奇数行 singular
