@@ -298,7 +298,6 @@
 
                 // include sub-template
                 .replace(juicer.settings.include, function($, tpl, data) {
-                	debugger;
                 	
                     return '<%= _method.__juicer(' + tpl + ', ' + data + '); %>';
                 });
