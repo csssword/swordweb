@@ -396,6 +396,8 @@ var SwordForm = new Class({
     				defineItemEl.set(key,options[key]);
     			}
     		}xRule=defineItemEl.get("rule");
+    		SwordForm_Template.formObj=this;
+    		SwordForm_Template.fName=fName;
     		var htmlStr=SwordForm_Template.getItemHtml(type, defineItemEl, "");
     		var div = $(document.createElement("div"));
     		div.innerHTML = htmlStr;
