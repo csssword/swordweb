@@ -397,7 +397,7 @@ var SwordForm = new Class({
     			}
     		}xRule=defineItemEl.get("rule");
     		var htmlStr=SwordForm_Template.getItemHtml(type, defineItemEl, "");
-    		var div = document.createElement("div");
+    		var div = $(document.createElement("div"));
     		div.innerHTML = htmlStr;
     		div.getChildren()[0].inject(defineItemEl,"before");
     		idEl=$(idStr);
