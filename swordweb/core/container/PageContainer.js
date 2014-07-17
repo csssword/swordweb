@@ -2,17 +2,17 @@ var PageContainer = new Class({
     Implements:[Events,Options]
     ,name:"PageContainer"
     ,widgetFactory: new WidgetFactory()
-    ,redirect:null
+//    ,redirect:null
     ,mask:null
     ,initData:null
     ,calendar:null
     ,select:null
     ,uploadCommit:null
-    ,edit:false
-    ,editor :null
+//    ,edit:false
+//    ,editor :null
     ,pinitData:null
     ,widgets:new Hash()
-    ,studioComm:null
+//    ,studioComm:null
     ,formItems:{
 		"checkbox":SwordRadioCheckboxTemplate,
 		"select":SwordSelectTemplate,
@@ -30,12 +30,6 @@ var PageContainer = new Class({
 		"file":SwordFileTemplate,
 	    "hidden":SwordHiddenTemplate
     }
-    ,isEdit:function() {
-        return this.edit;
-    }
-    ,initialize: function() {
-//        this.edit = edit;
-    }
     ,initSwordTag :function(node) {
         var swordWidgets = [];
         if($defined(node)) {
@@ -43,17 +37,8 @@ var PageContainer = new Class({
         } else {
             swordWidgets = $$("div[sword][sword!='PageInit'][type!='pulltree'][lazy!='true']");
         }
-//        if(this.isEdit()) {
-//            this.getEditor().start();
-//        }
-//        this.detailed = '';
-//        var start = new Date().getTime();
         swordWidgets.each(function(value) {
         	var wName=value.get("name");
-//        	var begin = new Date().getTime();
-//            if(this.isEdit()) {
-//                this.getEditor().dealEl(value);
-//            }
         	if(value.get("sword")=="SwordSubmit"){
         		value=$$("div[name="+wName+"][sword='SwordSubmit']")[0];
         	}
@@ -62,9 +47,7 @@ var PageContainer = new Class({
             	$w(wName).renderForm(value,pc.getInitData(wName));
             }
             value.set('isload', 'true');
-//            this.detailed = this.detailed + value.get('name')+ ":" + (new Date().getTime()-begin) + "----";
         }, this);
-//        this.detailed = this.detailed + "总时间："+ (new Date().getTime()-start);
     },
     initWidgetParam:function(value){
     	var swordWidget = this.widgetFactory.create(value);
@@ -123,8 +106,7 @@ var PageContainer = new Class({
         }
     }
     ,swordCacheArray:[]//存储页面缓存的定义
-    ,
-    initSwordCacheData:function(){// 读取页面定义的缓存
+    ,initSwordCacheData:function(){// 读取页面定义的缓存
         var ct = document.getElementById('SwordCacheData');
         var querystr = null;
         if($defined(ct)){//由于历史原因，下拉树和下拉列表分开定义
@@ -203,14 +185,6 @@ var PageContainer = new Class({
         if(!$defined(this.validate))this.validate = this.widgetFactory.create("SwordValidator");
         return this.validate;
     }
-//    ,getEditor:function() {
-//        if(!$defined(this.editor))this.editor = this.widgetFactory.create("Editor");
-//        return this.editor;
-//    }
-//    ,getValidateCode:function() {
-//        if(!$defined(this.validateCode))this.validateCode = this.widgetFactory.create("SwordValidateCode");
-//        return this.validateCode;
-//    }
     ,getPageInit:function() {
         if(!$defined(this.pageInit)) {
             var pageInits = $$("div[sword='PageInit']");
@@ -307,142 +281,81 @@ var PageContainer = new Class({
         }
         pc.getMask().unmask();
     }
-    ,loadData:function(param) {
-        MaskDialog.hide();
-        var dataObj = param['dataObj'];
-        var onError = param['onError'];
-        var onSuccess = param['onSuccess'];
-        var loaddata = param['loaddata'];
-        if(!$chk(dataObj)) {
-            if($defined(param['onFinish'])) {
-                param['onFinish'](dataObj);
-            }
-            return;
-        }
-//        logger.debug("装载数据开始。。。。。", 'PageContainer');
-        if(!$defined(dataObj.getAttr)) {
-            dataObj["getAttr"] = this.getAttrFunc;
-        }
-        if(!$defined(dataObj.getData)) {
-            dataObj["getData"] = this.getData4Name;
-        }
-        if(!$defined(dataObj.getDataByDataName)) {
-            dataObj["getDataByDataName"] = this.getData4DataName;
-        }
-        if(dataObj['exception']) {
-            if($defined(onError)) {
-                onError(dataObj);
-            }
-            this.showEx(param,dataObj);
-            return;
-        } else {
-        
-            var resMsg = dataObj['message'];
-            if($defined(resMsg)) {
-                swordAlert(resMsg);
-            }
-            if($defined(onSuccess)) {
-                onSuccess(dataObj);
-                if(!document.body) {
-                    return;
-                }
-            }
-        }
-        if($defined(param['onFinish'])) {
-            param['onFinish'](dataObj);
-        }
-        if($chk(param['url'])){
-        	_pcSwordClientAJAXTiming("32",param['url'],param['dataObj'].getAttr("sessionID"),param['req'].tid,param['req'].ctrl);
-        }else{
-            _pcSwordClientPageJumpTiming("14");
-        }
-        if(!$defined(param['redirect']) || param['redirect'] != false) {
-            if($chk(dataObj.page)) {
-                var page = dataObj.page;
-//                logger.debug('执行页面跳转开始，目标页：' + page);
-                dataObj.page = null;
-                this.redirect.setData(dataObj);
-                if(page.lastIndexOf('?') != -1) {
-                    page += "&";
-                } else {
-                    page += "?";
-                }
-                page += "r=" + Math.random();
-                if(Browser.Engine.gecko) {
-                    this.redirect.go.delay(1, this.redirect, [page]);
-                } else {
-                    this.redirect.go(page);
-                }
-                return;
-            }
-        }
-        if(loaddata == 'widget') {
-//            logger.debug("全局的loaddata == 'widget',容器将不负责数据初始化操作。", 'PageContainer', 'loadData');
-            return;
-        }
-        var data = dataObj['data'];
-        if($chk(!data)) {
-//            logger.debug("返回的数据中没有res->data属性，不进行数据装载操作。。。", 'PageContainer');
-            return;
-        }
-        data.each(function(widgetData) {
-        	if(widgetData['type'] == ""){
-        		return;
-        	}
-            if(widgetData['sword'] == 'SwordSelect' ) {
-                if(param.initpage==true){ //页面初始化调用此处，不需要处理下拉的数据
-//                    logger.debug("不处理 SwordSelect 的数据，略过此段数据。。。", 'PageContainer');
-                }else if(widgetData['dataName']){
-                	var selData = widgetData.data;
-                	if(selData.length == 1 && !$chk(selData[0].code) && !$chk(selData[0].caption)){
-                		var selectdata = {
-                	            'sword':'SwordSelect',
-                	            'name' :widgetData['dataName'],
-                	            'data' :[]  
-                	        };
-                		this.reloadSel1(widgetData['dataName'], selectdata);
-                	}else{
-                		this.reloadSel(widgetData['dataName'],dataObj);
-                	}
-                }
-                return;
-            }
-            var widgetName = widgetData['name'];
-            if($chk(!widgetName)) {
-//                logger.debug("res->data->widget中没有name属性，略过此段数据。。。", 'PageContainer');
-                return;
-            }
-//            logger.debug("为组件【" + widgetName + "】装载数据。", 'PageContainer');
-            if(!widgetName.contains('.') && pageContainer.getWidget4loaddata(widgetName) == null) {
-//                logger.debug("组件池中没有组件【" + widgetName + "】，不执行装载数据。", 'PageContainer');
-                return;
-            }
-            if(widgetName.contains('.')) {
-                var name = widgetName.split('.');
-                if(pageContainer.getWidget4loaddata(name[0]) == null) {
-//                    logger.debug("组件池中没有组件【" + name[0] + "】，不执行装载数据。", 'PageContainer');
-                    return;
-                }
-            }
-            if(widgetData['loaddata'] != 'widget') {
-                if(widgetName.contains('.')) {
-                    var name = widgetName.split('.');
-                    pageContainer.getWidget4loaddata(name[0]).initData(widgetData);
-                } else {
-                	var widgetObj=pageContainer.getWidget4loaddata(widgetName),isUD=widgetObj.options?widgetObj.options.userDefine:"";
-                	if(param.initpage==true&&isUD == "true"){return;}
-                	widgetObj.initData(widgetData,dataObj);
-                }
-            }
-        }, this);
-//        this.initCoutTag();
-
-        if($defined(param['onAfterLoadData'])) {
-            param['onAfterLoadData'](dataObj);
-        }
-    }
-
-    ,widgets_loaddataOnly:new Hash()     //保存对象，这些对象在loaddata的时候会被调用，在$w的时候获取不到，hash中value是数组。目前：pulltree
+    ,
+	loadData : function(param) {
+		MaskDialog.hide();
+		var dataObj = param['dataObj'];
+//		var loaddata = param['loaddata'];
+		dataObj["getAttr"] = this.getAttrFunc;
+		dataObj["getData"] = this.getData4Name;
+		dataObj["getDataByDataName"] = this.getData4DataName;
+		if (dataObj['exception']) {
+			var onError = param['onError'];
+			if ($defined(onError)) {
+				onError(dataObj);
+			}
+			this.showEx(param, dataObj);
+		} else {
+			var resMsg = dataObj['message'];
+			if ($defined(resMsg)) {
+				swordAlert(resMsg);
+			}
+			var onSuccess = param['onSuccess'];
+			if ($defined(onSuccess)) {
+				onSuccess(dataObj);
+				if (!document.body) {
+					return;
+				}
+			}
+			if ($defined(param['onFinish'])) {
+				param['onFinish'](dataObj);
+			}
+			// if($chk(param['url'])){
+			// _pcSwordClientAJAXTiming("32",param['url'],param['dataObj'].getAttr("sessionID"),param['req'].tid,param['req'].ctrl);
+			// }else{
+			// _pcSwordClientPageJumpTiming("14");
+			// }
+//			if (loaddata == 'widget') {
+				// logger.debug("全局的loaddata == 'widget',容器将不负责数据初始化操作。",
+				// 'PageContainer', 'loadData');
+//				return;
+//			}
+			var data = dataObj['data'];
+			if ($chk(data)) {
+				data.each(function(widgetData) {
+					if (widgetData['type'] == "") {
+						return;
+					}
+					if (widgetData['sword'] == 'SwordSelect') {
+						if (param.initpage != true && widgetData['dataName']) {
+							this.reloadSel(widgetData['dataName'], dataObj);
+						}
+					} else {
+						var widgetName = widgetData['name'];
+						if (!$chk(widgetName)) {
+							// logger.debug("res->data->widget中没有name属性，略过此段数据。。。",
+							// 'PageContainer');
+							return;
+						}
+						// logger.debug("为组件【" + widgetName + "】装载数据。",
+						// 'PageContainer');
+						var widgetObj = pc.getWidget4loaddata(widgetName);
+						if (widgetObj != null && widgetData['loaddata'] != 'widget') {
+							var isUD = widgetObj.options? widgetObj.options.userDefine: "";
+							if (param.initpage == true && isUD == "true") {
+								return;
+							}
+							widgetObj.initData(widgetData, dataObj);
+						}
+					}
+				}, this);
+			}
+		}
+		if ($defined(param['onAfterLoadData'])) {
+			param['onAfterLoadData'](dataObj);
+		}
+	}
+    ,widgets_loaddataOnly:new Hash()     // 保存对象，这些对象在loaddata的时候会被调用，在$w的时候获取不到，hash中value是数组。目前：pulltree
     ,setWidget4loaddata:function(key,obj){
         if(!this.widgets_loaddataOnly.get(key)){
             this.widgets_loaddataOnly.set(key,[]);
@@ -636,13 +549,13 @@ var PageContainer = new Class({
               return;
           }
           var _dataObj = param['dataObj'] = JSON.decode(responseText);
-          if(!$defined(_dataObj.getAttr)) {
-        	  _dataObj["getAttr"] = this.getAttrFunc;
-          }
-          _pcSwordClientAJAXTiming("31",url,param['dataObj'].getAttr("sessionID"),req.tid,req.ctrl);
+//          if(!$defined(_dataObj.getAttr)) {
+//        	  _dataObj["getAttr"] = this.getAttrFunc;
+//          }
+//          _pcSwordClientAJAXTiming("31",url,param['dataObj'].getAttr("sessionID"),req.tid,req.ctrl);
           param['url'] = url;
           this.loadData(param);
-          _pcSwordClientAJAXTiming("33",url,param['dataObj'].getAttr("sessionID"),req.tid,req.ctrl);
+//          _pcSwordClientAJAXTiming("33",url,param['dataObj'].getAttr("sessionID"),req.tid,req.ctrl);
         }.bind(this);
         myRequest.onFailure = function() {
             pc.getMask().unmask();
@@ -755,10 +668,10 @@ var PageContainer = new Class({
     ,alertError:function(mes) {
         swordAlertWrong(mes, {'width':380,'height':200});
     }
-    ,getStudioComm:function() {
-        if(!$defined(this.studioComm))this.studioComm = this.widgetFactory.create("StudioComm");
-        return this.studioComm;
-    }
+//    ,getStudioComm:function() {
+//        if(!$defined(this.studioComm))this.studioComm = this.widgetFactory.create("StudioComm");
+//        return this.studioComm;
+//    }
 
     //根据dataname 重新装载下拉列表数据
     ,reloadSel:function(dataname, resdata) {
