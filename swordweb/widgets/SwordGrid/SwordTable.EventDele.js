@@ -294,8 +294,8 @@ SwordGrid.implement({
                 }
 
                 var formData = this.getOneRowFormData(el, showRow);
-                pc.redirect.setData(formData);
-                pc.redirect.go(page);
+//                pc.redirect.setData(formData);
+//                pc.redirect.go(page);
 
         }
     	
