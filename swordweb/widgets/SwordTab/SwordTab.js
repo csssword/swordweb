@@ -237,9 +237,9 @@ var SwordTab = new Class({
                     if($(item).getAttribute('isload') != 'true') {
                         /*var swordWidgets = $(item).getElements("div[sword][sword!='PageInit'][type!='pulltree'][isload!='true']");
                         swordWidgets.each(function(value) {
-                            if(pc.isEdit()) {
-                                pc.getEditor().addEl(value);
-                            }
+//                            if(pc.isEdit()) {
+//                                pc.getEditor().addEl(value);
+//                            }
                             var swordWidget = pageContainer.widgetFactory.create(value.getAttribute('sword'));
                             value.pNode = value;
                             swordWidget.initParam(value);
