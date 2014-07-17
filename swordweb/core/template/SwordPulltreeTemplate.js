@@ -95,7 +95,6 @@ var SwordPulltreeTemplate = {
 		item.setProperty("select", "true");
 		tree.initParam(item, formObj);
 		tree.setValidate(formObj.Vobj);
-		tree.initData(item, formObj);
 		return tree;
 	}
 	,runEventFocus:function(){
