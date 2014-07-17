@@ -1,5 +1,5 @@
 var jsR = new JsReady();
-jsR.baseWidgets = ['SwordShielding','Base','i18n','WidgetFactory','Utils','Redirect','SwordClientCache','PageContainer','SwordPopUpBox','SwordMenu','SwordCss','SwordSubmit','SwordFileUpload2','Template','SwordEventDelegator'];
+jsR.baseWidgets = ['SwordShielding','Base','i18n','WidgetFactory','Utils','SwordClientCache','PageContainer','SwordPopUpBox','SwordMenu','SwordCss','SwordSubmit','SwordFileUpload2','Template','SwordEventDelegator'];
 //jsR.addWidget({name:"Base",prefixPath:"swordweb/base",jsPath:['mootools-1.3.2-all.js','SwordImplement.js','adapter/adapter-1.3.2.js']});
 jsR.addWidget({name:"Base",prefixPath:"swordweb/base",jsPath:['mootools-1.2.1-all.js','SwordImplement.js']});
 jsR.addWidget({name:"i18n",prefixPath:"swordweb/core/i18n",jsPath:['zh-cn.js']});
@@ -15,7 +15,7 @@ jsR.addWidget({name:"SwordSecurityOperate",prefixPath:"swordweb/widgets/SwordSec
 //jsR.addWidget({name:"SwordLogger",prefixPath:"swordweb/widgets/SwordLogger",jsPath:['SwordLogger.js'],cssPath:['logger.css']});
 jsR.addWidget({name:"WidgetFactory",prefixPath:"swordweb/core/factory",jsPath:['WidgetFactory.js']});
 jsR.addWidget({name:"PageContainer",prefixPath:"swordweb/core/container",jsPath:['PageContainer.js']});
-jsR.addWidget({name:"Redirect",prefixPath:"swordweb/core/redirect",jsPath:['Redirect.js'],cssPath:['navigator.css']});
+//jsR.addWidget({name:"Redirect",prefixPath:"swordweb/core/redirect",jsPath:['Redirect.js'],cssPath:['navigator.css']});
 jsR.addWidget({name:"SwordForm",prefixPath:"swordweb/widgets/SwordForm",jsPath:['SwordForm.js','SwordFormExtra.js','FormLayer.js'],cssPath:['form.css']});
 jsR.addWidget({name:"SwordSelect",prefixPath:"swordweb/widgets/SwordSelect",jsPath:['SwordSelect.js'],cssPath:['select.css']});
 jsR.addWidget({name:"SwordGrid",prefixPath:"swordweb/widgets/SwordGrid",jsPath:['SwordTable.js','SwordTable.Tree.js','SwordTable.File2.js','SwordTable.EventDele.js'],cssPath:['SwordTable.css']});
