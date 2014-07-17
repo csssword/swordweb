@@ -674,7 +674,7 @@ var SwordGrid = new Class({
 
     //返回一个新的行号，保证此行号不会与现有表格数据重复，类似于序列号
     ,createNewRowNum:function() {
-        return this.options.totalRows + 1
+        return this.options.totalRows + 1;
     }
     ,validate:function(status,rows) {  
     	var allRows=this.options.sGrid_data_div.getElements("div.sGrid_data_row_div[status!='delete']");
@@ -5880,7 +5880,7 @@ var SwordGrid = new Class({
     	}
     	this.options.sGrid_data_div.empty();
     	this.removeAllError(); // 清空所有错误状态
-    	this.cachePages = []; 
+    	this.cachePages = [1]; 
     	
         this.options.totalRows = 0;
         this.options.initTotalRows = 0;
