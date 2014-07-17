@@ -683,10 +683,10 @@ var PageContainer = new Class({
         }
         this.initData.data[this.initData.data.length] = data;
     },
-    reloadSel1:function(dataname, seldata){
-    	this.deleteDataByDataName(dataname);
-    	this.initData.data[this.initData.data.length] = seldata;
-    },	
+//    reloadSel1:function(dataname, seldata){
+//    	this.deleteDataByDataName(dataname);
+//    	this.initData.data[this.initData.data.length] = seldata;
+//    },	
 	HotKeyHash:new Hash(),
     regHotKey : function() {
     	var bars = this.getWidgetsByType('SwordToolBar');
