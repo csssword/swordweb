@@ -98,7 +98,7 @@ SwordGrid.implement({
     	if(el.get('disable') == 'true'||el.get('disabled')==true)return;
     	var treename = el.get('treename');
         var treeObj = $w(treename);
-        if(!treeObj){  //没有树对象 根据 当前传入cell创建树对象  
+        if(treeObj&&!treeObj.select){  //没有树对象 根据 当前传入cell创建树对象  
         	var treeDef=el.clone();  //拷贝cell  避免改变当前cell的属性  
         	treeDef.setStyle('width', '100%');  //设置宽度  原始cell宽度 只有列定义上的宽度   100可保证输入框撑满cell
         	treeDef.set('select','true');  
