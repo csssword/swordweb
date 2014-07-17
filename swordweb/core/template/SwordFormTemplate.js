@@ -68,22 +68,22 @@ var SwordForm_Template = {
                     tem.push(("<th id='{id}' style='{style}' colspan='{c}' rowspan='{r}' >" + ttds.innerHTML + "</th>").substitute({c:cols, r:rows, style:style, id:id}));
                 } else {
                     var tdEls = ttds.getChildren();
-                    tdEls.each(function(d){
+                    tem.push(("<td style='{style}' id='{id}' colspan='{c}' rowspan='{r}' >").substitute({c:cols, r:rows, style:style, id:id}));
+                   	tdEls.each(function(d){
                     	if (d != null) {
                     		var dtag=d.get("tag");
                     		type = d.get('type'),itemName=d.get("name");
-                    		tem.push(("<td id='{id}' style='{style}' colspan='{c}' rowspan='{r}' >").substitute({c:cols, r:rows, style:style, id:id}));
-	                       	 if(dtag!="table"){
-	   		                   	 if(type){
-	   		                   		tem.push(this.getItemHtml(type, d, formData[itemName]));
-	   		                   	 }
-	   		                   	 tem.push(d.outerHTML);
-	                       	 }else{
-	                       		 this.buildTable(d,formData);
-	                       	 }
-	                       	tem.push("</td>");
+		                   	 if(dtag!="table"){
+			                   	 if(type){
+			                   		tem.push(this.getItemHtml(type, d, formData[itemName]));
+			                   	 }
+			                   	 tem.push(d.outerHTML);
+		                   	 }else{
+		                   		 this.buildTable(d,formData);
+		                   	 }
                     	}
                     }.bind(this));
+                	tem.push("</td>");
                 }
             }
             tem.push('</tr>');
