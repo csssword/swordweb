@@ -5851,9 +5851,6 @@ var SwordGrid = new Class({
         if($chk(msg)) {
             inputEL.set('msg', msg);
         }
-        if($chk(rule)) {
-            this.vObj._add(inputEL);
-        }
 
         inputEL.addClass('sGrid_data_row_item_text_input');
         inputEL.setStyle('width', el.getWidth()); //为 item 设置宽度
