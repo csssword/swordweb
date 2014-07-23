@@ -32,6 +32,7 @@ jsR.addWidget({name:"SwordCalendar",prefixPath:"swordweb/widgets/SwordCalendar",
 jsR.addWidget({name:"SwordTab",prefixPath:"swordweb/widgets/SwordTab",jsPath:['SwordTab.js'],cssPath:['tab.css']});
 
 jsR.addWidget({name:"SwordTree",prefixPath:"swordweb/widgets/SwordTree",jsPath:['SwordTree.js','SwordTree.Builder.js','SwordTree.DomFactory.js','SwordTree.Draw.js','SwordTree.Iterator.js','SwordTree.Drag.js','SwordTree.Select.js'],cssPath:['tree.css']});
+jsR.addWidget({name:"SwordBigTree",prefixPath:"swordweb/widgets/SwordBigTree",jsPath:['SwordBigTree.js','SwordBigTree.Model.js','SwordBigTree.Template.js','SwordBigTree.Builder.js','SwordBigTree.DomFactory.js','SwordBigTree.Draw.js','SwordBigTree.Iterator.js','SwordBigTree.Drag.js','SwordBigTree.Select.js'],cssPath:['tree.css']});
 
 jsR.addWidget({name:"SwordSubmit",prefixPath:"swordweb/widgets/SwordSubmit",jsPath:['SwordSubmit.js','SwordSubmit.Command.js'],cssPath:['submit.css']});
 jsR.addWidget({name:"SwordValidateCode",prefixPath:"swordweb/widgets/SwordValidateCode",jsPath:['SwordValidateCode.js'],cssPath:['validatecode.css']});
