@@ -3,8 +3,8 @@ jsR.baseWidgets = ['SwordShielding','Base','i18n','WidgetFactory','Utils','Sword
 //jsR.addWidget({name:"Base",prefixPath:"swordweb/base",jsPath:['mootools-1.3.2-all.js','SwordImplement.js','adapter/adapter-1.3.2.js']});
 jsR.addWidget({name:"Base",prefixPath:"swordweb/base",jsPath:['mootools-1.2.1-all.js','SwordImplement.js']});
 jsR.addWidget({name:"i18n",prefixPath:"swordweb/core/i18n",jsPath:['zh-cn.js']});
-jsR.addWidget({name:"Template",prefixPath:"swordweb/core/template",jsPath:['Template.js','File2Template.js','FileTemplate.js','SwordGridFields.js','juicerTemplate.js',
-'LabelTemplate.js','PasswordTemplate.js','RadioTemplate.js','SwordCalendarTemplate.js','SwordPulltreeTemplate.js','SwordSelectTemplate.js','TextareaTemplate.js','HiddenTemplate.js','TextTemplate.js','SwordFormTemplate.js','SwordGridTemplate.js']});
+jsR.addWidget({name:"Template",prefixPath:"swordweb/core/template",jsPath:['Template.js','File2Template.js','FileTemplate.js','SwordGridFields.js','juicerTemplate.js','juicerTemplate2.js',
+'LabelTemplate.js','PasswordTemplate.js','RadioTemplate.js','SwordCalendarTemplate.js','SwordPulltreeTemplate.js','SwordPullBigtreeTemplate.js','SwordSelectTemplate.js','TextareaTemplate.js','HiddenTemplate.js','TextTemplate.js','SwordFormTemplate.js','SwordGridTemplate.js']});
 jsR.addWidget({name:"SwordEventDelegator",prefixPath:"swordweb/core/event",jsPath:['SwordEventDelegator.js']});
 jsR.addWidget({name:"SwordShielding",prefixPath:"swordweb/widgets/SwordShielding",jsPath:['SwordShielding.js']});
 jsR.addWidget({name:"Utils",prefixPath:"swordweb/core/utils",jsPath:['SwordUtils.js','SwordDataFormat.js','Xml.js','ConvertHtml.js']});
@@ -13,6 +13,9 @@ jsR.addWidget({name:"LogonCss",prefixPath:"swordweb/widgets/LogonCss",cssPath:['
 jsR.addWidget({name:"FrameCss",prefixPath:"swordweb/widgets/FrameCss",cssPath:['frame1.css']});
 jsR.addWidget({name:"SwordSecurityOperate",prefixPath:"swordweb/widgets/SwordSecurityOperate",jsPath:['SwordSecurityOperate.js']});
 //jsR.addWidget({name:"SwordLogger",prefixPath:"swordweb/widgets/SwordLogger",jsPath:['SwordLogger.js'],cssPath:['logger.css']});
+
+jsR.addWidget({name:"SwordDataModel",prefixPath:"swordweb/core/model",jsPath:['SwordDataModel.js']});
+
 jsR.addWidget({name:"WidgetFactory",prefixPath:"swordweb/core/factory",jsPath:['WidgetFactory.js']});
 jsR.addWidget({name:"PageContainer",prefixPath:"swordweb/core/container",jsPath:['PageContainer.js']});
 //jsR.addWidget({name:"Redirect",prefixPath:"swordweb/core/redirect",jsPath:['Redirect.js'],cssPath:['navigator.css']});
@@ -27,7 +30,9 @@ jsR.addWidget({name:"SwordValidator",prefixPath:"swordweb/widgets/SwordValidator
 jsR.addWidget({name:"SwordCalendar",prefixPath:"swordweb/widgets/SwordCalendar",jsPath:['SwordCalendar.js'],cssPath:['calendar.css']});
 //jsR.addWidget({name:"SwordOdpsCalendar",prefixPath:"swordweb/widgets/SwordOdpsCalendar",jsPath:['calendar_sword.js','SwordOdpsCalendar.js'],cssPath:['jsaxis.css']});
 jsR.addWidget({name:"SwordTab",prefixPath:"swordweb/widgets/SwordTab",jsPath:['SwordTab.js'],cssPath:['tab.css']});
+
 jsR.addWidget({name:"SwordTree",prefixPath:"swordweb/widgets/SwordTree",jsPath:['SwordTree.js','SwordTree.Builder.js','SwordTree.DomFactory.js','SwordTree.Draw.js','SwordTree.Iterator.js','SwordTree.Drag.js','SwordTree.Select.js'],cssPath:['tree.css']});
+
 jsR.addWidget({name:"SwordSubmit",prefixPath:"swordweb/widgets/SwordSubmit",jsPath:['SwordSubmit.js','SwordSubmit.Command.js'],cssPath:['submit.css']});
 jsR.addWidget({name:"SwordValidateCode",prefixPath:"swordweb/widgets/SwordValidateCode",jsPath:['SwordValidateCode.js'],cssPath:['validatecode.css']});
 jsR.addWidget({name:"SwordMask",prefixPath:"swordweb/widgets/SwordMask",jsPath:['SwordMask.js'],cssPath:['mask.css']});

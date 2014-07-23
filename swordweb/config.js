@@ -29,8 +29,9 @@ var swordCfg={
         ,plugins:{//此行为金税三期所用的插件
               "SwordGrid":["gt_extend/js/SwordGrid_extend.js"]
              , "SwordForm":["gt_extend/js/SwordForm_extend.js"]
+             , "SwordBigTree":["gt_extend/js/SwordBigTree_extend.js"]
              , "SwordTree":["gt_extend/js/SwordTree_extend.js"]
-    		 , "SwordSelect":["gt_extend/js/SwordSelect_extend.js"]
+    	     , "SwordSelect":["gt_extend/js/SwordSelect_extend.js"]
              , "SwordToolBar":["swordweb/biz/plugins/SwordToolBar/adapter.js","gt_extend/js/SwordToolbar_extend.js"]
              , "Base":["gt_extend/js/onafter.js","gt3_public/jsDelegate.js","swordweb/kz.js"]
              , "SwordClientCache":["gt_extend/js/cacheTree.js","gt_extend/js/cacheSelect.js"]

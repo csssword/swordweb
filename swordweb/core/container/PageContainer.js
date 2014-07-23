@@ -24,7 +24,9 @@ var PageContainer = new Class({
 		"password":SwordPasswordTemplate,
 		"label":SwordLabelTemplate,
 		"tree":SwordPulltreeTemplate,
+		"bigtree":SwordPullBigtreeTemplate,
 		"pulltree":SwordPulltreeTemplate,
+		"pullbigtree":SwordPullBigtreeTemplate,	
 		"file2":SwordFile2Template,
 	    /*"pulllazytree":SwordPulllazytreeTemplate,*/
 		"file":SwordFileTemplate,
